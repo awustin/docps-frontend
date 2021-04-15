@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development --open --port 8060",
     "build": "webpack --mode production",
-    "lint": "eslint --cache --format codeframe --ext mjs,jsx,js src"
+    "lint": "eslint --fix --cache --format codeframe --ext mjs,jsx,js src"
   },
   "keywords": [],
   "author": "",
