@@ -5,7 +5,7 @@ class Users extends React.Component {
   constructor(props) {
     super(props);
     var initialState = {
-      usersList: '',
+      usersList: 'Loading ...',
       color: 'turquoise'
     };
     this.state = initialState;
@@ -14,7 +14,9 @@ class Users extends React.Component {
   componentDidMount() {
     fetch('http://localhost:3000/fetch')
       .then((response) => response.json())
-      .then((data) => this.buildUsersList(data)); 
+      .then((data) => this.buildUsersList(data))
+      .catch(() => this.setState({usersList: 'There was an error!'}))
+      ; 
   }
 
   buildUsersList(data){
@@ -25,9 +27,6 @@ class Users extends React.Component {
         array.push(item);
       });
       this.setState({usersList: array});
-    }
-    else {
-      this.setState({usersList: 'No data'});
     }
   }
 
