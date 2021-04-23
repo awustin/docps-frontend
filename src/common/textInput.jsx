@@ -11,7 +11,7 @@ class TextInput extends React.Component {
   state = {
     value: '',
   };
-  
+
   handleChange(e) {
     const { handleTextIn } = this.props;
 

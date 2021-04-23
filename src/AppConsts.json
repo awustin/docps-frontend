@@ -1,0 +1,7 @@
+{
+    "errorCodes":
+    {
+        "INVALID_USERNAME": "Usuario o contraseña inválidos.",
+        "WRONG_FORMAT": "Formato incorrecto."
+    }
+}

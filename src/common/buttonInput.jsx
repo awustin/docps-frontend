@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class ButtonInput extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -19,11 +19,11 @@ class ButtonInput extends React.Component {
 
     return (
       <div>
-        <input 
-          type="submit" 
-          value={value} 
+        <input
+          type="submit"
+          value={value}
           onClick={this.handleChange}
-          disabled={disabledFlag} 
+          disabled={disabledFlag}
         />
       </div>
     );
@@ -33,6 +33,8 @@ class ButtonInput extends React.Component {
 ButtonInput.propTypes = {
   value: PropTypes.string.isRequired,
   enabled: PropTypes.bool.isRequired,
+  handleClick: PropTypes.func,
 };
+ButtonInput.defaultProps = { handleClick: undefined };
 
 export default hot(module)(ButtonInput);
