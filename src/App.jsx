@@ -16,16 +16,6 @@ class App extends Component {
     usr: undefined,
     error: undefined,
   };
-  /*
-  componentDidUpdate(prevProps, prevState) {
-    const { usr, error } = this.state;
-    if (prevState.usr !== usr
-      && usr !== undefined
-      && Object.entries(error).length === 0
-    ) {
-      this.setState({ loggedIn: true });
-    }
-  } */
 
   userLogIn(params) {
     UserLogIn(params)
