@@ -13,13 +13,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rebass/forms": "^4.0.6",
     "axios": "^0.21.1",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hot-loader": "^4.13.0",
     "react-redux": "^7.2.3",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "rebass": "^4.0.7",
+    "theme-ui": "^0.7.3"
   },
   "devDependencies": {
     "@neutrinojs/airbnb": "^9.5.0",

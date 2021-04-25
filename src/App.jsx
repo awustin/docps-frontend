@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
+import { ThemeProvider } from 'theme-ui';
+import theme from './theme/theme';
 import './App.css';
 
 class App extends Component {
@@ -23,7 +25,7 @@ class App extends Component {
         const { usr, error } = this.state;
         let authUser;
 
-        if(response.data != undefined) {
+        if(response.data !== undefined) {
           authUser = response.data.data.usuario
           if (usr !== authUser
             && authUser !== undefined
@@ -33,7 +35,7 @@ class App extends Component {
           }
         }
         else {
-          this.setState({ error: response.message })
+          this.setState({ error: (response.message !== 'Network Error') ? response.message : 'NETWORK_ERROR' })
         }
       })
   }
@@ -45,6 +47,7 @@ class App extends Component {
   render() {
     const { loggedIn, error } = this.state
     return (
+      <ThemeProvider theme={theme}>
       <Router>
         {
         (loggedIn) ? (
@@ -63,6 +66,7 @@ class App extends Component {
           )
       }
       </Router>
+      </ThemeProvider>
     );
   }
 }

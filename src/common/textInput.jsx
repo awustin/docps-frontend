@@ -1,6 +1,8 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box } from 'rebass';
+import { Label, Input } from '@rebass/forms';
 
 class TextInput extends React.Component {
   constructor(props) {
@@ -24,12 +26,15 @@ class TextInput extends React.Component {
     const { value } = this.state;
     return (
       <div>
-        <input
-          type={type}
-          placeholder={placeholder}
-          onChange={this.handleChange}
-          value={value}
-        />
+        <Box>
+          <Label>{placeholder}</Label>
+          <Input
+            type={type}
+            placeholder={placeholder}
+            onChange={this.handleChange}
+            value={value}
+          />
+        </Box>
       </div>
     );
   }
