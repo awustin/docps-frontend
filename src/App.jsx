@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
-import { ThemeProvider } from 'theme-ui';
 import theme from './theme/theme';
 import './App.css';
 
@@ -47,7 +46,6 @@ class App extends Component {
   render() {
     const { loggedIn, error } = this.state
     return (
-      <ThemeProvider theme={theme}>
       <Router>
         {
         (loggedIn) ? (
@@ -66,7 +64,6 @@ class App extends Component {
           )
       }
       </Router>
-      </ThemeProvider>
     );
   }
 }

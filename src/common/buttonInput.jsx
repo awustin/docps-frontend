@@ -1,7 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import PropTypes from 'prop-types';
-
 class ButtonInput extends React.Component {
   constructor(props) {
     super(props);
@@ -18,14 +17,14 @@ class ButtonInput extends React.Component {
     const disabledFlag = (!enabled) ? 'disabled' : '';
 
     return (
-      <div>
-        <input
-          type="submit"
-          value={value}
-          onClick={this.handleChange}
-          disabled={disabledFlag}
-        />
-      </div>
+      <input
+        type="submit"
+        value={value}
+        onClick={this.handleChange}
+        disabled={disabledFlag}
+      >
+      {value}
+      </input>
     );
   }
 }

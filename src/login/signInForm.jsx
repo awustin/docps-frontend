@@ -1,6 +1,5 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Box } from 'rebass';
 import TextInput from '../common/textInput';
 import ButtonInput from '../common/buttonInput';
 import { validateUsername } from '../utils/validate';
@@ -44,33 +43,21 @@ class SignInForm extends React.Component {
     const { isValid, errorMessage } = this.state;
     return (      
       <div>
-        <Box
-          p={1}
-          sx={{
-            color: 'bluish'
-          }}
-        >
-          <TextInput
-            type="text"
-            placeholder="Nombre de usuario"
-            handleTextIn={this.childSetUsername}
-          />
-          <TextInput
-            type="password"
-            placeholder="Contraseña"
-            handleTextIn={this.childSetPassword}
-          />
-        </Box>
-        <div>
-          <ButtonInput
-            enabled={isValid}
-            value="Log in!"
-            handleClick={this.userLogIn}
-          />
-        </div>
-        <div>
-          {errorMessage}
-        </div>
+        <TextInput
+          type="text"
+          placeholder="Nombre de usuario"
+          handleTextIn={this.childSetUsername}
+        />
+        <TextInput
+          type="password"
+          placeholder="Contraseña"
+          handleTextIn={this.childSetPassword}
+        />
+        <ButtonInput
+          enabled={isValid}
+          value="Log in!"
+          handleClick={this.userLogIn}
+        />
       </div>
     );
   }
