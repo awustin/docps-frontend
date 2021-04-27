@@ -1,7 +1,9 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import PropTypes from 'prop-types';
-class ButtonInput extends React.Component {
+import { Button } from 'antd';
+
+class ButtonStyleOne extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -17,23 +19,22 @@ class ButtonInput extends React.Component {
     const disabledFlag = (!enabled) ? 'disabled' : '';
 
     return (
-      <input
-        type="submit"
-        value={value}
+      <Button
+        type="primary"
         onClick={this.handleChange}
         disabled={disabledFlag}
       >
       {value}
-      </input>
+      </Button>
     );
   }
 }
 
-ButtonInput.propTypes = {
+ButtonStyleOne.propTypes = {
   value: PropTypes.string.isRequired,
   enabled: PropTypes.bool.isRequired,
   handleClick: PropTypes.func,
 };
-ButtonInput.defaultProps = { handleClick: undefined };
+ButtonStyleOne.defaultProps = { handleClick: undefined };
 
-export default hot(module)(ButtonInput);
+export default hot(module)(ButtonStyleOne);

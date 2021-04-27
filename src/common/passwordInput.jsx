@@ -1,9 +1,10 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input } from 'antd';
+import { Input, Space } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
-class TextInput extends React.Component {
+class PasswordInput extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -21,13 +22,12 @@ class TextInput extends React.Component {
   }
 
   render() {
-    const { type, placeholder } = this.props;
+    const { placeholder } = this.props;
     const { value } = this.state;
     return (
       <div>
         <label>{placeholder}</label>
-        <Input
-          type={type}
+        <Input.Password
           placeholder={placeholder}
           onChange={this.handleChange}
           value={value}
@@ -37,10 +37,9 @@ class TextInput extends React.Component {
   }
 }
 
-TextInput.propTypes = {
-  type: PropTypes.string.isRequired,
+PasswordInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   handleTextIn: PropTypes.func.isRequired,
 };
 
-export default hot(module)(TextInput);
+export default hot(module)(PasswordInput);

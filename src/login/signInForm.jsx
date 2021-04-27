@@ -1,7 +1,8 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import TextInput from '../common/textInput';
-import ButtonInput from '../common/buttonInput';
+import PasswordInput from '../common/passwordInput';
+import ButtonStyleOne from '../common/buttonStyleOne';
 import { validateUsername } from '../utils/validate';
 
 class SignInForm extends React.Component {
@@ -48,12 +49,11 @@ class SignInForm extends React.Component {
           placeholder="Nombre de usuario"
           handleTextIn={this.childSetUsername}
         />
-        <TextInput
-          type="password"
+        <PasswordInput
           placeholder="Contraseña"
           handleTextIn={this.childSetPassword}
         />
-        <ButtonInput
+        <ButtonStyleOne
           enabled={isValid}
           value="Log in!"
           handleClick={this.userLogIn}
