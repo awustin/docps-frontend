@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
+import AppLayout from './homepage/appLayout';
 import './App.css';
 
 class App extends Component {
@@ -23,19 +24,19 @@ class App extends Component {
         const { usr, error } = this.state;
         let authUser;
 
-        if(response.data !== undefined) {
-          authUser = response.data.data.usuario
+        if (response.data !== undefined) {
+          authUser = response.data.data.usuario;
+          console.log(usr + ' ' + authUser + ' ' + error);
           if (usr !== authUser
             && authUser !== undefined
-            && error !== undefined
+            && error == undefined
           ) {
             this.setState({ loggedIn: true, usr: authUser, error: undefined })
           }
+        } else {
+          this.setState({ error: (response.message !== 'Network Error') ? response.message : 'NETWORK_ERROR' });
         }
-        else {
-          this.setState({ error: (response.message !== 'Network Error') ? response.message : 'NETWORK_ERROR' })
-        }
-      })
+      });
   }
 
   userLogOut() {
@@ -43,24 +44,31 @@ class App extends Component {
   }
 
   render() {
-    const { loggedIn, error } = this.state
+    const { loggedIn, usr, error } = this.state;
     return (
       <Router>
         {
         (loggedIn) ? (
-          <div>Welcome! Not supported yet. </div>
+          <Route
+            path="/"
+            render={() => (
+              <AppLayout
+                user={usr}
+              />
+            )}
+          />
         )
           : (
-            <Route
-              path="/"
-              render={() => (
-                <LoginPage
-                  logIn={this.userLogIn}
-                  errorCode={error}
-                />
-              )}              
-            />
-          )
+          <Route
+            path="/"
+            render={() => (
+              <LoginPage
+                logIn={this.userLogIn}
+                errorCode={error}
+              />
+            )}
+          />
+        )
       }
       </Router>
     );

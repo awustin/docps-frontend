@@ -1,8 +1,7 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Space } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Input } from 'antd';
 
 class PasswordInput extends React.Component {
   constructor(props) {

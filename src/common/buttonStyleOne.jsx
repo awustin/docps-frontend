@@ -24,7 +24,7 @@ class ButtonStyleOne extends React.Component {
         onClick={this.handleChange}
         disabled={disabledFlag}
       >
-      {value}
+        {value}
       </Button>
     );
   }

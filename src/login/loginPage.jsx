@@ -3,11 +3,11 @@ import React from 'react';
 import SignInForm from './signInForm';
 import * as d from '../AppConsts.json';
 
-class LoginPage extends React.Component {  
-  informLoginError(){
+class LoginPage extends React.Component {
+  informLoginError() {
     const { errorCode } = this.props;
-    if(errorCode != undefined){
-      return <div>{d.errorCodes[errorCode]}</div>
+    if (errorCode != undefined) {
+      return <div>{d.errorCodes[errorCode]}</div>;
     }
   }
 
