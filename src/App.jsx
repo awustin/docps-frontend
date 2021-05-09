@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
-import AppLayout from './homepage/appLayout';
+import UserPage from './user/userPage';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -29,7 +29,7 @@ class App extends Component {
           authUser = response.data.data.usuario;
           if (usr !== authUser
             && authUser !== undefined
-            && error == undefined
+            && error === undefined
           ) {
             this.setState({ loggedIn: true, usr: authUser, error: undefined })
           }
@@ -50,11 +50,11 @@ class App extends Component {
         {
         (loggedIn) ? (
           <div>
-          <Redirect to="/home" />
+          <Redirect to="/user" />
           <Route
-            path="/home"
+            path="/user"
             render={() => (
-              <AppLayout
+              <UserPage
                 user={usr}
               />
             )}
