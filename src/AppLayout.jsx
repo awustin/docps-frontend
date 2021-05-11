@@ -1,6 +1,7 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import { Layout, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 import {
   UserOutlined,
   BarChartOutlined,
@@ -35,23 +36,23 @@ class AppLayout extends React.Component {
           <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
             <Menu theme="dark" mode="inline">
               <Menu.Item key="1" icon={<UserOutlined />}>
-                Usuario
+                <Link to="/user">Usuario</Link>
               </Menu.Item>
               <SubMenu key="sub1" icon={<FolderOutlined />} title="Proyectos">
-                <Menu.Item key="2">Crear proyecto</Menu.Item>
-                <Menu.Item key="3">Buscar proyectos</Menu.Item>
+                <Menu.Item key="2"><Link to="/projects">Crear proyecto</Link></Menu.Item>
+                <Menu.Item key="3"><Link to="/projects">Buscar proyectos</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<ExperimentOutlined />} title="Planes de prueba">
-                <Menu.Item key="4">Crear plan de prueba</Menu.Item>
-                <Menu.Item key="5">Buscar planes de prueba</Menu.Item>
-                <Menu.Item key="6">Exportar</Menu.Item>
+                <Menu.Item key="4"><Link to="/testplans">Crear plan de prueba</Link></Menu.Item>
+                <Menu.Item key="5"><Link to="/testplans">Buscar planes de prueba</Link></Menu.Item>
+                <Menu.Item key="6"><Link to="/testplans">Exportar</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" icon={<FileDoneOutlined />} title="Ejecuciones">
-                <Menu.Item key="7">Crear Ejecucion</Menu.Item>
-                <Menu.Item key="8">Listar Ejecuciones</Menu.Item>
+                <Menu.Item key="7"><Link to="/executions">Crear Ejecucion</Link></Menu.Item>
+                <Menu.Item key="8"><Link to="/executions">Listar Ejecuciones</Link></Menu.Item>
               </SubMenu>
               <Menu.Item key="9" icon={<BarChartOutlined />}>
-                Reportes
+                <Link to="/reports">Reportes</Link>
               </Menu.Item>
             </Menu>
           </Sider>

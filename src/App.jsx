@@ -1,9 +1,13 @@
 import { hot } from 'react-hot-loader';
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
-import UserPage from './user/userPage';
+import UserMain from './user/userMain';
+import ProjectsMain from './projects/projectsMain';
+import TestplansMain from './testplans/testplansMain';
+import ExecutionsMain from './executions/executionsMain';
+import ReportsMain from './reports/reportsMain';
 import 'antd/dist/antd.css';
 import './App.css';
 
@@ -50,29 +54,43 @@ class App extends Component {
         {
         (loggedIn) ? (
           <div>
-          <Redirect to="/user" />
-          <Route
-            path="/user"
-            render={() => (
-              <UserPage
-                user={usr}
-              />
-            )}
-          />
+          <Switch>
+            <Route path="/user" render={() => (
+              <UserMain user={usr} /> )}
+            />
+            <Route path="/projects" render={() => (
+              <ProjectsMain user={usr} /> )}
+            />
+            <Route path="/testplans" render={() => (
+              <TestplansMain user={usr} /> )}
+            />
+            <Route path="/executions" render={() => (
+              <ExecutionsMain user={usr} /> )}
+            />
+            <Route path="/reports" render={() => (
+              <ReportsMain user={usr} /> )}
+            />
+            <Route path="/login" render={() => (
+              <Redirect to="/user"/>)}
+            />
+            <Route exact path="/" render={() => (
+              <Redirect to="/user"/>)}
+            />
+            <Route path="/" render={() => (
+              <div> Not found :( </div>)}
+            />
+          </Switch>
           </div>
-        )
-          : (
+        ) : (
           <div>
-          <Redirect to="/login" />
-          <Route
-            path="/login"
-            render={() => (
-              <LoginPage
-                logIn={this.userLogIn}
-                errorCode={error}
+            <Switch>
+              <Route path="/login" render={() => (
+                <LoginPage logIn={this.userLogIn} errorCode={error} />)}
               />
-            )}
-          />
+              <Route path="/" render={() => (
+                <Redirect to="/login"/>)}
+              />
+            </Switch>
           </div>
         )
       }

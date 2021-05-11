@@ -1,17 +1,17 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import AppLayout from '../homepage/appLayout';
+import AppLayout from '../AppLayout';
 
-class UserPage extends React.Component {
+class ExecutionsMain extends React.Component {
     render() {
         return(
             <AppLayout>
                 <div>
-                    UserPage
+                    Executions
                 </div>
             </AppLayout>
         );
     }
 }
 
-export default hot(module)(UserPage);
+export default hot(module)(ExecutionsMain);
