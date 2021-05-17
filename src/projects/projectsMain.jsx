@@ -1,14 +1,24 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
+import { Route,Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
+import ProjectForm from '../projects/projectForm';
 
 class ProjectsMain extends React.Component {
     render() {
         return(
             <AppLayout>
-                <div>
-                    ProjectsPage
-                </div>
+                <Switch>
+                    <Route path="/projects/create" render={() => (
+                        <ProjectForm/>)}
+                    />
+                    <Route path="/projects/search" render={() => (
+                        <div> Buscar proyectos </div>)}
+                    />
+                    <Route path="/projects" render={() => (
+                        <div> Not found :( </div>)}
+                    />
+                </Switch>
             </AppLayout>
         );
     }

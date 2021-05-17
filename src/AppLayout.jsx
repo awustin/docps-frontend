@@ -39,8 +39,8 @@ class AppLayout extends React.Component {
                 <Link to="/user">Usuario</Link>
               </Menu.Item>
               <SubMenu key="sub1" icon={<FolderOutlined />} title="Proyectos">
-                <Menu.Item key="2"><Link to="/projects">Crear proyecto</Link></Menu.Item>
-                <Menu.Item key="3"><Link to="/projects">Buscar proyectos</Link></Menu.Item>
+                <Menu.Item key="2"><Link to="/projects/create">Crear proyecto</Link></Menu.Item>
+                <Menu.Item key="3"><Link to="/projects/search">Buscar proyectos</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<ExperimentOutlined />} title="Planes de prueba">
                 <Menu.Item key="4"><Link to="/testplans">Crear plan de prueba</Link></Menu.Item>
@@ -59,8 +59,7 @@ class AppLayout extends React.Component {
           <Layout className="site-layout">
             <Header className="site-layout-background" style={{ padding: 0 }} />
             <Content style={{ margin: '0 16px' }}>
-              <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                Contenido
+              <div className="site-layout-container" style={{ padding: 24, minHeight: 360 }}>
                 { this.props.children }
               </div>
             </Content>
