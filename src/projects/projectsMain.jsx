@@ -3,6 +3,7 @@ import React from 'react';
 import { Route,Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
 import ProjectForm from '../projects/projectForm';
+import ProjectSearch from '../projects/projectSearch';
 
 class ProjectsMain extends React.Component {
     render() {
@@ -13,7 +14,7 @@ class ProjectsMain extends React.Component {
                         <ProjectForm/>)}
                     />
                     <Route path="/projects/search" render={() => (
-                        <div> Buscar proyectos </div>)}
+                        <ProjectSearch/>)}
                     />
                     <Route path="/projects" render={() => (
                         <div> Not found :( </div>)}

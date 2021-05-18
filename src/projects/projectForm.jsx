@@ -26,28 +26,34 @@ class ProjectForm extends React.Component {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
         }
-
         const tailLayout = {
           wrapperCol: { offset: 7, span: 12 },
         }
-
         return(            
             <>
             <Breadcrumb>
                 <Breadcrumb.Item>Proyectos</Breadcrumb.Item>
                 <Breadcrumb.Item>Crear</Breadcrumb.Item>
             </Breadcrumb>
-            <div class="project-form-container" style={{margin: "50px"}}>
+            <div className="project-form-container" style={{margin: "50px"}}>
                 <Title level={3}>Crear proyecto</Title>
                 <Divider dashed></Divider>
                 <Form {...layout}
                     name="projectForm"
                     layout="horizontal"
                 >
-                    <Form.Item label="Nombre">
+                    <Form.Item 
+                        label="Nombre"
+                        name="projectName"
+                        rules={[{ required: true, message: 'El nombre del proyecto está vacío.' }]}
+                    >
                         <Input/>
                     </Form.Item>
-                    <Form.Item label="Grupo">
+                    <Form.Item 
+                        label="Grupo"
+                        name="projectGroup"
+                        rules={[{ required: true, message: 'Seleccione un grupo.' }]}
+                    >
                         <Select>
                             <Select.Option value="Pumas">Pumas</Select.Option>
                         </Select>
