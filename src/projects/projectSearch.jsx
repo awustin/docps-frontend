@@ -16,16 +16,38 @@ class ProjectSearch extends React.Component {
       super(props)
     }
     state = {
-        results: {
-            "GROUP A" : {
-                "proyecto-00": 1,
-                "PROYECTO-01": 2
+        results: [
+            {
+                "name":"proyectoA",
+                "id":1,
+                "group":"Pumas"
             },
-            "GROUP B" : {
-                "DOCPS-Tests": 4,
-                "Proyecto-de-prueba": 5
-            }
-        },
+            {
+                "name":"proyectoB",
+                "id":2,
+                "group":"Pumas"
+            },
+            {
+                "name":"proyectoC",
+                "id":3,
+                "group":"Pumas"
+            },
+            {
+                "name":"CERO",
+                "id":7,
+                "group":"Aguilas"
+            },
+            {
+                "name":"UNO",
+                "id":8,
+                "group":"Aguilas"
+            },
+            {
+                "name":"DOS",
+                "id":10,
+                "group":"Tiburones"
+            },
+        ],
         error: undefined
     }
     showResults() {

@@ -2,48 +2,49 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import {
     Typography,
-    List,
+    Table,
     Space,
-    Tag,
 } from 'antd';
+import { 
+  DeleteTwoTone,
+  EditTwoTone,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
 
 class ProjectSearchResults extends React.Component {
     constructor(props) {
       super(props)
     }
 
-    buildResultList() {
+    buildResultTable() {
       const { resultList } = this.props
+
+      const columns = [
+        {
+          title: 'Nombre',
+          dataIndex: 'name'
+        },
+        {
+          title: 'Grupo',
+          dataIndex: 'group',
+          defaultSortOrder: 'ascend',
+          sorter: (a, b) => a.group.localeCompare(b.group)
+        },
+        {
+          title: 'Action',
+          key: 'action',
+          render: (text, record) => (
+            <Space>
+              <Link to={{ pathname: "/projects/id?"+record.id, "projectId": record.id }}><EditTwoTone fontSize={19} /></Link>
+              <DeleteTwoTone />
+            </Space>
+          ),
+        },
+      ]
+
       if(resultList !== undefined || resultList.length() !== 0) 
       {
-        let list = []
-        Object.entries(resultList).forEach(element => {
-          list.push(
-          <> 
-            <List
-              header={<div>{element[0]}</div>}
-              bordered
-              size={"small"}
-              style={{margin: "0 0 10px", background: "#ffffff"}}
-              dataSource={Object.entries(element[1])}
-              renderItem={item => (
-              <List.Item>
-                <Space align="center">
-                  <Link to={{ 
-                      pathname: "/projects/id?" + item[1]
-                  }}>
-                    {item}
-                  </Link>
-                </Space>
-              </List.Item>
-            )}
-            />
-          </>
-          )
-        })
-        return list
+        return <Table columns={columns} dataSource={resultList}/>
       }
 
     }
@@ -54,7 +55,7 @@ class ProjectSearchResults extends React.Component {
             <>
             <div className="project-search-results">
                 <Title level={4}>Resultados</Title>
-                {this.buildResultList()}
+                {this.buildResultTable()}
             </div>
             </>
         );
