@@ -31,13 +31,15 @@ class ProjectSearchResults extends React.Component {
           sorter: (a, b) => a.group.localeCompare(b.group)
         },
         {
-          title: 'Action',
+          title: 'Acción',
           key: 'action',
           render: (text, record) => (
+            <>
             <Space>
-              <Link to={{ pathname: "/projects/id?"+record.id, "projectId": record.id }}><EditTwoTone fontSize={19} /></Link>
-              <DeleteTwoTone />
+              <Link to={{ pathname: "/projects/" + record.id }}><EditTwoTone style={{ fontSize: '150%'}} /></Link>
+              <DeleteTwoTone style={{ fontSize: '150%'}} />
             </Space>
+            </>
           ),
         },
       ]
