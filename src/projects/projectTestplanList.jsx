@@ -6,9 +6,15 @@ import {
     Avatar,
     Tag,
     Button,
-    Skeleton
+    Row,
+    Col,
 } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import { 
+    EditOutlined,
+    DeleteOutlined,
+    PlusCircleFilled,
+} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 class ProjectTestplanList extends React.Component {
     constructor(props){
@@ -26,6 +32,7 @@ class ProjectTestplanList extends React.Component {
             list.push({
                 title: 'TEST-' + index,
                 key: index + 1,
+                id: index + 1,
                 dateModified: '15/04/2021',
                 status: statuses[Math.floor(Math.random() * statuses.length)]
             })                        
@@ -51,20 +58,34 @@ class ProjectTestplanList extends React.Component {
         const { Title } = Typography
         return(
             <>
-            <Title level={4}>Planes de pruebas</Title>
+            <Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
+                <Col flex="1 0 75%">
+                    <Title level={4}>Planes de pruebas</Title>
+                </Col>
+                <Col flex="1 0 25%" style={{textAlign: "end"}}>                
+                    <Button style={{display: "inline-flex", alignItems: "center"}}>
+                        <PlusCircleFilled style={{ color: "#b0b0b0", paddingTop: "1px"}}/>
+                        Crear plan de pruebas
+                    </Button>
+                </Col>
+            </Row>
             <List
                 size="small"
                 pagination={{
-                    pageSize: 10
+                    pageSize: 9
                     }}
                 dataSource={testplanList}
-                bordered={true}
+                bordered={false}
                 renderItem={item => (
                     <List.Item
                         key={item.key}
-                        extra={<>
-                            {this.statusTag(item.status)}
-                        </>}
+                        span={4}
+                        actions={[
+                            this.statusTag(item.status),
+                            <Link to={{ pathname: "/testplans/" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+                            <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+                        ]}
+                        style={{background: "#fff"}}
                     >
                         <List.Item.Meta
                             avatar={<Avatar src={item.avatar} />}
@@ -72,8 +93,8 @@ class ProjectTestplanList extends React.Component {
                             description={'Última modificación: ' + item.dateModified}
                             />
                     </List.Item>
-            )}
-        />
+                )}
+            />
             </>
         );
     }
