@@ -19,10 +19,12 @@ class TestplanForm extends React.Component {
       this.clearForm = this.clearForm.bind(this)
       this.onNewTagChange = this.onNewTagChange.bind(this)
       this.addItemTag = this.addItemTag.bind(this)
+      this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     state = {
-        projectId: '',
+        projectId: undefined,
+        projectName: undefined,
         tagItems: ['pumas','regresiones','usuario'],
         newTag: ''
     }
@@ -32,14 +34,20 @@ class TestplanForm extends React.Component {
     }
 
     componentDidMount(){
-        let projectId = undefined
         if(Object.keys(this.props).includes("match"))
-        {
-            console.log(this.props.match)
-            projectId = this.props.match.projectId
-            this.setState({ projectId: projectId })
-            console.log(projectId)
-        }        
+            this.setState({
+                projectId: this.props.match.params.projectId,
+                projectName: this.props.match.params.projectName
+            })
+    }
+
+    componentDidUpdate() {
+        const { projectId } = this.state
+        if(this.props.location.pathname === '/testplans/create' && projectId !== undefined)
+            this.setState({ 
+                projectId: undefined, 
+                projectName: undefined 
+            })
     }
 
     onNewTagChange(e) {
@@ -54,8 +62,19 @@ class TestplanForm extends React.Component {
         });
     }
 
+    handleSubmit(values) {
+        const { projectId } = this.state
+        let params = {
+            testplanPorjectId: values.testplanProjectId || projectId,
+            testplanName: values.testplanName,
+            description: values.description,
+            tags: values.tags            
+        }
+        // Query
+    }
+
     render() {
-        const { projectId, tagItems, newTag } = this.state
+        const { projectId, projectName, tagItems, newTag } = this.state
         const { Title } = Typography
         const { Option } = Select
         const layout = {
@@ -78,13 +97,14 @@ class TestplanForm extends React.Component {
                 <Form {...layout}
                     name="projectForm"
                     layout="horizontal"
+                    onFinish={this.handleSubmit}
                 >
                     {
                         (projectId === undefined) ? 
                             (
                                 <Form.Item 
                                     label="Proyecto"
-                                    name="testplanProject"
+                                    name="testplanProjectId"
                                     rules={[{ required: true, message: 'Seleccione un proyecto.' }]}
                                 >
                                     <Select>
@@ -97,7 +117,7 @@ class TestplanForm extends React.Component {
                                 <Form.Item 
                                     label="Proyecto"
                                 >
-                                    {projectId}
+                                    {projectName}
                                 </Form.Item>                        
                             )
                     }
@@ -143,7 +163,7 @@ class TestplanForm extends React.Component {
                         </Select>
                     </Form.Item>
                     <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">Guardar</Button>
+                        <Button type="primary" htmlType="submit">Crear</Button>
                         <Button htmlType="button" onClick={this.clearForm} style={{ margin: '0 8px' }}>Cancelar</Button>
                     </Form.Item>
                 </Form>

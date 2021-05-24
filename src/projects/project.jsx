@@ -58,7 +58,7 @@ class Project extends React.Component {
                     </Col>                    
                 </Row>
                 <Divider dashed></Divider>
-                <ProjectTestplanList projectId={id}/>
+                <ProjectTestplanList project={{projectId: id, projectName: projectName}}/>
             </div>
             </>
         );

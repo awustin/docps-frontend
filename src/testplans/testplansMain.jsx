@@ -12,7 +12,7 @@ class TestplansMain extends React.Component {
                     <Route exact path="/testplans/create" render={() => (
                         <TestplanForm/>)}
                     />
-                    <Route path="/testplans/create/:projectId" render={() => (
+                    <Route path="/testplans/create?p=:projectId&n=:projectName" render={() => (
                         <TestplanForm/>)}
                     />
                     <Route path="/testplans/search" render={() => (
