@@ -39,6 +39,7 @@ class ProjectTestplanList extends React.Component {
         }
         this.setState({ testplanList: list })
     }
+
     statusTag(status) {
         switch(status)
         {
@@ -54,6 +55,7 @@ class ProjectTestplanList extends React.Component {
     }
 
     render() {
+        const { projectId } = this.props
         const { testplanList } = this.state
         const { Title } = Typography
         return(
@@ -62,11 +64,12 @@ class ProjectTestplanList extends React.Component {
                 <Col flex="1 0 75%">
                     <Title level={4}>Planes de pruebas</Title>
                 </Col>
-                <Col flex="1 0 25%" style={{textAlign: "end"}}>                
-                    <Button style={{display: "inline-flex", alignItems: "center"}}>
-                        <PlusCircleFilled style={{ color: "#b0b0b0", paddingTop: "1px"}}/>
-                        Crear plan de pruebas
-                    </Button>
+                <Col flex="1 0 25%" style={{textAlign: "end"}}>
+                    <Link to={{ pathname:"/testplans/create/" + projectId }}>
+                        <Button style={{display: "inline-flex", alignItems: "center"}}>
+                            <PlusCircleFilled style={{ color: "#b0b0b0", paddingTop: "1px"}}/>Crear plan de pruebas
+                        </Button>
+                    </Link>
                 </Col>
             </Row>
             <List

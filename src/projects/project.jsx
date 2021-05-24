@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader';
 import React from 'react';
 import {
     Typography,
@@ -45,7 +44,7 @@ class Project extends React.Component {
             <div className="project-container" style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "center"}}>
                     <Col flex="1 0 75%">
-                        <Title level={3}>Proyecto {id}</Title>
+                        <Title level={3}>{projectName} (id = {id})</Title>
                     </Col>
                     <Col flex="1 0 25%" style={{textAlign: "end"}}>
                         <Button type="primary" onClick={this.handleEditClick}>Modificar</Button>
@@ -59,7 +58,7 @@ class Project extends React.Component {
                     </Col>                    
                 </Row>
                 <Divider dashed></Divider>
-                <ProjectTestplanList/>
+                <ProjectTestplanList projectId={id}/>
             </div>
             </>
         );
