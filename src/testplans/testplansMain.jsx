@@ -3,6 +3,7 @@ import React from 'react';
 import { Route,Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
 import TestplanForm from './testplanForm';
+import TestplanSearch from './testplanSearch';
 
 class TestplansMain extends React.Component {
     render() {
@@ -16,7 +17,7 @@ class TestplansMain extends React.Component {
                         <TestplanForm/>)}
                     />
                     <Route path="/testplans/search" render={() => (
-                        <>search</>)}
+                        <TestplanSearch/>)}
                     />
                     <Route path="/testplans/:id" render={() => (
                         <>testplanid</>)}
