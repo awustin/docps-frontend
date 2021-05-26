@@ -23,8 +23,6 @@ class TestplanForm extends React.Component {
     }
 
     state = {
-        projectId: undefined,
-        projectName: undefined,
         tagItems: ['pumas','regresiones','usuario'],
         newTag: ''
     }
@@ -33,21 +31,14 @@ class TestplanForm extends React.Component {
         alert('Limpiar formulario')
     }
 
-    componentDidMount(){
-        if(Object.keys(this.props).includes("match"))
-            this.setState({
-                projectId: this.props.match.params.projectId,
-                projectName: this.props.match.params.projectName
-            })
-    }
-
-    componentDidUpdate() {
-        const { projectId } = this.state
-        if(this.props.location.pathname === '/testplans/create' && projectId !== undefined)
-            this.setState({ 
-                projectId: undefined, 
-                projectName: undefined 
-            })
+    componentDidMount() {      
+        const { setProject } = this.props
+        if(Object.keys(this.props).includes("match") && setProject !== undefined)
+        {
+            let id = this.props.match.params.projectId
+            let name = this.props.match.params.projectName
+            setProject(id, name)
+        }
     }
 
     onNewTagChange(e) {
@@ -63,9 +54,9 @@ class TestplanForm extends React.Component {
     }
 
     handleSubmit(values) {
-        const { projectId } = this.state
+        const { project } = this.props
         let params = {
-            testplanPorjectId: values.testplanProjectId || projectId,
+            testplanPorjectId: values.testplanProjectId || project.projectId,
             testplanName: values.testplanName,
             description: values.description,
             tags: values.tags            
@@ -74,7 +65,8 @@ class TestplanForm extends React.Component {
     }
 
     render() {
-        const { projectId, projectName, tagItems, newTag } = this.state
+        const { tagItems, newTag } = this.state
+        const { project } = this.props
         const { Title } = Typography
         const { Option } = Select
         const layout = {
@@ -91,7 +83,7 @@ class TestplanForm extends React.Component {
                 <Breadcrumb.Item>Planes de pruebas</Breadcrumb.Item>
                 <Breadcrumb.Item>Crear</Breadcrumb.Item>
             </Breadcrumb>
-            <div className="project-form-container" style={{margin: "50px"}}>
+            <div className="testplan-form-container" style={{margin: "50px"}}>
                 <Title level={3}>Crear plan de pruebas</Title>
                 <Divider dashed></Divider>
                 <Form {...layout}
@@ -100,7 +92,7 @@ class TestplanForm extends React.Component {
                     onFinish={this.handleSubmit}
                 >
                     {
-                        (projectId === undefined) ? 
+                        (project.projectId === undefined) ? 
                             (
                                 <Form.Item 
                                     label="Proyecto"
@@ -117,7 +109,7 @@ class TestplanForm extends React.Component {
                                 <Form.Item 
                                     label="Proyecto"
                                 >
-                                    {projectName}
+                                    {project.projectName}
                                 </Form.Item>                        
                             )
                     }

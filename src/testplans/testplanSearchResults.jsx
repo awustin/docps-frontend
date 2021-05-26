@@ -16,7 +16,7 @@ class TestplanSearchResults extends React.Component {
     constructor(props) {
       super(props)
       this.statusTag = this.statusTag.bind(this)
-      this.tags = this.tags.bind(this)
+      this.handleEditTestplanClick = this.handleEditTestplanClick.bind(this)
     }
     
     statusTag(status) {
@@ -33,12 +33,13 @@ class TestplanSearchResults extends React.Component {
         }
     }
 
-    tags(tags) {
+    handleEditTestplanClick(item) {
+        const { setTestplan } = this.props
+        setTestplan(item)
     }
 
     buildResultList() {
       const { resultList } = this.props
-      console.log(resultList)
       if(resultList !== undefined && resultList.lenght !== 0) 
         return (
             <List
@@ -55,14 +56,14 @@ class TestplanSearchResults extends React.Component {
                         actions={[
                             item.tags.map( tag => <Tag>{tag}</Tag> ),
                             this.statusTag(item.status),
-                            <Link to={{ pathname: "/testplans/" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+                            <Link to={{ pathname: "/testplans/" + item.testplanId }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/></Link>,
                             <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                         ]}
                         style={{background: "#fff"}}
                     >
                         <List.Item.Meta
                             avatar={<Avatar src={item.avatar} />}
-                            title={<a href={item.href}>{item.title}</a>}
+                            title={<a href={item.href}>{item.testplanName}</a>}
                             description={item.groupName + ' / ' + item.projectName}
                             />
                     </List.Item>

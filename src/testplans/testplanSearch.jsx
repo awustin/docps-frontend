@@ -33,9 +33,9 @@ class TestplanSearch extends React.Component {
         for (let index = 0; index < 21; index++) {
             results.push(
                 {
-                    id: index,
-                    key: index,
-                    title: "TESTPLAN-" + index,
+                    key: "item"+index*2,
+                    testplanId: index,
+                    testplanName: "TESTPLAN-" + index,
                     description: "Este es un plan de pruebas",
                     tags: ["test","noche"],
                     createdOn: '10/02/2021',
@@ -81,11 +81,12 @@ class TestplanSearch extends React.Component {
 
     showResults() {
         const { results } = this.state
+        const { setTestplan } = this.props
         if(results !== undefined)
         return (
             <>
             <Divider dashed/>
-            <TestplanSearchResults resultList={results}/>
+            <TestplanSearchResults resultList={results} setTestplan={setTestplan}/>
             </>
         )
     }

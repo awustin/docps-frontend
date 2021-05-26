@@ -20,31 +20,37 @@ class ProjectSearch extends React.Component {
             {
                 "name":"proyectoA",
                 "id":1,
+                "key":0,
                 "group":"Pumas"
             },
             {
                 "name":"proyectoB",
                 "id":2,
+                "key":1,
                 "group":"Pumas"
             },
             {
                 "name":"proyectoC",
                 "id":3,
+                "key":2,
                 "group":"Pumas"
             },
             {
                 "name":"CERO",
                 "id":7,
+                "key":3,
                 "group":"Aguilas"
             },
             {
                 "name":"UNO",
                 "id":8,
+                "key":4,
                 "group":"Aguilas"
             },
             {
                 "name":"DOS",
                 "id":10,
+                "key":5,
                 "group":"Tiburones"
             },
         ],
