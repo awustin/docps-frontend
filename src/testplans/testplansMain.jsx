@@ -12,6 +12,7 @@ class TestplansMain extends React.Component {
         super(props)
         this.setTestplan = this.setTestplan.bind(this)
         this.setProject = this.setProject.bind(this)
+        this.fetchTestplan = this.fetchTestplan.bind(this)
     }
 
     state = {
@@ -47,6 +48,28 @@ class TestplansMain extends React.Component {
         })
     }
 
+    fetchTestplan(projectId, testplanId) {
+        //Query
+        let project = {
+            projectId: projectId,
+            projectName: 'PRO-124'
+        }
+        let testplan = {
+            key: 'item'+testplanId,
+            testplanId: testplanId,
+            testplanName: 'ISSUE-1: Pruebas',
+            description: 'Plan de pruebas para una funcionalidad',
+            tags: ['integración'],
+            createdOn: '21/03/2021',
+            status: 'Passed',
+            projectId: projectId,
+            projectName: 'PRO-124',
+            groupId: 1,
+            groupName: 'Pumas'
+        }
+        this.setState({ project: project, testplan: testplan })
+    }
+
     render() {
         const { project, testplan } = this.state
         return(
@@ -61,8 +84,11 @@ class TestplansMain extends React.Component {
                     <Route path="/testplans/search" render={() => (
                         <TestplanSearch setTestplan={this.setTestplan}/>)}
                     />
-                    <Route path="/testplans/:id" render={() => (
+                    <Route exact path="/testplans/id=:id" render={() => (
                         <Testplan testplan={testplan}/>)}
+                    />
+                    <Route path="/testplans/p=:projectId&id=:testplanId" render={() => (
+                        <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan}/>)}
                     />
                     <Route path="/testplans" render={() => (
                         <div> Not found :( </div>)}

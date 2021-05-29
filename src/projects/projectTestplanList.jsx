@@ -85,7 +85,7 @@ class ProjectTestplanList extends React.Component {
                         span={4}
                         actions={[
                             this.statusTag(item.status),
-                            <Link to={{ pathname: "/testplans/" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+                            <Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
                             <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                         ]}
                         style={{background: "#fff"}}

@@ -19,17 +19,17 @@ class TestplanSearchResults extends React.Component {
       this.handleEditTestplanClick = this.handleEditTestplanClick.bind(this)
     }
     
-    statusTag(status) {
+    statusTag(status,itemKey) {
         switch(status)
         {
             case 'Not executed':
-                return <Tag color="#999997">No ejecutado</Tag>
+                return <Tag key={itemKey+'999997'} color="#999997">No ejecutado</Tag>
             case 'In progress':
-                return <Tag color="#ebcf52">En progreso</Tag>
+                return <Tag key ={itemKey+'ebcf52'} color="#ebcf52">En progreso</Tag>
             case 'Passed':
-                return <Tag color="#09de8c">Pasó</Tag>
+                return <Tag key={itemKey+'09de8c'} color="#09de8c">Pasó</Tag>
             case 'Failed':
-                return <Tag color="#f50">Falló</Tag>
+                return <Tag key={itemKey+'f50'} color="#f50">Falló</Tag>
         }
     }
 
@@ -54,9 +54,9 @@ class TestplanSearchResults extends React.Component {
                         key={item.key}
                         span={4}
                         actions={[
-                            item.tags.map( tag => <Tag>{tag}</Tag> ),
-                            this.statusTag(item.status),
-                            <Link to={{ pathname: "/testplans/" + item.testplanId }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/></Link>,
+                            item.tags.map( tag => <Tag key={item.key+tag}>{tag}</Tag> ),
+                            this.statusTag(item.status,item.key),
+                            <Link to={{ pathname: "/testplans/id=" + item.testplanId }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/></Link>,
                             <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                         ]}
                         style={{background: "#fff"}}
