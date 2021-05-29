@@ -46,13 +46,13 @@ class TestplanEdit extends React.Component {
     }
 
     render() {
-        const { visible, projectName } = this.props
+        const { visible, projectName, description, tags } = this.props
         const { confirmLoading } = this.state
         const { Title } = Typography
         return(
             <> 
             <Modal
-                title="Editar proyecto"
+                title="Editar plan de pruebas"
                 visible={visible}
                 onOk={this.handleOk}
                 okText={'Guardar'}
@@ -64,9 +64,23 @@ class TestplanEdit extends React.Component {
                 <Form>
                     <Form.Item
                         label="Nombre"
-                        name="projectName"
+                        name="testplanName"
                         initialValue={projectName}
                         rules={[{ required: true, message: 'El nombre del proyecto está vacío.' }]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Descripción"
+                        name="description"
+                        initialValue={description}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Etiquetas"
+                        name="tags"
+                        initialValue={tags}
                     >
                         <Input/>
                     </Form.Item>

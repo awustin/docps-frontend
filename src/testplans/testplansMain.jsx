@@ -59,7 +59,7 @@ class TestplansMain extends React.Component {
             testplanId: testplanId,
             testplanName: 'ISSUE-1: Pruebas',
             description: 'Plan de pruebas para una funcionalidad',
-            tags: ['integración'],
+            tags: ['integración','QA'],
             createdOn: '21/03/2021',
             status: 'Passed',
             projectId: projectId,
