@@ -107,7 +107,7 @@ class Testplan extends React.Component {
     }
 
     render() {
-        const { testplan } = this.props
+        const { testplan } = this.props    
         const { testcases } = this.state
         const { showEditModal } = this.state
         const { Title,Text } = Typography
@@ -178,4 +178,4 @@ class Testplan extends React.Component {
     }
 }
 
-export default withRouter(Testplan);
+export default React.memo(withRouter(Testplan));
