@@ -27,7 +27,6 @@ class Testplan extends React.Component {
         this.handleEditClick = this.handleEditClick.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
-        this.updateProjectName = this.updateProjectName.bind(this)
         this.fetchTestcases = this.fetchTestcases.bind(this)
     }
     state = {
@@ -101,13 +100,8 @@ class Testplan extends React.Component {
         this.setState({ showEditModal: value })
     }
 
-    updateProjectName(value) {
-        //Query
-        this.setState({ projectName: value })
-    }
-
     render() {
-        const { testplan } = this.props    
+        const { testplan, updateTestplan } = this.props
         const { testcases } = this.state
         const { showEditModal } = this.state
         const { Title,Text } = Typography
@@ -118,6 +112,7 @@ class Testplan extends React.Component {
                 <Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
             </Breadcrumb>
             <div className="testplan-description-container" style={{margin: "50px"}}>
+                <Title level={3}>Plan de prueba</Title>
                 <Row style={{display: "flex", alignItems: "top"}}>
                     <Col flex="1 0 75%">
                         <Descriptions column={1} size="small" labelStyle={{width: "100px"}} bordered>
@@ -131,8 +126,8 @@ class Testplan extends React.Component {
                         <Button type="primary" onClick={this.handleEditClick}>Modificar</Button>
                         <TestplanEdit 
                             id={testplan.testplanId} 
-                            projectName="NOMbre" 
-                            updateProjectName={this.updateProjectName}
+                            testplanAttributes={[testplan.testplanName,testplan.description,testplan.tags]} 
+                            updateTestplan={updateTestplan}
                             visible={showEditModal} 
                             isEditModalVisible={this.isEditModalVisible} 
                         />
@@ -140,7 +135,7 @@ class Testplan extends React.Component {
                 </Row>
                 <Divider dashed></Divider>
             </div>
-            <div className="testplan-testcases-container">
+            <div className="testplan-testcases-container"  style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
                     <Col flex="1 0 75%">
                         <Title level={4}>Casos de prueba</Title>

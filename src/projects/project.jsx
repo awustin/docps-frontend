@@ -5,6 +5,7 @@ import {
     Button,
     Row,
     Col,
+    Breadcrumb,
 } from 'antd';
 import { withRouter } from "react-router";
 import ProjectEdit from './modals/projectEdit';
@@ -41,6 +42,10 @@ class Project extends React.Component {
         const { Title } = Typography
         return(
             <>
+            <Breadcrumb>
+                <Breadcrumb.Item>Proyectos</Breadcrumb.Item>
+                <Breadcrumb.Item>{projectName}</Breadcrumb.Item>
+            </Breadcrumb>
             <div className="project-container" style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "center"}}>
                     <Col flex="1 0 75%">

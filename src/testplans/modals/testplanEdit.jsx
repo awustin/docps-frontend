@@ -6,21 +6,37 @@ import {
     Form,
     Input,
     Modal,
+    Select,
+    Divider,
 } from 'antd';
+import { 
+    PlusOutlined,
+} from '@ant-design/icons';
 
 class TestplanEdit extends React.Component {
     constructor(props){
         super(props)
+        this.onNewTagChange = this.onNewTagChange.bind(this)
         this.handleOk = this.handleOk.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
     }
     state = {
         confirmLoading: false,
-        newProjectName: ''
+        tagItems:['uno','dos','tres'],
+        newTag:'',
+        newTestplanAttributes: {
+            name: '',
+            description: '',
+            tags: ''
+        }
     }
 
     setVisible(value) {
         this.setState({ visible: value })
+    }
+    
+    onNewTagChange(e) {
+        this.setState({ newTag: e.target.value })
     }
 
     setConfirmLoading(value) {
@@ -36,36 +52,48 @@ class TestplanEdit extends React.Component {
         isEditModalVisible(false);
     }
     
-    handleOk() {
-        const { newProjectName } = this.state
-        const { isEditModalVisible, updateProjectName } = this.props
+    handleOk(values) {
+        const { isEditModalVisible, updateTestplan } = this.props
         this.setConfirmLoading(true);
-        updateProjectName(newProjectName);
+        updateTestplan(values);
         isEditModalVisible(false);
         this.setConfirmLoading(false);
     }
 
     render() {
-        const { visible, projectName, description, tags } = this.props
-        const { confirmLoading } = this.state
+        const { visible, testplanAttributes, description, tags } = this.props
+        const { confirmLoading, tagItems, newTag } = this.state
         const { Title } = Typography
+        const { Option } = Select
+        const layout = {
+            labelCol: { span: 7 },
+            wrapperCol: { span: 12 },
+        }
+        const tailLayout = {
+          wrapperCol: { offset: 7, span: 12 },
+        }
         return(
             <> 
             <Modal
                 title="Editar plan de pruebas"
                 visible={visible}
-                onOk={this.handleOk}
-                okText={'Guardar'}
                 confirmLoading={confirmLoading}
-                onCancel={this.handleCancel}
-                cancelText={'Cancelar'}
                 destroyOnClose={true}
+                okButtonProps={{form:'editForm', key: 'submit', htmlType: 'submit'}}
+                okText="Confirmar"
+                onCancel={this.handleCancel}
+                cancelText="Cancelar"
             >
-                <Form>
+                <Form {...layout}
+                    name="testplanEditForm"
+                    id="editForm"
+                    layout="horizontal"
+                    onFinish={this.handleOk}
+                >
                     <Form.Item
                         label="Nombre"
                         name="testplanName"
-                        initialValue={projectName}
+                        initialValue={testplanAttributes[0]}
                         rules={[{ required: true, message: 'El nombre del proyecto está vacío.' }]}
                     >
                         <Input/>
@@ -73,16 +101,38 @@ class TestplanEdit extends React.Component {
                     <Form.Item
                         label="Descripción"
                         name="description"
-                        initialValue={description}
+                        initialValue={testplanAttributes[1]}
                     >
-                        <Input/>
+                        <Input.TextArea 
+                            maxLength={500}
+                            autoSize={{ minRows: 5 }}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="Etiquetas"
                         name="tags"
-                        initialValue={tags}
+                        initialValue={testplanAttributes[2]}
                     >
-                        <Input/>
+                        <Select 
+                            mode="tags"
+                            dropdownRender={menu => (
+                                <div>
+                                    {menu}
+                                    <Divider style={{ margin: '4px 0' }} />
+                                    <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+                                        <Input style={{ flex: 'auto' }} value={newTag} onChange={this.onNewTagChange} />
+                                        <a
+                                            style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
+                                            onClick={this.addItemTag}
+                                        >
+                                            <PlusOutlined /> Agregar etiqueta
+                                        </a>
+                                    </div>
+                                </div>
+                            )}                            
+                        >
+                            {tagItems.map(item => <Option key={item}>{item}</Option>)}
+                        </Select>
                     </Form.Item>
                 </Form>
             </Modal>
