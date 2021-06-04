@@ -8,7 +8,8 @@ import {
   ThunderboltOutlined,
   ExperimentOutlined,
   FileDoneOutlined,
-  FolderOutlined
+  FolderOutlined,
+  UsergroupAddOutlined
 } from '@ant-design/icons';
 
 
@@ -36,23 +37,26 @@ class AppLayout extends React.Component {
         <Layout style={{ minHeight: '100vh' }}>
           <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
             <Menu theme="dark" mode="inline">
-              <Menu.Item key="1" icon={<UserOutlined style={{ fontSize: '150%'}}/>}>
+              <Menu.Item key="0" icon={<UserOutlined style={{ fontSize: '150%'}}/>}>
                 <Link to="/user">Usuario</Link>
               </Menu.Item>
+              <SubMenu key="sub0" icon={<UsergroupAddOutlined style={{ fontSize: '150%'}}/>} title="Grupos">
+                <Menu.Item key="1"><Link to="/groups/create">Crear grupo</Link></Menu.Item>
+              </SubMenu>
               <SubMenu key="sub1" icon={<FolderOutlined style={{ fontSize: '150%'}}/>} title="Proyectos">
-                <Menu.Item key="2"><Link to="/projects/create">Crear proyecto</Link></Menu.Item>
-                <Menu.Item key="3"><Link to="/projects/search">Buscar proyectos</Link></Menu.Item>
+                <Menu.Item key="3"><Link to="/projects/create">Crear proyecto</Link></Menu.Item>
+                <Menu.Item key="4"><Link to="/projects/search">Buscar proyectos</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" icon={<ExperimentOutlined style={{ fontSize: '150%'}}/>} title="Planes de prueba">
-                <Menu.Item key="4"><Link to="/testplans/create">Crear plan de prueba</Link></Menu.Item>
-                <Menu.Item key="5"><Link to="/testplans/search">Buscar planes de prueba</Link></Menu.Item>
-                <Menu.Item key="6"><Link to="/testplans/export">Exportar</Link></Menu.Item>
+                <Menu.Item key="5"><Link to="/testplans/create">Crear plan de prueba</Link></Menu.Item>
+                <Menu.Item key="6"><Link to="/testplans/search">Buscar planes de prueba</Link></Menu.Item>
+                <Menu.Item key="7"><Link to="/testplans/export">Exportar</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub3" icon={<ThunderboltOutlined style={{ fontSize: '150%'}}/>} title="Ejecuciones">
-                <Menu.Item key="7"><Link to="/executions/create">Crear Ejecucion</Link></Menu.Item>
-                <Menu.Item key="8"><Link to="/executions/view">Listar Ejecuciones</Link></Menu.Item>
+                <Menu.Item key="8"><Link to="/executions/create">Crear Ejecucion</Link></Menu.Item>
+                <Menu.Item key="9"><Link to="/executions/view">Listar Ejecuciones</Link></Menu.Item>
               </SubMenu>
-              <Menu.Item key="9" icon={<BarChartOutlined style={{ fontSize: '150%'}}/>}>
+              <Menu.Item key="10" icon={<BarChartOutlined style={{ fontSize: '150%'}}/>}>
                 <Link to="/reports">Reportes</Link>
               </Menu.Item>
             </Menu>

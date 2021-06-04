@@ -5,6 +5,7 @@ import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
 import UserMain from './user/userMain';
 import ProjectsMain from './projects/projectsMain';
+import GroupMain from './groups/groupsMain';
 import TestplansMain from './testplans/testplansMain';
 import ExecutionsMain from './executions/executionsMain';
 import ReportsMain from './reports/reportsMain';
@@ -57,6 +58,9 @@ class App extends Component {
           <Switch>
             <Route path="/user" render={() => (
               <UserMain user={usr} /> )}
+            />
+            <Route path="/groups" render={() => (
+              <GroupMain user={usr} /> )}
             />
             <Route path="/projects" render={() => (
               <ProjectsMain user={usr} /> )}
