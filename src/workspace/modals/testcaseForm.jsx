@@ -46,10 +46,12 @@ class TestcaseForm extends React.Component {
     }
     
     handleOk(values) {
-        const { isEditModalVisible } = this.props
-        this.setConfirmLoading(true);
-        isEditModalVisible(false);
-        this.setConfirmLoading(false);
+        const { isEditModalVisible,upsertTestcase } = this.props
+        this.setConfirmLoading(true)
+        isEditModalVisible(false)
+        //upsert testcase
+        upsertTestcase(values)
+        this.setConfirmLoading(false)
     }
 
     prioritiesOptions() {

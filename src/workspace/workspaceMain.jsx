@@ -11,13 +11,20 @@ class WorkspaceMain extends React.Component {
         this.setTestcase = this.setTestcase.bind(this)
         this.setTestplan = this.setTestplan.bind(this)
         this.fetchTestcase = this.fetchTestcase.bind(this)
-        this.updateTestcase = this.updateTestcase.bind(this)
+        this.upsertTestcase = this.upsertTestcase.bind(this)
         this.addStep = this.addStep.bind(this)
     }
 
     state = {
         testcase: {
             //properties
+            id: undefined,
+            testcaseName: undefined,
+            description: undefined,
+            preconditions: undefined,
+            priority: undefined,
+            modifiedOn: undefined,
+            isExported: undefined,
             testplanId: undefined,
             testplanName: undefined,
             projectId: undefined,
@@ -61,14 +68,29 @@ class WorkspaceMain extends React.Component {
         this.setState({ project: project, testplan: testplan })
     }
 
-    updateTestcase(values) {
-        //Query
-        const { testplan } = this.state
-        let newTestplan = testplan
-        newTestplan.testplanName = values.testplanName
-        newTestplan.description = values.description
-        newTestplan.tags = values.tags || []
-        this.setState({ testplan: newTestplan })
+    upsertTestcase(values) {
+        const { testcase } = this.state
+        console.log(values)
+        let newTestcase = testcase
+        if( testcase.id === undefined )
+        {
+            //Insert(values)
+            //si falla , mensaje y volver atrás
+            newTestcase.id = 0
+            newTestcase.testcaseName = values.testcaseName
+            newTestcase.description = values.description
+            newTestcase.preconditions = values.preconditions
+            newTestcase.priority = values.priority
+        }
+        else
+        {
+            //Update
+            //si falla mensaje
+            newTestcase.testplanName = values.testplanName
+            newTestcase.description = values.description
+            newTestcase.tags = values.tags || []
+        }
+        this.setState({ testcase: newTestcase })
     }
 
     addStep(values) {
@@ -95,7 +117,7 @@ class WorkspaceMain extends React.Component {
             <AppLayout>
                 <Switch>
                     <Route exact path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase testcase={testcase} setTestplan={this.setTestplan} addStep={this.addStep}/>)}
+                        <Testcase testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
                     />
                     <Route path="/workspace/search" render={() => (
                         <Testcase setTestcase={this.setTestcase}/>)}

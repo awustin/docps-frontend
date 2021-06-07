@@ -20,6 +20,7 @@ import {
     ThunderboltOutlined,
     PlusCircleFilled,
 } from '@ant-design/icons';
+import * as d from '../../AppConsts.json';
 import TestcaseSetps from './testcaseSteps';
 import TestcaseForm from '../modals/testcaseForm';
 
@@ -28,6 +29,7 @@ class Testcase extends React.Component {
         super(props)
         this.handleEditClick = this.handleEditClick.bind(this)
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
+        this.priorityTag = this.priorityTag.bind(this)
     }
 
     state = {
@@ -35,16 +37,21 @@ class Testcase extends React.Component {
     }
     
     componentDidMount() {      
-        const { setTestplan } = this.props
+        const { testcase,setTestplan } = this.props
         if(Object.keys(this.props).includes("match") && setTestplan !== undefined)
         {
             let id = this.props.match.params.testplanId
             let name = this.props.match.params.testplanName
             setTestplan(id, name)
         }
+        if(testcase.id === undefined)
+        {
+            this.setState({ showEditModal: true })      
+        }
     }
 
     handleEditClick() {
+        console.log(this.props.testcase)
         this.setState({ showEditModal: true })
     }
     
@@ -52,8 +59,29 @@ class Testcase extends React.Component {
         this.setState({ showEditModal: value })
     }
 
+    priorityTag() {
+        const { testcase } = this.props
+        let priority = testcase.priority
+        let tagColor 
+        switch(priority)
+        {
+            case "Low":
+                tagColor = '#6cdef5'
+                break
+            case "Medium":
+                tagColor = '#f5b642'
+                break
+            case "High":
+                tagColor = '#f56942'
+                break
+            default:
+                break
+        }
+        return <Tag color={tagColor}>{d.priorities[priority]}</Tag>
+    }
+
     render() {
-        const { testcase, addStep } = this.props
+        const { testcase, upsertTestcase, addStep } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
         const { Meta } = Card
@@ -72,19 +100,20 @@ class Testcase extends React.Component {
                         ]}>
                             <Title level={5}>Caso de prueba</Title>
                             <Descriptions column={1} size="small" labelStyle={{width: "120px"}}>
-                                <Descriptions.Item label="Nombre"><Text strong>nombre</Text></Descriptions.Item>
-                                <Descriptions.Item label="Descripción">Descripción</Descriptions.Item>
-                                <Descriptions.Item label="Precondiciones">tag</Descriptions.Item>
-                                <Descriptions.Item label="Prioridad">tags</Descriptions.Item>
+                                <Descriptions.Item label="Nombre"><Text strong>{testcase.testcaseName}</Text></Descriptions.Item>
+                                <Descriptions.Item label="Descripción">{testcase.description}</Descriptions.Item>
+                                <Descriptions.Item label="Precondiciones">{testcase.preconditions}</Descriptions.Item>
+                                <Descriptions.Item label="Prioridad">{this.priorityTag()}</Descriptions.Item>
                             </Descriptions>
                         </Card>
                         <TestcaseForm 
                             visible={showEditModal} 
-                            isEditModalVisible={this.isEditModalVisible} 
+                            isEditModalVisible={this.isEditModalVisible}
+                            upsertTestcase={upsertTestcase}
                         />
                     </Col>
                     <Col flex="1 0 75%" style={{textAlign: "middle"}}>
-                        <Title level={5} style={{marginLeft: "20px"}}>Pasos</Title>
+                        <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
                         <TestcaseSetps steps={testcase.steps} addStep={addStep}/>
                     </Col>                    
                 </Row>
