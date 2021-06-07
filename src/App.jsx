@@ -6,6 +6,7 @@ import LoginPage from './login/loginPage';
 import UserMain from './user/userMain';
 import ProjectsMain from './projects/projectsMain';
 import TestplansMain from './testplans/testplansMain';
+import WorkspaceMain from './workspace/workspaceMain';
 import ExecutionsMain from './executions/executionsMain';
 import ReportsMain from './reports/reportsMain';
 import 'antd/dist/antd.css';
@@ -63,6 +64,9 @@ class App extends Component {
             />
             <Route path="/testplans" render={() => (
               <TestplansMain user={usr} /> )}
+            />
+            <Route path="/workspace" render={() => (
+              <WorkspaceMain user={usr} /> )}
             />
             <Route path="/executions" render={() => (
               <ExecutionsMain user={usr} /> )}

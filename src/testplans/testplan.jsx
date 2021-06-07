@@ -17,6 +17,7 @@ import {
     EditOutlined,
     DeleteOutlined,
     ThunderboltOutlined,
+    PlusCircleFilled,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import TestplanEdit from './modals/testplanEdit';
@@ -139,6 +140,13 @@ class Testplan extends React.Component {
                 <Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
                     <Col flex="1 0 75%">
                         <Title level={4}>Casos de prueba</Title>
+                    </Col>                    
+                    <Col flex="1 0 25%" style={{textAlign: "end"}}>
+                        <Link to={{ pathname:"/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName}}>
+                            <Button style={{display: "inline-flex", alignItems: "center"}}>
+                                <PlusCircleFilled style={{ color: "#b0b0b0", paddingTop: "1px"}}/>Crear caso de prueba
+                            </Button>
+                        </Link>
                     </Col>
                 </Row>
                 <List

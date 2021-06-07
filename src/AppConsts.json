@@ -4,5 +4,11 @@
         "INVALID_USERNAME": "Usuario o contraseña inválidos.",
         "NETWORK_ERROR": "Error al conectar con el servidor.",
         "WRONG_FORMAT": "Formato incorrecto."
+    },
+    "priorities":
+    {
+        "Low": "Baja",
+        "Medium": "Media",
+        "High": "Alta"
     }
 }

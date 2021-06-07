@@ -23,6 +23,18 @@ class AppLayout extends React.Component {
   state = {
     collapsed: false
   };
+
+  componentDidUpdate() {
+    const { collapsed } = this.state
+    if(('location' in this.props.children._self.props) && collapsed === false)
+    {
+      let pathname = this.props.children._self.props.location.pathname 
+      if(pathname.includes("workspace"))
+      {
+        this.setState({ collapsed: true })
+      }
+    }
+  }
   
   onCollapse = collapsed => {
     this.setState({ collapsed });
@@ -64,7 +76,7 @@ class AppLayout extends React.Component {
                 { this.props.children }
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>DOCPS 2021</Footer>
         </Layout>
         </Layout>
       </div>
