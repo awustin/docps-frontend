@@ -35,14 +35,18 @@ class WorkspaceMain extends React.Component {
         }
     }
     
-    setTestcase(testcase) {
+    setTestcase(values) {
+        const { testcase } = this.state
+        testcase["id"] = values.id
+        testcase["testplanId"] = values.testplanId
+        testcase["testplanName"] = values.testplanName
         this.setState({ testcase: testcase })
     }
 
-    setTestplan(id, name) {      
+    setTestplan(id, name) {
         const { testcase } = this.state
         testcase["testplanId"] = id
-        testcase["testplanName"]  =name
+        testcase["testplanName"] = name
         this.setState({ testcase: testcase })
     }
 
@@ -117,13 +121,13 @@ class WorkspaceMain extends React.Component {
             <AppLayout>
                 <Switch>
                     <Route exact path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
+                        <Testcase action="create" testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
+                    />
+                    <Route exact path="/workspace/id=:id&p=:testplanId&n=:testplanName" render={() => (
+                        <Testcase action="edit" testcase={testcase} setTestcase={this.setTestcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
                     />
                     <Route path="/workspace/search" render={() => (
                         <Testcase setTestcase={this.setTestcase}/>)}
-                    />
-                    <Route exact path="/workspace/id=:id" render={() => (
-                        <Testcase/>)}
                     />
                     <Route path="/workspace/p=:projectId&id=:testplanId" render={() => (
                         <Testcase/>)}

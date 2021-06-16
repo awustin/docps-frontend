@@ -52,6 +52,7 @@ class Testplan extends React.Component {
         let statuses = ['Not executed','In progress','Passed','Failed']
         for (let index = 0; index < 5; index++) {
             let item = {
+                id: index*2,
                 key: 'case'+index*2,
                 caseId: index,
                 caseName: 'CasoDePrueba-'+index,
@@ -161,7 +162,7 @@ class Testplan extends React.Component {
                             key={item.key}
                             span={4}
                             actions={[
-                                <Link to={{ pathname: "/workspace/id=" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+                                <Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
                                 <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} />,
                                 <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                             ]}

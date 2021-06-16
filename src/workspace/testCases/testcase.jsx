@@ -36,17 +36,33 @@ class Testcase extends React.Component {
         showEditModal: false,
     }
     
-    componentDidMount() {      
-        const { testcase,setTestplan } = this.props
-        if(Object.keys(this.props).includes("match") && setTestplan !== undefined)
+    componentDidMount() {    
+        const { testcase,setTestplan,setTestcase,action } = this.props
+        switch(action)
         {
-            let id = this.props.match.params.testplanId
-            let name = this.props.match.params.testplanName
-            setTestplan(id, name)
-        }
-        if(testcase.id === undefined)
-        {
-            this.setState({ showEditModal: true })      
+            case("create"):
+                if(Object.keys(this.props).includes("match") && setTestplan !== undefined)
+                {
+                    let id = this.props.match.params.testplanId
+                    let name = this.props.match.params.testplanName
+                    setTestplan(id, name)
+                }
+                if(testcase.id === undefined)
+                    this.setState({ showEditModal: true })
+                break;
+            case("edit"):
+                if(Object.keys(this.props).includes("match") && setTestcase !== undefined)
+                {
+                    let values = {
+                        id: this.props.match.params.id,
+                        testplanId: this.props.match.params.testplanId,
+                        testplanName: this.props.match.params.testplanName
+                    }
+                    setTestcase(values)
+                }
+                break;
+            default:
+                break;
         }
     }
 
