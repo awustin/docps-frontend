@@ -8,7 +8,6 @@ import Testcase from './testCases/testcase';
 class WorkspaceMain extends React.Component {
     constructor(props){
         super(props)
-        this.setTestcase = this.setTestcase.bind(this)
         this.setTestplan = this.setTestplan.bind(this)
         this.fetchTestcase = this.fetchTestcase.bind(this)
         this.upsertTestcase = this.upsertTestcase.bind(this)
@@ -34,14 +33,6 @@ class WorkspaceMain extends React.Component {
             steps: []
         }
     }
-    
-    setTestcase(values) {
-        const { testcase } = this.state
-        testcase["id"] = values.id
-        testcase["testplanId"] = values.testplanId
-        testcase["testplanName"] = values.testplanName
-        this.setState({ testcase: testcase })
-    }
 
     setTestplan(id, name) {
         const { testcase } = this.state
@@ -50,37 +41,36 @@ class WorkspaceMain extends React.Component {
         this.setState({ testcase: testcase })
     }
 
-    fetchTestcase(projectId, testplanId) {
+    fetchTestcase(ids) {
         //Query
-        let project = {
-            projectId: projectId,
-            projectName: 'PRO-124'
+        //Si hay error mensaje y volver atrás
+        let testcase = {
+            id: ids.id,
+            testcaseName: 'CASO-001',
+            description: 'Este es un caso de prueba.',
+            preconditions: 'Login',
+            priority: 'Low',
+            modifiedOn: '1/1/2021',
+            isExported: false,
+            testplanId: ids.testplanId,
+            testplanName: ids.testplanName,
+            projectId: 99,
+            projectName: 'COMPANY-APP',
+            groupId: 88,
+            groupName: 'Pumas',
+            steps: []
         }
-        let testplan = {
-            key: 'item'+testplanId,
-            testplanId: testplanId,
-            testplanName: 'ISSUE-1: Pruebas',
-            description: 'Plan de pruebas para una funcionalidad',
-            tags: ['integración','QA'],
-            createdOn: '21/03/2021',
-            status: 'Passed',
-            projectId: projectId,
-            projectName: 'PRO-124',
-            groupId: 1,
-            groupName: 'Pumas'
-        }
-        this.setState({ project: project, testplan: testplan })
+        this.setState({ testcase: testcase })
     }
 
     upsertTestcase(values) {
         const { testcase } = this.state
-        console.log(values)
         let newTestcase = testcase
         if( testcase.id === undefined )
         {
             //Insert(values)
             //si falla , mensaje y volver atrás
-            newTestcase.id = 0
+            newTestcase.id = 999
             newTestcase.testcaseName = values.testcaseName
             newTestcase.description = values.description
             newTestcase.preconditions = values.preconditions
@@ -90,9 +80,10 @@ class WorkspaceMain extends React.Component {
         {
             //Update
             //si falla mensaje
-            newTestcase.testplanName = values.testplanName
+            newTestcase.testcaseName = values.testcaseName
             newTestcase.description = values.description
-            newTestcase.tags = values.tags || []
+            newTestcase.preconditions = values.preconditions
+            newTestcase.priority = values.priority
         }
         this.setState({ testcase: newTestcase })
     }
@@ -124,10 +115,7 @@ class WorkspaceMain extends React.Component {
                         <Testcase action="create" testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
                     />
                     <Route exact path="/workspace/id=:id&p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase action="edit" testcase={testcase} setTestcase={this.setTestcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
-                    />
-                    <Route path="/workspace/search" render={() => (
-                        <Testcase setTestcase={this.setTestcase}/>)}
+                        <Testcase action="edit" testcase={testcase} fetchTestcase={this.fetchTestcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
                     />
                     <Route path="/workspace/p=:projectId&id=:testplanId" render={() => (
                         <Testcase/>)}

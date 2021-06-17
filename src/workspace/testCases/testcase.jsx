@@ -37,7 +37,7 @@ class Testcase extends React.Component {
     }
     
     componentDidMount() {    
-        const { testcase,setTestplan,setTestcase,action } = this.props
+        const { testcase,setTestplan,fetchTestcase,action } = this.props
         switch(action)
         {
             case("create"):
@@ -51,14 +51,14 @@ class Testcase extends React.Component {
                     this.setState({ showEditModal: true })
                 break;
             case("edit"):
-                if(Object.keys(this.props).includes("match") && setTestcase !== undefined)
+                if(Object.keys(this.props).includes("match") && fetchTestcase !== undefined)
                 {
                     let values = {
                         id: this.props.match.params.id,
                         testplanId: this.props.match.params.testplanId,
                         testplanName: this.props.match.params.testplanName
                     }
-                    setTestcase(values)
+                    fetchTestcase(values)
                 }
                 break;
             default:
@@ -67,7 +67,6 @@ class Testcase extends React.Component {
     }
 
     handleEditClick() {
-        console.log(this.props.testcase)
         this.setState({ showEditModal: true })
     }
     
@@ -97,17 +96,27 @@ class Testcase extends React.Component {
     }
 
     render() {
-        const { testcase, upsertTestcase, addStep } = this.props
+        const { testcase, upsertTestcase, addStep, action } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
         const { Meta } = Card
         return(
             <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
-                <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
-                <Breadcrumb.Item>Crear caso de prueba</Breadcrumb.Item>
-            </Breadcrumb>
+            { (action === 'create') ?
+                <Breadcrumb>
+                    <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
+                    <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
+                    <Breadcrumb.Item>Crear caso de prueba</Breadcrumb.Item>
+                </Breadcrumb>
+                : (
+                <Breadcrumb>
+                    <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
+                    <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
+                    <Breadcrumb.Item>Modificar caso de prueba</Breadcrumb.Item>
+                    <Breadcrumb.Item>{testcase.testcaseName}</Breadcrumb.Item>
+                </Breadcrumb>
+                )
+            }
             <div className="testcase-container" style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "top"}}>
                     <Col flex="1 0 25%">
@@ -123,9 +132,15 @@ class Testcase extends React.Component {
                             </Descriptions>
                         </Card>
                         <TestcaseForm 
-                            visible={showEditModal} 
+                            visible={showEditModal}
                             isEditModalVisible={this.isEditModalVisible}
                             upsertTestcase={upsertTestcase}
+                            values={{
+                                name: testcase.testcaseName,
+                                description: testcase.description,
+                                preconditions: testcase.preconditions,
+                                priority: testcase.priority
+                                }}
                         />
                     </Col>
                     <Col flex="1 0 75%" style={{textAlign: "middle"}}>

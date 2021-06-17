@@ -3,16 +3,11 @@ import React from 'react';
 import {
     Typography,
     Tag,
-    Button,
     Form,
     Input,
     Modal,
     Select,
-    Divider,
 } from 'antd';
-import { 
-    PlusOutlined,
-} from '@ant-design/icons';
 import * as d from '../../AppConsts.json';
 
 class TestcaseForm extends React.Component {
@@ -84,16 +79,11 @@ class TestcaseForm extends React.Component {
     }
 
     render() {
-        const { visible } = this.props
-        const { confirmLoading, tagItems, newTag } = this.state
-        const { Title } = Typography
-        const { Option } = Select
+        const { visible, values } = this.props
+        const { confirmLoading } = this.state
         const layout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
-        }
-        const tailLayout = {
-          wrapperCol: { offset: 7, span: 12 },
         }
         return(
             <> 
@@ -116,6 +106,7 @@ class TestcaseForm extends React.Component {
                     <Form.Item
                         label="Nombre"
                         name="testcaseName"
+                        initialValue={values.name}
                         rules={[{ required: true, message: 'El nombre del caso de prueba está vacío.' }]}
                     >
                         <Input/>
@@ -123,6 +114,7 @@ class TestcaseForm extends React.Component {
                     <Form.Item
                         label="Descripción"
                         name="description"
+                        initialValue={values.description}
                     >
                         <Input.TextArea 
                             maxLength={500}
@@ -132,6 +124,7 @@ class TestcaseForm extends React.Component {
                     <Form.Item
                         label="Precondiciones"
                         name="preconditions"
+                        initialValue={values.preconditions}
                     >
                         <Input.TextArea 
                             maxLength={500}
@@ -141,6 +134,7 @@ class TestcaseForm extends React.Component {
                     <Form.Item
                         label="Prioridad"
                         name="priority"
+                        initialValue={values.priority}
                     >
                         <Select>
                             {this.prioritiesOptions()}
