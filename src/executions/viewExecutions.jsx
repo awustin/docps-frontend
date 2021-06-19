@@ -21,13 +21,12 @@ class ViewExecutions extends React.Component {
         let statuses = ['Not executed','In progress','Passed','Failed']
         let list = []
         //Query execution list with testcase id. Then show modal
-        console.log('Fetching executions for testcase id: ' + id)
         for (let index = 0; index < 3; index++) {
             list.push({
                 id: index,
                 key: index*2,
                 status: statuses[Math.floor(Math.random() * statuses.length)],
-                commentary: 'Esta ejecución es de prueba',
+                commentary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
                 createdOn: '1/1/2021'
             })   
         }
