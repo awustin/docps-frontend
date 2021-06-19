@@ -10,6 +10,7 @@ class ViewExecutions extends React.Component {
         super(props)
         this.handleClick = this.handleClick.bind(this)
         this.isModalVisible = this.isModalVisible.bind(this)
+        this.addExecution = this.addExecution.bind(this)
     }
     state = {
         showModal: false,
@@ -21,7 +22,7 @@ class ViewExecutions extends React.Component {
         let statuses = ['Not executed','In progress','Passed','Failed']
         let list = []
         //Query execution list with testcase id. Then show modal
-        for (let index = 0; index < 3; index++) {
+        for (let index = 0; index < 2; index++) {
             list.push({
                 id: index,
                 key: index*2,
@@ -37,6 +38,23 @@ class ViewExecutions extends React.Component {
         this.setState({ showModal: value })
     }
 
+    addExecution() {
+        //Query to insert execution
+        //Query to fetch executions
+        //refresh state
+        let { executions } = this.state
+        var today = new Date();
+        let newExecution = {
+            id: 99,
+            key: 99*2,
+            status: 'Not executed',
+            commentary: '',
+            createdOn: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
+        }
+        executions.push(newExecution)
+        this.setState({ executions: executions })
+    }
+
     render() {
         const { showModal, executions } = this.state
         return(
@@ -44,6 +62,7 @@ class ViewExecutions extends React.Component {
                 <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} onClick={this.handleClick} />
                 <ExecutionList
                     list={executions}
+                    addExecution={this.addExecution}
                     visible={showModal} 
                     isModalVisible={this.isModalVisible} 
                 />

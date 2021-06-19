@@ -14,6 +14,7 @@ import {
     SettingOutlined,
     EditOutlined,
     EllipsisOutlined,
+    PlusCircleOutlined,
 } from '@ant-design/icons';
 
 const { Meta } = Card
@@ -47,7 +48,7 @@ class ExecutionList extends React.Component {
         list.forEach(item => {
             renderItems.push(
                 <Card className="execution-card" 
-                    style={{ borderRadius: "0.5em", margin: 15 }} 
+                    style={{ borderRadius: "0.5em", marginBottom: 15, marginTop: 15 }} 
                     actions={[
                         <SettingOutlined key="setting" />,
                         <EditOutlined key="edit" />,
@@ -85,7 +86,7 @@ class ExecutionList extends React.Component {
     }
 
     render() {
-        const { visible } = this.props
+        const { visible,addExecution } = this.props
         const { confirmLoading } = this.state
         return(
             <> 
@@ -100,6 +101,15 @@ class ExecutionList extends React.Component {
             >
                 <div className="execution-list-container"  style={{margin: "10px"}}>
                     {this.showExecutionList()}
+                </div>
+                <div className="execution-add" style={{display: "flex", margin: "10px"}}>
+                    <Button key="add-execution"
+                        onClick={ ()=> {addExecution()} }
+                        icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/> }
+                        type="primary"
+                    >
+                        Agregar ejecución
+                    </Button>
                 </div>
             </Modal>
             </>
