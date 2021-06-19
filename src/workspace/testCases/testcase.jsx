@@ -1,24 +1,17 @@
 import React from 'react';
 import {
     Typography,
-    Divider,
-    Button,
+    Alert,
     Row,
     Col,
     Descriptions,
     Tag,
     Breadcrumb,
-    List,
-    Avatar,
-    Tooltip,
     Card,
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
     EditOutlined,
-    DeleteOutlined,
-    ThunderboltOutlined,
-    PlusCircleFilled,
 } from '@ant-design/icons';
 import * as d from '../../AppConsts.json';
 import TestcaseSetps from './testcaseSteps';
@@ -30,6 +23,7 @@ class Testcase extends React.Component {
         this.handleEditClick = this.handleEditClick.bind(this)
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
         this.priorityTag = this.priorityTag.bind(this)
+        this.showMessages = this.showMessages.bind(this)
     }
 
     state = {
@@ -95,6 +89,13 @@ class Testcase extends React.Component {
         return <Tag color={tagColor}>{d.priorities[priority]}</Tag>
     }
 
+    showMessages() {
+        const { messages } = this.props
+        return messages.map( (msg) => {
+            return(<Alert key={msg} message={msg.text} type={msg.type} showIcon closable/>)
+        })
+    }
+
     render() {
         const { testcase, upsertTestcase, addStep, action } = this.props
         const { showEditModal } = this.state
@@ -148,6 +149,9 @@ class Testcase extends React.Component {
                         <TestcaseSetps steps={testcase.steps} addStep={addStep}/>
                     </Col>                    
                 </Row>
+            </div>
+            <div className="testcase-messages" style={{margin: "50px"}}>
+                {this.showMessages()}
             </div>
             </>
         );

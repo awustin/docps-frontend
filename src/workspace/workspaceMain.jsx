@@ -11,6 +11,7 @@ class WorkspaceMain extends React.Component {
         this.setTestplan = this.setTestplan.bind(this)
         this.fetchTestcase = this.fetchTestcase.bind(this)
         this.upsertTestcase = this.upsertTestcase.bind(this)
+        this.addMessage = this.addMessage.bind(this)
         this.addStep = this.addStep.bind(this)
     }
 
@@ -31,7 +32,8 @@ class WorkspaceMain extends React.Component {
             groupId: undefined,
             groupName: undefined,
             steps: []
-        }
+        },
+        messages: []
     }
 
     setTestplan(id, name) {
@@ -47,7 +49,7 @@ class WorkspaceMain extends React.Component {
         let testcase = {
             id: ids.id,
             testcaseName: 'CASO-001',
-            description: 'Este es un caso de prueba.',
+            description: 'Este es un caso de prueba ya creado.',
             preconditions: 'Login',
             priority: 'Low',
             modifiedOn: '1/1/2021',
@@ -69,12 +71,19 @@ class WorkspaceMain extends React.Component {
         if( testcase.id === undefined )
         {
             //Insert(values)
-            //si falla , mensaje y volver atrás
             newTestcase.id = 999
             newTestcase.testcaseName = values.testcaseName
             newTestcase.description = values.description
             newTestcase.preconditions = values.preconditions
             newTestcase.priority = values.priority
+            //si falla , mensaje y volver atrás
+            //Con el insert, obtener id insertado
+            //Hacer fetchTestcase para cargar el testcase desde la BD
+            this.fetchTestcase({id: 777, testplanId: 7, testplanName: 'PLAN-002'})
+            //Cargar mensaje de creado con exito
+            this.addMessage('Caso de prueba creado con éxito','success')
+            //redirigir a la vista de edición
+            this.props.history.push("/workspace/id=" + testcase.id + "&p=" + testcase.testplanId + "&n=" + testcase.testplanName)
         }
         else
         {
@@ -84,8 +93,15 @@ class WorkspaceMain extends React.Component {
             newTestcase.description = values.description
             newTestcase.preconditions = values.preconditions
             newTestcase.priority = values.priority
+            this.setState({ testcase: newTestcase })
         }
-        this.setState({ testcase: newTestcase })
+    }
+
+    addMessage(text,type) {
+        const { messages } = this.state
+        let newMessages = messages
+        newMessages.push({ text: text, type: type})
+        this.setState({ messages: newMessages })
     }
 
     addStep(values) {
@@ -107,15 +123,15 @@ class WorkspaceMain extends React.Component {
     }
 
     render() {
-        const { testcase } = this.state
+        const { testcase, messages } = this.state
         return(
             <AppLayout>
                 <Switch>
                     <Route exact path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase action="create" testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
+                        <Testcase action="create" testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep} messages={messages}/>)}
                     />
                     <Route exact path="/workspace/id=:id&p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase action="edit" testcase={testcase} fetchTestcase={this.fetchTestcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep}/>)}
+                        <Testcase action="edit" testcase={testcase} fetchTestcase={this.fetchTestcase} upsertTestcase={this.upsertTestcase} addStep={this.addStep} messages={messages}/>)}
                     />
                     <Route path="/workspace/p=:projectId&id=:testplanId" render={() => (
                         <Testcase/>)}
