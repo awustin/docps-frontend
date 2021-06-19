@@ -21,6 +21,7 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import TestplanEdit from './modals/testplanEdit';
+import ViewExecutions from '../executions/viewExecutions';
 
 class Testplan extends React.Component {
     constructor(props){
@@ -163,14 +164,14 @@ class Testplan extends React.Component {
                             span={4}
                             actions={[
                                 <Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
-                                <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} />,
+                                <ViewExecutions id={item.id}/>,
                                 <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                             ]}
                             style={{background: "#fff"}}
                         >
                             <List.Item.Meta
                                 avatar={<Avatar src={item.avatar} />}
-                                title={<a href={item.href}>{item.caseName}</a>}
+                                title={item.caseName}
                                 description={'Última modificación: ' + item.modifiedOn}
                                 />
                         </List.Item>
