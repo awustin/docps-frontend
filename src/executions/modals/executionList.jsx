@@ -4,18 +4,15 @@ import {
     Button,
     Modal,
     Card,
-    Space,
     Tag,
     Row,
     Col,
-    Divider,
 } from 'antd';
 import {
-    SettingOutlined,
-    EditOutlined,
-    EllipsisOutlined,
     PlusCircleOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
+import EditExecutionButton from '../editExecutionButton'
 
 const { Meta } = Card
 
@@ -24,7 +21,6 @@ class ExecutionList extends React.Component {
         super(props)
         this.handleOk = this.handleOk.bind(this)
         this.showExecutionList = this.showExecutionList.bind(this)
-        this.statusTag = this.statusTag.bind(this)
     }
     state = {
         confirmLoading: false
@@ -34,7 +30,7 @@ class ExecutionList extends React.Component {
         this.setState({ confirmLoading: value })
     }
     
-    handleOk(values) {
+    handleOk() {
         const { isModalVisible } = this.props
         this.setConfirmLoading(true);
         //close
@@ -43,16 +39,18 @@ class ExecutionList extends React.Component {
     }
 
     showExecutionList() {
-        const { list } = this.props
+        const { list,updateExecution } = this.props
         let renderItems = []
         list.forEach(item => {
             renderItems.push(
                 <Card className="execution-card" 
                     style={{ borderRadius: "0.5em", marginBottom: 15, marginTop: 15 }} 
                     actions={[
-                        <SettingOutlined key="setting" />,
-                        <EditOutlined key="edit" />,
-                        <EllipsisOutlined key="ellipsis" />,
+                        <EditExecutionButton key="edit-execution"
+                            executionValues={{ id: item.id, status: item.status , commentary: item.commentary }}
+                            updateExecution={updateExecution}
+                        />,
+                        <DeleteOutlined key="delete-execution" />,
                     ]}
                     key={'card-' + item.key}
                 >

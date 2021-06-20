@@ -16,8 +16,7 @@ import { withRouter } from "react-router";
 import { 
     EditOutlined,
     DeleteOutlined,
-    ThunderboltOutlined,
-    PlusCircleFilled,
+    PlusCircleOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import TestplanEdit from './modals/testplanEdit';
@@ -146,7 +145,7 @@ class Testplan extends React.Component {
                     <Col flex="1 0 25%" style={{textAlign: "end"}}>
                         <Link to={{ pathname:"/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName}}>
                             <Button style={{display: "inline-flex", alignItems: "center"}}>
-                                <PlusCircleFilled style={{ color: "#b0b0b0", paddingTop: "1px"}}/>Crear caso de prueba
+                                <PlusCircleOutlined style={{ color: "#b0b0b0", paddingTop: "1px"}}/>Crear caso de prueba
                             </Button>
                         </Link>
                     </Col>
@@ -163,7 +162,11 @@ class Testplan extends React.Component {
                             key={item.key}
                             span={4}
                             actions={[
-                                <Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+                                <Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}>
+                                    <Tooltip title="Modificar caso de prueba" color="#108ee9">
+                                        <EditOutlined style={{ fontSize: '150%'}} />
+                                    </Tooltip>
+                                </Link>,
                                 <ViewExecutions id={item.id}/>,
                                 <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
                             ]}

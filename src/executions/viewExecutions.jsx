@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+    Tooltip,
+} from 'antd';
 import { withRouter } from "react-router";
 import {
     ThunderboltOutlined,
@@ -11,6 +14,7 @@ class ViewExecutions extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.isModalVisible = this.isModalVisible.bind(this)
         this.addExecution = this.addExecution.bind(this)
+        this.updateExecution = this.updateExecution.bind(this)
     }
     state = {
         showModal: false,
@@ -55,14 +59,32 @@ class ViewExecutions extends React.Component {
         this.setState({ executions: executions })
     }
 
+    updateExecution(values) {
+        //Query to update execution by Id
+        //Query to fetch executions
+        //refresh state
+        let { executions } = this.state
+        executions.forEach( (e) => {
+            if(e.id === values.id)
+            {
+                e.status = values.status
+                e.commentary = values.commentary
+            }
+        })
+        this.setState({ executions: executions })
+    }
+
     render() {
         const { showModal, executions } = this.state
         return(
             <>
-                <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} onClick={this.handleClick} />
+                <Tooltip title="Mostrar ejecuciones" color="#108ee9">
+                    <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} onClick={this.handleClick} />
+                </Tooltip>
                 <ExecutionList
                     list={executions}
                     addExecution={this.addExecution}
+                    updateExecution={this.updateExecution}
                     visible={showModal} 
                     isModalVisible={this.isModalVisible} 
                 />
