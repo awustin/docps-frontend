@@ -1,6 +1,9 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import {
+    Tooltip,
+} from 'antd';
+import {
     EditOutlined,
 } from '@ant-design/icons';
 import ExecutionEdit from './modals/executionEdit';
@@ -28,7 +31,9 @@ class ExecutionList extends React.Component {
         const { showModal } = this.state
         return(
             <> 
-            <EditOutlined onClick={this.handleClick}/>
+            <Tooltip title="Modificar ejecución" color="#108ee9">
+                <EditOutlined onClick={this.handleClick}/>
+            </Tooltip>
             <ExecutionEdit
                 executionValues={executionValues}
                 updateExecution={updateExecution}

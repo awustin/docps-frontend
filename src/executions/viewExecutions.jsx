@@ -15,6 +15,7 @@ class ViewExecutions extends React.Component {
         this.isModalVisible = this.isModalVisible.bind(this)
         this.addExecution = this.addExecution.bind(this)
         this.updateExecution = this.updateExecution.bind(this)
+        this.deleteExecution = this.deleteExecution.bind(this)
     }
     state = {
         showModal: false,
@@ -74,6 +75,16 @@ class ViewExecutions extends React.Component {
         this.setState({ executions: executions })
     }
 
+    deleteExecution(id) {
+        //Query to delete by Id
+        //Query to fetch exectuions
+        //refresh state
+        const { executions } = this.state
+        this.setState({ executions: executions.filter( (e) => {
+            return e.id !== id
+        }) })
+    }
+
     render() {
         const { showModal, executions } = this.state
         return(
@@ -85,6 +96,7 @@ class ViewExecutions extends React.Component {
                     list={executions}
                     addExecution={this.addExecution}
                     updateExecution={this.updateExecution}
+                    deleteExecution={this.deleteExecution}
                     visible={showModal} 
                     isModalVisible={this.isModalVisible} 
                 />

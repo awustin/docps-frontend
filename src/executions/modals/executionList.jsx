@@ -6,7 +6,13 @@ import {
     Card,
     Tag,
     Row,
-    Col,
+    Col,    
+    Popconfirm,
+    message,
+    Typography,
+    Space,
+    Divider,
+    Tooltip,
 } from 'antd';
 import {
     PlusCircleOutlined,
@@ -20,7 +26,9 @@ class ExecutionList extends React.Component {
     constructor(props){
         super(props)
         this.handleOk = this.handleOk.bind(this)
+        this.handleDeleteExecution = this.handleDeleteExecution.bind(this)
         this.showExecutionList = this.showExecutionList.bind(this)
+        this.showEmptyList = this.showEmptyList.bind(this)
     }
     state = {
         confirmLoading: false
@@ -29,6 +37,12 @@ class ExecutionList extends React.Component {
     setConfirmLoading(value) {
         this.setState({ confirmLoading: value })
     }
+
+    handleDeleteExecution(id) {
+        const { deleteExecution } = this.props
+        deleteExecution(id)
+        message.success("Ejecución eliminada.")
+    }
     
     handleOk() {
         const { isModalVisible } = this.props
@@ -36,7 +50,7 @@ class ExecutionList extends React.Component {
         //close
         isModalVisible(false);
         this.setConfirmLoading(false);
-    }
+    }    
 
     showExecutionList() {
         const { list,updateExecution } = this.props
@@ -50,7 +64,17 @@ class ExecutionList extends React.Component {
                             executionValues={{ id: item.id, status: item.status , commentary: item.commentary }}
                             updateExecution={updateExecution}
                         />,
-                        <DeleteOutlined key="delete-execution" />,
+                        <Tooltip title="Eliminar ejecución" color="#108ee9">
+                            <Popconfirm
+                                title="¿Eliminar la ejecución?"
+                                placement="bottom"
+                                onConfirm={ () => { this.handleDeleteExecution(item.id) }}
+                                okText="Eliminar"
+                                cancelText="No"
+                            >
+                                <DeleteOutlined key="delete-execution" />
+                            </Popconfirm>
+                        </Tooltip>,
                     ]}
                     key={'card-' + item.key}
                 >
@@ -69,6 +93,18 @@ class ExecutionList extends React.Component {
         return(renderItems)
     }
 
+    showEmptyList() {
+        const { Text } = Typography;
+        return(
+            <>
+                <Space style={{ width:'100%', flexDirection: 'column', fontSize: '120%' }}>
+                    <Text type="secondary">No hay ejecuciones.</Text>
+                </Space>
+                <Divider/>
+            </>
+        )
+    }
+
     statusTag(status) {
         switch(status)
         {
@@ -84,7 +120,7 @@ class ExecutionList extends React.Component {
     }
 
     render() {
-        const { visible,addExecution } = this.props
+        const { visible,list,addExecution } = this.props
         const { confirmLoading } = this.state
         return(
             <> 
@@ -98,7 +134,7 @@ class ExecutionList extends React.Component {
                 footer={[<Button key="close" onClick={this.handleOk}>Cerrar</Button>]}
             >
                 <div className="execution-list-container"  style={{margin: "10px"}}>
-                    {this.showExecutionList()}
+                    { (list.length > 0) ? (this.showExecutionList()) : (this.showEmptyList()) }
                 </div>
                 <div className="execution-add" style={{display: "flex", margin: "10px"}}>
                     <Button key="add-execution"
