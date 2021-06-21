@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader';
 import React from 'react';
 import {
     Typography,
@@ -8,6 +7,7 @@ import {
     Modal,
     Select,
 } from 'antd';
+import { withRouter } from "react-router";
 import * as d from '../../AppConsts.json';
 
 class TestcaseForm extends React.Component {
@@ -36,8 +36,10 @@ class TestcaseForm extends React.Component {
     }
     
     handleCancel() {
-        const { isEditModalVisible } = this.props
-        isEditModalVisible(false);
+        const { isEditModalVisible,values } = this.props
+        isEditModalVisible(false)
+        if( values.id === undefined )
+            this.props.history.goBack()
     }
     
     handleOk(values) {
@@ -96,6 +98,9 @@ class TestcaseForm extends React.Component {
                 okText="Confirmar"
                 onCancel={this.handleCancel}
                 cancelText="Cancelar"
+                closable={false}
+                maskClosable={false}
+                keyboard={false}
             >
                 <Form {...layout}
                     name="testcaseForm"
@@ -147,4 +152,4 @@ class TestcaseForm extends React.Component {
     }
 }
 
-export default hot(module)(TestcaseForm);
+export default withRouter(TestcaseForm);

@@ -137,6 +137,7 @@ class Testcase extends React.Component {
                             isEditModalVisible={this.isEditModalVisible}
                             upsertTestcase={upsertTestcase}
                             values={{
+                                id: testcase.id,
                                 name: testcase.testcaseName,
                                 description: testcase.description,
                                 preconditions: testcase.preconditions,
