@@ -95,7 +95,7 @@ class TestplansMain extends React.Component {
                     <Route path="/testplans/search" render={() => (
                         <TestplanSearch setTestplan={this.setTestplan}/>)}
                     />
-                    <Route exact path="/testplans/id=:id" render={() => (
+                    <Route exact path="/testplans/id=:testplanId" render={() => (
                         <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan} updateTestplan={this.updateTestplan}/>)}
                     />
                     <Route path="/testplans/p=:projectId&id=:testplanId" render={() => (

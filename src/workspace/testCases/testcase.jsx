@@ -14,7 +14,7 @@ import {
     EditOutlined,
 } from '@ant-design/icons';
 import * as d from '../../AppConsts.json';
-import TestcaseSetps from './testcaseSteps';
+import TestcaseSteps from './testcaseSteps';
 import TestcaseForm from '../modals/testcaseForm';
 
 class Testcase extends React.Component {
@@ -147,7 +147,7 @@ class Testcase extends React.Component {
                     </Col>
                     <Col flex="1 0 75%" style={{textAlign: "middle"}}>
                         <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
-                        <TestcaseSetps steps={testcase.steps} addStep={addStep}/>
+                        <TestcaseSteps steps={testcase.steps} addStep={addStep}/>
                     </Col>                    
                 </Row>
             </div>

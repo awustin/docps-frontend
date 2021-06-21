@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-class TestcaseSetps extends React.Component {
+class TestcaseSteps extends React.Component {
     constructor(props){
         super(props)
         this.displaySteps = this.displaySteps.bind(this)
@@ -54,4 +54,4 @@ class TestcaseSetps extends React.Component {
     }
 }
 
-export default withRouter(TestcaseSetps);
+export default withRouter(TestcaseSteps);
