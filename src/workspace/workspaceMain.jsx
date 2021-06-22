@@ -108,18 +108,19 @@ class WorkspaceMain extends React.Component {
         let { testcase } = this.state
         let list = testcase.steps
         let newstep = {
-            action: 'Hacer algo',
-            result: 'Sucede A',
-            data: 'Credenciales'
+            action: values.action,
+            result: values.result,
+            data: values.data,
+            order: list.length
         }
-        if(list === undefined)
+        if(list === undefined) {
             list = [newstep]
-        else
+        }        
+        else {
             list.push(newstep)
-
-        testcase.steps = list
-
-        this.setState({ testcase: testcase})        
+        }
+        testcase.steps = list  
+        this.setState({ testcase: testcase})
     }
 
     render() {
