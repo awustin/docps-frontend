@@ -5,6 +5,8 @@ import {
     Card,
     Form,
     Input,
+    Row,
+    Col
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -25,7 +27,17 @@ class TestcaseSteps extends React.Component {
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
             cardList.push(
-                <Card key={index}>{step.action} {step.result} {step.data}</Card>
+                <Card key={index}
+                    style={{ 
+                        borderRadius: "0.8em"
+                    }}
+                >
+                    <Row>
+                        <Col flex="1 0 33%">{step.action}</Col>
+                        <Col flex="1 0 33%">{step.data}</Col>
+                        <Col flex="1 0 33%">{step.result}</Col>
+                    </Row>
+                </Card>
             )
         }
         return cardList
@@ -43,11 +55,8 @@ class TestcaseSteps extends React.Component {
         return(
             <>
             <div className="testcase-steps-container" style={{marginLeft: "30px"}}>
-                <Space direction="vertical" style={{width: "100%"}}>
-                    {this.displaySteps()}
-                </Space>
                 <Space style={{ 
-                    marginBlockStart: "1%",
+                    marginBlockEnd: "1%",
                     justifyContent:"center",
                     width: "100%",
                     paddingTop: "2%",
@@ -94,6 +103,9 @@ class TestcaseSteps extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
+                </Space>
+                <Space direction="vertical" style={{width: "100%"}}>
+                    {this.displaySteps()}
                 </Space>
             </div>
             </>
