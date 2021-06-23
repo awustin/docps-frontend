@@ -8,6 +8,7 @@ import {
     Tag,
     Breadcrumb,
     Card,
+    Divider,
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -147,6 +148,7 @@ class Testcase extends React.Component {
                     </Col>
                     <Col flex="1 0 75%" style={{textAlign: "middle"}}>
                         <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
+                        <Divider style={{marginLeft: "30px"}}/>
                         <TestcaseSteps steps={testcase.steps} addStep={addStep}/>
                     </Col>                    
                 </Row>

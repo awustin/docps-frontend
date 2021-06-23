@@ -2,11 +2,12 @@ import React from 'react';
 import {
     Space,
     Button,
-    Card,
+    Typography,
     Form,
     Input,
     Row,
-    Col
+    Col,
+    Divider
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -27,17 +28,27 @@ class TestcaseSteps extends React.Component {
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
             cardList.push(
-                <Card key={index}
+                <Row key={index}
                     style={{ 
-                        borderRadius: "0.8em"
+                        borderRadius: "0.8em",
+                        display: "flex",
+                        paddingTop: "1%",
+                        paddingBottom: "1%",
+                        background: "#fafafa",
+                        borderRadius: "0.8em",
                     }}
+                    align="middle"
                 >
-                    <Row>
-                        <Col flex="1 0 33%">{step.action}</Col>
-                        <Col flex="1 0 33%">{step.data}</Col>
-                        <Col flex="1 0 33%">{step.result}</Col>
-                    </Row>
-                </Card>
+                    <Col flex="1 0 10%"
+                        style={{textAlign:"center"}}
+                    >
+                        {step.order+1}                    
+                    </Col>
+                    <Col flex="1 0 20%">{step.action}</Col>
+                    <Col flex="1 0 20%">{step.data}</Col>
+                    <Col flex="1 0 20%">{step.result}</Col>
+                    <Col flex="1 0 10%">acciones</Col>
+                </Row>
             )
         }
         return cardList
@@ -49,14 +60,31 @@ class TestcaseSteps extends React.Component {
         document.getElementById("steps_form_action").value = ''
         document.getElementById("steps_form_data").value = ''
         document.getElementById("steps_form_result").value = ''
+        document.getElementById("steps_form").reset()
     }
 
     render() {
+        const { Title } = Typography
         return(
             <>
-            <div className="testcase-steps-container" style={{marginLeft: "30px"}}>
+            <div className="testcase-steps-container" style={{marginLeft: "30px"}}>                
+                <Space direction="vertical" style={{width: "100%"}}>
+                    <Row style={{ 
+                            paddingTop: "0%",
+                            paddingBottom: "0%",
+                        }}
+                        align="middle"
+                    >
+                        <Col flex="1 0 10%"></Col>
+                        <Col flex="1 0 20%"><Title level={5}>Acción</Title></Col>
+                        <Col flex="1 0 20%"><Title level={5}>Datos</Title></Col>
+                        <Col flex="1 0 20%"><Title level={5}>Resultado</Title></Col>
+                        <Col flex="1 0 10%"></Col>
+                    </Row>
+                    {this.displaySteps()}
+                </Space>
                 <Space style={{ 
-                    marginBlockEnd: "1%",
+                    marginBlockStart: "1%",
                     justifyContent:"center",
                     width: "100%",
                     paddingTop: "2%",
@@ -103,9 +131,6 @@ class TestcaseSteps extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-                </Space>
-                <Space direction="vertical" style={{width: "100%"}}>
-                    {this.displaySteps()}
                 </Space>
             </div>
             </>
