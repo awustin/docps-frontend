@@ -122,7 +122,9 @@ class Testcase extends React.Component {
             <div className="testcase-container" style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "top"}}>
                     <Col flex="1 0 25%">
-                        <Card actions={[ 
+                        <Card
+                            style={{ borderRadius: "0.8em" }}
+                            actions={[ 
                             <EditOutlined key="edit" onClick={this.handleEditClick}/> 
                         ]}>
                             <Title level={5}>Caso de prueba</Title>

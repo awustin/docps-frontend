@@ -13,7 +13,7 @@ import { withRouter } from "react-router";
 import { 
     PlusCircleOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import StepSearch from '../steps/stepSearch';
 
 class TestcaseSteps extends React.Component {
     constructor(props){
@@ -67,7 +67,55 @@ class TestcaseSteps extends React.Component {
         const { Title } = Typography
         return(
             <>
-            <div className="testcase-steps-container" style={{marginLeft: "30px"}}>                
+            <div className="testcase-steps-container" style={{marginLeft: "30px"}}>
+                {/*<div id="steps-form-container" style={{ 
+                    justifyContent:"center",
+                    paddingTop: "2%",
+                    paddingBottom: "2%",
+                    background: "#fafafa",
+                    borderRadius: "0.8em",                    
+                    border: "solid",
+                    borderWidth: "1px",
+                    borderColor: "#cccccc"
+                    }}
+                >*/}
+                    <Row className="steps-form-container" style={{ justifyContent: "flex-end" }}>
+                        <Form name="steps_form"
+                            layout="inline"
+                            onFinish={ (e) => {this.onNewStepClick(e)} }
+                            style={{ alignItems: "center"}}
+                        >
+                            <Form.Item name="action"
+                                rules={[{ required: true, message: "Debe ingresar una acción"}]}
+                                style={{ flex:"1 0 20%" }}
+                            >
+                                <Input.TextArea placeholder="Acción"/>
+                            </Form.Item>
+                            <Form.Item name="data"
+                                style={{ flex:"1 0 20%" }}
+                            >
+                                <Input.TextArea placeholder="Datos"/>
+                            </Form.Item>
+                            <Form.Item name="result"
+                                style={{ flex:"1 0 20%" }}
+                            >
+                                <Input.TextArea placeholder="Resultado esperado"/>
+                            </Form.Item>
+                            <Form.Item 
+                                    style={{flex:"auto", marginRight: "0px", textAlign: "end"}}
+                                >
+                                    <Button style={{ alignItems: "center", borderRadius: "1em" }} 
+                                            type="primary"
+                                            htmlType="submit"
+                                            icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/>}    
+                                    >Agregar paso
+                                    </Button>
+                                </Form.Item>
+                        </Form>
+                    </Row>
+                    <StepSearch/>
+                {/*</div>*/}
+                <Divider/>
                 <Space direction="vertical" style={{width: "100%"}}>
                     <Row style={{ 
                             paddingTop: "0%",
@@ -82,55 +130,6 @@ class TestcaseSteps extends React.Component {
                         <Col flex="1 0 10%"></Col>
                     </Row>
                     {this.displaySteps()}
-                </Space>
-                <Space style={{ 
-                    marginBlockStart: "1%",
-                    justifyContent:"center",
-                    width: "100%",
-                    paddingTop: "2%",
-                    paddingBottom: "2%",
-                    background: "#fafafa",
-                    borderRadius: "0.8em",                    
-                    border: "solid",
-                    borderWidth: "1px",
-                    borderColor: "#cccccc"
-                    }}
-                >
-                    <Form style={{ alignItems: "center", justifyContent: "space-between" }}
-                    name="steps_form"
-                    layout="inline"
-                    onFinish={ (e) => {this.onNewStepClick(e)} }
-                >
-                    <Form.Item 
-                        name="action"
-                        rules={[{ required: true, message: "Debe ingresar una acción"}]}
-                        style={{flex:"0 0 25%"}}
-                    >
-                        <Input.TextArea placeholder="Acción"/>
-                    </Form.Item>
-                    <Form.Item 
-                        name="data"
-                        style={{flex:"0 0 20%"}}
-                    >
-                        <Input.TextArea placeholder="Datos"/>
-                    </Form.Item>
-                    <Form.Item 
-                        name="result"
-                        style={{flex:"0 0 25%"}}
-                    >
-                        <Input.TextArea placeholder="Resultado esperado"/>
-                    </Form.Item>
-                    <Form.Item
-                        style={{flex:"auto"}}
-                    >
-                        <Button style={{ alignItems: "center", borderRadius: "1em" }} 
-                                type="primary"
-                                htmlType="submit"
-                                icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/>}    
-                        >Agregar paso
-                        </Button>
-                    </Form.Item>
-                </Form>
                 </Space>
             </div>
             </>
