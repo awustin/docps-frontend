@@ -5,6 +5,7 @@ import {
     Typography,
     Form,
     Input,
+    AutoComplete,
     Row,
     Col,
 } from 'antd';
@@ -22,16 +23,12 @@ class StepSearch extends React.Component {
         return(
             <>
             <div className="steps-search-container">
-                <Row style={{ marginBlockStart: "5%", justifyContent: "flex-end" }}>
-                    <Col style={{  marginRight: "16px"  }} span={12}>
-                        <Input/>
-                    </Col>
-                    <Col style={{ marginLeft: "23px" }}>
-                        <Button style={{ alignItems: "center", borderRadius: "1em" }} 
-                                htmlType="submit"
-                                icon={<SearchOutlined style={{ fontSize: "110%" }}/>}    
-                        >Buscar pasos
-                        </Button>
+                <Row style={{ justifyContent: "flex-start", marginBlock: "1% 1%" }}>
+                    <Col span={20}>
+                        <AutoComplete
+                            style={{ width: "100%" }}
+                            disabled={true}
+                        />
                     </Col>
                 </Row>
             </div>

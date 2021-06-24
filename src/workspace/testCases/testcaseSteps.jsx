@@ -79,7 +79,14 @@ class TestcaseSteps extends React.Component {
                     borderColor: "#cccccc"
                     }}
                 >*/}
-                    <Row className="steps-form-container" style={{ justifyContent: "flex-end" }}>
+                    <Row style={{ marginBlock: "1% 1%" }}>
+                        <Col>
+                            <Title level={5}>Agregar un paso</Title>
+                        </Col>
+                    </Row>
+                    <Row
+                        style={{ justifyContent: "flex-start" }}
+                    >
                         <Form name="steps_form"
                             layout="inline"
                             onFinish={ (e) => {this.onNewStepClick(e)} }
@@ -112,6 +119,11 @@ class TestcaseSteps extends React.Component {
                                     </Button>
                                 </Form.Item>
                         </Form>
+                    </Row>
+                    <Row style={{ marginBlock: "5% 1%" }}>
+                        <Col>
+                            <Title level={5}>Buscar un paso</Title>
+                        </Col>
                     </Row>
                     <StepSearch/>
                 {/*</div>*/}
