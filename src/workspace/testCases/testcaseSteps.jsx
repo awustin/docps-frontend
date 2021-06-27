@@ -85,7 +85,7 @@ class TestcaseSteps extends React.Component {
                         </Col>
                     </Row>
                     <Row
-                        style={{ justifyContent: "flex-start" }}
+                        style={{ justifyContent: "center" }}
                     >
                         <Form name="steps_form"
                             layout="inline"
@@ -109,7 +109,7 @@ class TestcaseSteps extends React.Component {
                                 <Input.TextArea placeholder="Resultado esperado"/>
                             </Form.Item>
                             <Form.Item 
-                                    style={{flex:"auto", marginRight: "0px", textAlign: "end"}}
+                                    style={{flex:"auto"}}
                                 >
                                     <Button style={{ alignItems: "center", borderRadius: "1em" }} 
                                             type="primary"
