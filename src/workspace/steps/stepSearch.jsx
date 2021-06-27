@@ -3,7 +3,11 @@ import {
     TreeSelect,
     Row,
     Col,
+    Button,
 } from 'antd';
+import { 
+    PlusCircleOutlined
+} from '@ant-design/icons';
 import { withRouter } from "react-router";
 
 function random() {
@@ -15,24 +19,29 @@ class StepSearch extends React.Component {
         super(props)
         this.onLoadData = this.onLoadData.bind(this)
         this.getTestplanList = this.getTestplanList.bind(this)
+        this.onChangeValue = this.onChangeValue.bind(this)
+        this.onInsertStepClick = this.onInsertStepClick.bind(this)
     }
 
     state = {
         value: undefined,
-        treeData: this.getTestplanList()
+        testplanValue: undefined,
+        testcaseValue: undefined,
+        treeData: this.getTestplanList(),
+        step: undefined
     }
 
     onLoadData(treeNode) {
         return new Promise( resolve => {
             const { id,pId } = treeNode.props;
-            console.log(this.state.treeData)
             setTimeout(() => {
                 if(!pId)
                 {
                     //Fetch testcases
                     let testcases = this.getTestcaseList(id)
                     this.setState({
-                        treeData: this.state.treeData.concat(testcases)                
+                        treeData: this.state.treeData.concat(testcases),
+                        testplanValue: { testplanId: id }            
                     });
                 }
                 else
@@ -41,6 +50,7 @@ class StepSearch extends React.Component {
                     let steps = this.getStepList(id)
                     this.setState({
                         treeData: this.state.treeData.concat(steps),
+                        testcaseValue: { testcaseId: id }
                     });
                 }
               resolve();
@@ -48,7 +58,7 @@ class StepSearch extends React.Component {
         });
     }
 
-    getStepList(testcaseId) {        
+    getStepList(testcaseId) {
         //Query to fetch steps of testcase treeNode
         let list = []
         for (let index = 0; index < 3; index++) {
@@ -57,9 +67,12 @@ class StepSearch extends React.Component {
                 id: 'step'+ran,
                 pId: testcaseId,
                 value: 'step'+ran,
-                title: testcaseId + "-step-" + index,
+                title: 'step'+ran,
                 selectable: true,
-                isLeaf: true
+                isLeaf: true,
+                action: 'Paso '+'step'+ran,
+                data: 'Datos para utilizar',
+                result: 'Se insertó un paso'
             })            
         }
         return list;
@@ -74,7 +87,7 @@ class StepSearch extends React.Component {
                 id: 'case'+ran,
                 pId: testplanId,
                 value: 'case'+ran,
-                title: testplanId + "-Testcase-" + index,
+                title: 'case'+ran,
                 selectable: false
             })            
         }
@@ -83,6 +96,7 @@ class StepSearch extends React.Component {
 
     getTestplanList() {
         //Query para la lista de los planes de prueba del mismo Grupo
+        //id = ID de la tabla de la BD
         let list = []
         for (let index = 0; index < 10; index++) {
             list.push(
@@ -98,22 +112,56 @@ class StepSearch extends React.Component {
         return list
     }
 
+    onChangeValue(value) {
+        const { treeData } = this.state
+        let step = undefined
+        for (let index = treeData.length-1; index >= 0; index--) {
+            const item = treeData[index]
+            if( item['id'] === value )
+            {
+                step = {
+                    action: item['action'],
+                    data: item['data'],
+                    result: item['result']
+                }
+                break
+            }   
+        }
+        this.setState({ value:value, step:step })
+    }
+
+    onInsertStepClick() {
+        const { addStep } = this.props
+        const { step } = this.state 
+        //Query to fetch variables for step?
+        addStep(step)
+    }
+
     render() {
         const { treeData, value }  = this.state
         return(
             <>
             <div className="steps-search-container">
                 <Row style={{ justifyContent: "center", marginBlock: "1% 1%" }}>
-                    <Col span={24}>
+                    <Col span={2}></Col>
+                    <Col span={15}>
                         <TreeSelect
                             treeDataSimpleMode
-                            style={{ width: "100%" }}
+                            style={{ width: "97%" }}
                             placeholder="Seleccione para comenzar la búsqueda"
                             value={value}
                             loadData={this.onLoadData}
-                            onChange={(a)=>{console.log(a);this.setState({value:a})}}
+                            onChange={this.onChangeValue}
                             treeData={treeData}
                         />
+                    </Col>
+                    <Col span={7}>
+                        <Button style={{ alignItems: "center", borderRadius: "1em" }}
+                                icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/>}
+                                disabled={!value}
+                                onClick={this.onInsertStepClick}
+                        >Insertar paso
+                        </Button>
                     </Col>
                 </Row>
             </div>
