@@ -6,6 +6,10 @@ import {
 } from 'antd';
 import { withRouter } from "react-router";
 
+function random() {
+    return Math.random().toString(36).substring(2, 6)
+}
+
 class StepSearch extends React.Component {
     constructor(props){
         super(props)
@@ -20,29 +24,62 @@ class StepSearch extends React.Component {
 
     onLoadData(treeNode) {
         return new Promise( resolve => {
-            const { id } = treeNode.props;
+            const { id,pId } = treeNode.props;
+            console.log(this.state.treeData)
             setTimeout(() => {
-              this.setState({
-                treeData: this.state.treeData.concat([
-                  this.genTreeNode(id, false),
-                  this.genTreeNode(id, true),
-                ]),
-              });
+                if(!pId)
+                {
+                    //Fetch testcases
+                    let testcases = this.getTestcaseList(id)
+                    this.setState({
+                        treeData: this.state.treeData.concat(testcases)                
+                    });
+                }
+                else
+                {
+                    //Fetch steps
+                    let steps = this.getStepList(id)
+                    this.setState({
+                        treeData: this.state.treeData.concat(steps),
+                    });
+                }
               resolve();
             }, 300);
         });
     }
-    
-    genTreeNode = (parentId, isLeaf = false) => {
-        const random = Math.random().toString(36).substring(2, 6);
-        return {
-            id: random,
-            pId: parentId,
-            value: random,
-            title: isLeaf ? 'Tree Node' : 'Expand to load',
-            isLeaf,
-        };
-    };
+
+    getStepList(testcaseId) {        
+        //Query to fetch steps of testcase treeNode
+        let list = []
+        for (let index = 0; index < 3; index++) {
+            let ran = random()
+            list.push({
+                id: 'step'+ran,
+                pId: testcaseId,
+                value: 'step'+ran,
+                title: testcaseId + "-step-" + index,
+                selectable: true,
+                isLeaf: true
+            })            
+        }
+        return list;
+    }
+
+    getTestcaseList(testplanId) {
+        //Query to fetch testcases of testplan treeNode
+        let list = []
+        for (let index = 0; index < 3; index++) {            
+            let ran = random()
+            list.push({
+                id: 'case'+ran,
+                pId: testplanId,
+                value: 'case'+ran,
+                title: testplanId + "-Testcase-" + index,
+                selectable: false
+            })            
+        }
+        return list;
+    }    
 
     getTestplanList() {
         //Query para la lista de los planes de prueba del mismo Grupo
