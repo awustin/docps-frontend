@@ -13,6 +13,8 @@ class WorkspaceMain extends React.Component {
         this.upsertTestcase = this.upsertTestcase.bind(this)
         this.addMessage = this.addMessage.bind(this)
         this.addStep = this.addStep.bind(this)
+        this.editStep = this.editStep.bind(this)
+        this.saveSteps = this.saveSteps.bind(this)
     }
 
     state = {
@@ -33,7 +35,8 @@ class WorkspaceMain extends React.Component {
             groupName: undefined,
             steps: []
         },
-        messages: []
+        messages: [],
+        modifiedSteps: false,
     }
 
     setTestplan(id, name) {
@@ -120,19 +123,57 @@ class WorkspaceMain extends React.Component {
             list.push(newstep)
         }
         testcase.steps = list  
-        this.setState({ testcase: testcase})
+        this.setState({ testcase: testcase, modifiedSteps: true })
+    }
+
+    editStep(field, index, value) {
+        const { testcase } = this.state
+        let steps = testcase.steps
+        steps[index][field] = value
+        this.setState( prevState => ({
+            testcase: {
+                ...prevState.testcase,
+                steps: steps
+            }, 
+            modifiedSteps: true 
+        }))
+    }
+
+    saveSteps() {
+        this.addMessage('Pasos guardados','success')
+        this.setState({ modifiedSteps: false })
     }
 
     render() {
-        const { testcase, messages } = this.state
+        const { testcase, messages, modifiedSteps } = this.state
         return(
             <AppLayout>
                 <Switch>
                     <Route exact path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase action="create" testcase={testcase} setTestplan={this.setTestplan} upsertTestcase={this.upsertTestcase} addStep={this.addStep} messages={messages}/>)}
+                        <Testcase action="create" 
+                            testcase={testcase}
+                            setTestplan={this.setTestplan}
+                            upsertTestcase={this.upsertTestcase}
+                            addStep={this.addStep}
+                            editStep={this.editStep}
+                            saveSteps={this.saveSteps}
+                            messages={messages}
+                            modifiedSteps={modifiedSteps}
+                        />
+                        )}
                     />
                     <Route exact path="/workspace/id=:id&p=:testplanId&n=:testplanName" render={() => (
-                        <Testcase action="edit" testcase={testcase} fetchTestcase={this.fetchTestcase} upsertTestcase={this.upsertTestcase} addStep={this.addStep} messages={messages}/>)}
+                        <Testcase action="edit"
+                            testcase={testcase}
+                            fetchTestcase={this.fetchTestcase}
+                            upsertTestcase={this.upsertTestcase}
+                            addStep={this.addStep}
+                            editStep={this.editStep}
+                            messages={messages}
+                            saveSteps={this.saveSteps}
+                            modifiedSteps={modifiedSteps}
+                        />
+                        )}
                     />
                     <Route path="/workspace/p=:projectId&id=:testplanId" render={() => (
                         <Testcase/>)}

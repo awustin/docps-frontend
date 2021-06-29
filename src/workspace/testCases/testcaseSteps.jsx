@@ -11,9 +11,12 @@ import {
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
-    PlusCircleOutlined
+    PlusCircleOutlined,
+    EditOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 import StepSearch from '../steps/stepSearch';
+import Step from '../steps/step';
 
 class TestcaseSteps extends React.Component {
     constructor(props){
@@ -23,35 +26,19 @@ class TestcaseSteps extends React.Component {
     }
 
     displaySteps() {
-        const { steps } = this.props
-        let cardList = []
+        const { steps, editStep } = this.props
+        let stepList = []
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
-            cardList.push(
-                <Row key={index}
-                    style={{ 
-                        borderRadius: "0.8em",
-                        display: "flex",
-                        paddingTop: "1%",
-                        paddingBottom: "1%",
-                        background: "#fafafa",
-                        borderRadius: "0.8em",
-                    }}
-                    align="middle"
-                >
-                    <Col flex="1 0 10%"
-                        style={{textAlign:"center"}}
-                    >
-                        {step.order+1}                    
-                    </Col>
-                    <Col flex="1 0 20%">{step.action}</Col>
-                    <Col flex="1 0 20%">{step.data}</Col>
-                    <Col flex="1 0 20%">{step.result}</Col>
-                    <Col flex="1 0 10%">acciones</Col>
-                </Row>
+            stepList.push(
+                <Step 
+                    key={index}
+                    step={step}
+                    editStep={editStep}
+                />
             )
         }
-        return cardList
+        return stepList
     }
 
     onNewStepClick(values) {
@@ -69,17 +56,6 @@ class TestcaseSteps extends React.Component {
         return(
             <>
             <div className="testcase-steps-container" style={{marginLeft: "30px"}}>
-                {/*<div id="steps-form-container" style={{ 
-                    justifyContent:"center",
-                    paddingTop: "2%",
-                    paddingBottom: "2%",
-                    background: "#fafafa",
-                    borderRadius: "0.8em",                    
-                    border: "solid",
-                    borderWidth: "1px",
-                    borderColor: "#cccccc"
-                    }}
-                >*/}
                     <Row style={{ marginBlock: "1% 1%" }}>
                         <Col>
                             <Title level={5}>Agregar un paso</Title>
@@ -141,7 +117,7 @@ class TestcaseSteps extends React.Component {
                         <Col flex="1 0 20%"><Title level={5}>Acción</Title></Col>
                         <Col flex="1 0 20%"><Title level={5}>Datos</Title></Col>
                         <Col flex="1 0 20%"><Title level={5}>Resultado</Title></Col>
-                        <Col flex="1 0 10%"></Col>
+                        <Col flex="1 0 5%"></Col>
                     </Row>
                     {this.displaySteps()}
                 </Space>

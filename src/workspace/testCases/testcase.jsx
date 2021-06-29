@@ -9,6 +9,7 @@ import {
     Breadcrumb,
     Card,
     Divider,
+    Button
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -25,6 +26,7 @@ class Testcase extends React.Component {
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
         this.priorityTag = this.priorityTag.bind(this)
         this.showMessages = this.showMessages.bind(this)
+        this.handleSaveStepsClick = this.handleSaveStepsClick.bind(this)
     }
 
     state = {
@@ -97,8 +99,13 @@ class Testcase extends React.Component {
         })
     }
 
+    handleSaveStepsClick() {
+        const { saveSteps } = this.props
+        saveSteps()
+    }
+
     render() {
-        const { testcase, upsertTestcase, addStep, action } = this.props
+        const { testcase, upsertTestcase, addStep, editStep, action, modifiedSteps } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
         const { Meta } = Card
@@ -149,9 +156,20 @@ class Testcase extends React.Component {
                         />
                     </Col>
                     <Col flex="1 0 75%" style={{textAlign: "middle"}}>
-                        <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
+                        <Row>
+                            <Col flex="1 0 75%">
+                                <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
+                            </Col>
+                            <Col flex="1 0 25%" style={{textAlign: "end"}}>
+                                <Button type="primary" disabled={!modifiedSteps} onClick={this.handleSaveStepsClick}>Guardar cambios</Button>
+                            </Col>
+                        </Row>
                         <Divider style={{marginLeft: "30px"}}/>
-                        <TestcaseSteps steps={testcase.steps} addStep={addStep}/>
+                        <TestcaseSteps 
+                            steps={testcase.steps}
+                            addStep={addStep}
+                            editStep={editStep}
+                        />
                     </Col>                    
                 </Row>
             </div>
