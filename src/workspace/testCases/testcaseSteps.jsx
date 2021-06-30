@@ -26,7 +26,7 @@ class TestcaseSteps extends React.Component {
     }
 
     displaySteps() {
-        const { steps, editStep } = this.props
+        const { steps, editStep, deleteStep } = this.props
         let stepList = []
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
@@ -35,6 +35,7 @@ class TestcaseSteps extends React.Component {
                     key={index}
                     step={step}
                     editStep={editStep}
+                    deleteStep={deleteStep}
                 />
             )
         }

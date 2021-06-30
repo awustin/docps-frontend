@@ -3,6 +3,7 @@ import {
     Row,
     Col,
     Typography,
+    Tooltip,
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -15,21 +16,24 @@ class Step extends React.Component {
         this.onActionEdit = this.onActionEdit.bind(this)
         this.onDataEdit = this.onDataEdit.bind(this)
         this.onResultEdit = this.onResultEdit.bind(this)
+        this.onStepDelete = this.onStepDelete.bind(this)
     }
 
     state = {
         action: this.props.step.action,
         data: this.props.step.data,
-        result: this.props.step.result
+        result: this.props.step.result,
+        order: this.props.step.order
     }
 
-    componentWillReceiveProps() {
+    componentDidMount() {
         const { step } = this.props
         this.setState({
             action: step.action,
             data: step.data,
-            result: step.result
-        })
+            result: step.result,
+            order: step.order
+            })
     }
 
     onActionEdit(a) {
@@ -48,9 +52,13 @@ class Step extends React.Component {
         editStep('result', step.order, a)
     }
 
+    onStepDelete() {
+        const { deleteStep, step } = this.props
+        deleteStep(step.order)
+    }
+
     render() {
         const { key, step } = this.props
-        const { action, data, result } = this.state
         const { Paragraph } = Typography
         return(
             <Row key={key}
@@ -70,15 +78,19 @@ class Step extends React.Component {
                     {step.order+1}
                 </Col>
                 <Col flex="1 0 20%">
-                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onActionEdit }}>{action}</Paragraph>
+                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onActionEdit }}>{step.action}</Paragraph>
                 </Col>
                 <Col flex="1 0 20%">
-                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onDataEdit }}>{data}</Paragraph>
+                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onDataEdit }}>{step.data}</Paragraph>
                 </Col>
                 <Col flex="1 0 20%">
-                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onResultEdit }}>{result}</Paragraph>
+                    <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onResultEdit }}>{step.result}</Paragraph>
                 </Col>
-                <Col flex="1 0 5%"><DeleteOutlined/></Col>
+                <Col flex="1 0 5%">
+                    <Tooltip title="Eliminar paso" color="#108ee9">
+                        <DeleteOutlined style={{ fontSize: "120%" }} onClick={this.onStepDelete}/>
+                    </Tooltip>
+                </Col>
             </Row>
         );
     }

@@ -14,6 +14,7 @@ class WorkspaceMain extends React.Component {
         this.addMessage = this.addMessage.bind(this)
         this.addStep = this.addStep.bind(this)
         this.editStep = this.editStep.bind(this)
+        this.deleteStep = this.deleteStep.bind(this)
         this.saveSteps = this.saveSteps.bind(this)
     }
 
@@ -139,6 +140,23 @@ class WorkspaceMain extends React.Component {
         }))
     }
 
+    deleteStep(index) {
+        let { steps } = this.state.testcase
+        
+        steps.splice(index,1)
+        for (let index = 0; index < steps.length; index++) {
+            steps[index].order = index
+        }
+        this.setState( prevState => ({
+            testcase: {
+                ...prevState.testcase,
+                steps: steps
+            }, 
+            modifiedSteps: true 
+        }))
+        this.addMessage('Paso eliminado','success')
+    }
+
     saveSteps() {
         this.addMessage('Pasos guardados','success')
         this.setState({ modifiedSteps: false })
@@ -156,6 +174,7 @@ class WorkspaceMain extends React.Component {
                             upsertTestcase={this.upsertTestcase}
                             addStep={this.addStep}
                             editStep={this.editStep}
+                            deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
@@ -169,8 +188,9 @@ class WorkspaceMain extends React.Component {
                             upsertTestcase={this.upsertTestcase}
                             addStep={this.addStep}
                             editStep={this.editStep}
-                            messages={messages}
+                            deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
+                            messages={messages}
                             modifiedSteps={modifiedSteps}
                         />
                         )}

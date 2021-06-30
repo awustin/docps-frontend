@@ -33,7 +33,7 @@ class Testcase extends React.Component {
         showEditModal: false,
     }
     
-    componentDidMount() {    
+    componentDidMount() {
         const { testcase,setTestplan,fetchTestcase,action } = this.props
         switch(action)
         {
@@ -94,9 +94,14 @@ class Testcase extends React.Component {
 
     showMessages() {
         const { messages } = this.props
-        return messages.map( (msg) => {
-            return(<Alert key={msg} message={msg.text} type={msg.type} showIcon closable/>)
-        })
+        let alertList = []
+        for (let index = 0; index < messages.length; index++) {
+            let msg = messages[index]
+            alertList.push(
+                <Alert style={{ marginBlock: "1%" }} key={index} message={msg.text} type={msg.type} showIcon closable/>
+            )
+        }
+        return alertList
     }
 
     handleSaveStepsClick() {
@@ -105,10 +110,9 @@ class Testcase extends React.Component {
     }
 
     render() {
-        const { testcase, upsertTestcase, addStep, editStep, action, modifiedSteps } = this.props
+        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
-        const { Meta } = Card
         return(
             <>
             { (action === 'create') ?
@@ -169,6 +173,7 @@ class Testcase extends React.Component {
                             steps={testcase.steps}
                             addStep={addStep}
                             editStep={editStep}
+                            deleteStep={deleteStep}
                         />
                     </Col>                    
                 </Row>
