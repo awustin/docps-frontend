@@ -154,7 +154,6 @@ class WorkspaceMain extends React.Component {
             }, 
             modifiedSteps: true 
         }))
-        this.addMessage('Paso eliminado','success')
     }
 
     saveSteps() {

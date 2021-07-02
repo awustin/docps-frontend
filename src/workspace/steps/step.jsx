@@ -4,6 +4,8 @@ import {
     Col,
     Typography,
     Tooltip,
+    Popconfirm,
+    message
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -55,6 +57,7 @@ class Step extends React.Component {
     onStepDelete() {
         const { deleteStep, step } = this.props
         deleteStep(step.order)
+        message.success("Paso eliminado.")
     }
 
     render() {
@@ -88,7 +91,15 @@ class Step extends React.Component {
                 </Col>
                 <Col flex="1 0 5%">
                     <Tooltip title="Eliminar paso" color="#108ee9">
-                        <DeleteOutlined style={{ fontSize: "120%" }} onClick={this.onStepDelete}/>
+                        <Popconfirm
+                            title="¿Eliminar este paso?"
+                            placement="top"
+                            onConfirm={this.onStepDelete}
+                            okText="Eliminar"
+                            cancelText="No"
+                        >
+                            <DeleteOutlined style={{ fontSize: "120%" }}/>
+                        </Popconfirm>
                     </Tooltip>
                 </Col>
             </Row>
