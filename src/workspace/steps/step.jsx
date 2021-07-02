@@ -10,7 +10,9 @@ import {
 import { withRouter } from "react-router";
 import { 
     DeleteOutlined,
+    InsertRowLeftOutlined,
 } from '@ant-design/icons';
+import VariablesView from '../variables/variablesView';
 
 class Step extends React.Component {
     constructor(props){
@@ -19,13 +21,15 @@ class Step extends React.Component {
         this.onDataEdit = this.onDataEdit.bind(this)
         this.onResultEdit = this.onResultEdit.bind(this)
         this.onStepDelete = this.onStepDelete.bind(this)
+        this.onShowVariablesClick = this.onShowVariablesClick.bind(this)
     }
 
     state = {
         action: this.props.step.action,
         data: this.props.step.data,
         result: this.props.step.result,
-        order: this.props.step.order
+        order: this.props.step.order,
+        showVariables: false
     }
 
     componentDidMount() {
@@ -60,10 +64,17 @@ class Step extends React.Component {
         message.success("Paso eliminado.")
     }
 
+    onShowVariablesClick() {
+        const { showVariables } = this.state
+        this.setState({ showVariables: !showVariables })
+    }
+
     render() {
-        const { key, step } = this.props
+        const { showVariables } = this.state
+        const { key, step, variablesOperations } = this.props
         const { Paragraph } = Typography
         return(
+            <>
             <Row key={key}
                 style={{ 
                     borderRadius: "0.8em",
@@ -75,7 +86,7 @@ class Step extends React.Component {
                 }}
                 align="middle"
             >
-                <Col flex="1 0 10%"
+                <Col flex="1 0 5%"
                     style={{textAlign:"center"}}
                 >
                     {step.order+1}
@@ -88,6 +99,11 @@ class Step extends React.Component {
                 </Col>
                 <Col flex="1 0 20%">
                     <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onResultEdit }}>{step.result}</Paragraph>
+                </Col>
+                <Col flex="1 0 5%">
+                    <Tooltip title="Variables" color="#108ee9">
+                        <InsertRowLeftOutlined style={{ fontSize: "120%" }} onClick={this.onShowVariablesClick}/>
+                    </Tooltip>
                 </Col>
                 <Col flex="1 0 5%">
                     <Tooltip title="Eliminar paso" color="#108ee9">
@@ -103,6 +119,15 @@ class Step extends React.Component {
                     </Tooltip>
                 </Col>
             </Row>
+            { (showVariables) ?
+                <VariablesView
+                    variablesOperations={variablesOperations}
+                    step={step}
+                />
+                :
+                <></>
+            }
+            </>       
         );
     }
 }

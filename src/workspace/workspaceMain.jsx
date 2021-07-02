@@ -15,6 +15,7 @@ class WorkspaceMain extends React.Component {
         this.addStep = this.addStep.bind(this)
         this.editStep = this.editStep.bind(this)
         this.deleteStep = this.deleteStep.bind(this)
+        this.addVariable = this.addVariable.bind(this)
         this.saveSteps = this.saveSteps.bind(this)
     }
 
@@ -39,7 +40,6 @@ class WorkspaceMain extends React.Component {
         messages: [],
         modifiedSteps: false,
     }
-
     setTestplan(id, name) {
         const { testcase } = this.state
         testcase["testplanId"] = id
@@ -115,7 +115,19 @@ class WorkspaceMain extends React.Component {
             action: values.action,
             result: values.result,
             data: values.data,
-            order: list.length
+            order: list.length,
+            actionVariable: {
+                name: undefined,
+                values: undefined
+            },
+            resultVariable: {
+                name: undefined,
+                values: undefined
+            },
+            dataVariable: {
+                name: undefined,
+                values: undefined
+            }
         }
         if(list === undefined) {
             list = [newstep]
@@ -156,6 +168,34 @@ class WorkspaceMain extends React.Component {
         }))
     }
 
+    addVariable(index, field, data) {
+        let { steps } = this.state.testcase
+        let varType
+        switch(field)
+        {
+            case 'action':
+                varType = 'actionVariable'
+                break
+            case 'result':
+                varType = 'resultVariable'
+                break
+            case 'data':
+                varType = 'dataVariable'
+                break
+            default:
+                break
+        }
+        steps[index][varType]['name'] = data.name
+        steps[index][varType]['values'] = data.values
+        this.setState( prevState => ({
+            testcase: {
+                ...prevState.testcase,
+                steps: steps
+            }, 
+            modifiedSteps: true 
+        }))
+    }
+
     saveSteps() {
         this.addMessage('Pasos guardados','success')
         this.setState({ modifiedSteps: false })
@@ -175,6 +215,7 @@ class WorkspaceMain extends React.Component {
                             editStep={this.editStep}
                             deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
+                            variablesOperations={{ addVariable: this.addVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
                         />
@@ -189,6 +230,7 @@ class WorkspaceMain extends React.Component {
                             editStep={this.editStep}
                             deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
+                            variablesOperations={{ addVariable: this.addVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
                         />

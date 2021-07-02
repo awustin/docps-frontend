@@ -26,7 +26,7 @@ class TestcaseSteps extends React.Component {
     }
 
     displaySteps() {
-        const { steps, editStep, deleteStep } = this.props
+        const { steps, editStep, deleteStep, variablesOperations } = this.props
         let stepList = []
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
@@ -36,6 +36,7 @@ class TestcaseSteps extends React.Component {
                     step={step}
                     editStep={editStep}
                     deleteStep={deleteStep}
+                    variablesOperations={variablesOperations}
                 />
             )
         }
@@ -114,10 +115,11 @@ class TestcaseSteps extends React.Component {
                         }}
                         align="middle"
                     >
-                        <Col flex="1 0 10%"></Col>
+                        <Col flex="1 0 5%"></Col>
                         <Col flex="1 0 20%"><Title level={5}>Acción</Title></Col>
                         <Col flex="1 0 20%"><Title level={5}>Datos</Title></Col>
                         <Col flex="1 0 20%"><Title level={5}>Resultado</Title></Col>
+                        <Col flex="1 0 5%"></Col>
                         <Col flex="1 0 5%"></Col>
                     </Row>
                     {this.displaySteps()}

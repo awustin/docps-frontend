@@ -110,7 +110,7 @@ class Testcase extends React.Component {
     }
 
     render() {
-        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps } = this.props
+        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
         return(
@@ -174,6 +174,7 @@ class Testcase extends React.Component {
                             addStep={addStep}
                             editStep={editStep}
                             deleteStep={deleteStep}
+                            variablesOperations={variablesOperations}
                         />
                     </Col>                    
                 </Row>
