@@ -64,7 +64,26 @@ class WorkspaceMain extends React.Component {
             projectName: 'COMPANY-APP',
             groupId: 88,
             groupName: 'Pumas',
-            steps: []
+            steps: [
+                {
+                    action: 'Hacer algo',
+                    result: 'Debe pasar esto',
+                    data: 'Usar credenciales',
+                    order: 0,
+                    actionVariable: {
+                        name: undefined,
+                        values: undefined
+                    },
+                    resultVariable: {
+                        name: undefined,
+                        values: undefined
+                    },
+                    dataVariable: {
+                        name: undefined,
+                        values: undefined
+                    }
+                }
+            ]
         }
         this.setState({ testcase: testcase })
     }

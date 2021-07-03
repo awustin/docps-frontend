@@ -6,11 +6,14 @@ import {
     Form,
     Input,
     Button,
-    Typography
+    Select,
+    Row,
+    Col
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
     PlusOutlined,
+    CloseOutlined,
 } from '@ant-design/icons';
 
 class VariableEditPopup extends React.Component {
@@ -18,22 +21,23 @@ class VariableEditPopup extends React.Component {
         super(props)
         this.showEditVariableContent = this.showEditVariableContent.bind(this)
         this.handleEditVariable = this.handleEditVariable.bind(this)
+    }
 
+    state = {
+        popupVisible: false,
     }
 
     handleEditVariable(data) {
         const { variablesOperations, field, stepIndex } = this.props
-        if(variablesOperations.addVariable != undefined)
-        {
-            variablesOperations.addVariable(stepIndex,field,data)
-        }        
+        variablesOperations.addVariable(stepIndex,field,data)
+        this.setState({ popupVisible: false })
     }
 
     showEditVariableContent() {
         const { variable } = this.props
         const layout = {
             labelCol: { span: 6 },
-            wrapperCol: { span: 16 },
+            wrapperCol: { span: 18 },
         }
         return <>
                 <Form {...layout}
@@ -54,7 +58,19 @@ class VariableEditPopup extends React.Component {
                         name="values"
                         initialValue={variable.values}
                     >
-                        <Input/>
+                        <Select 
+                            mode="tags"
+                            dropdownRender={menu => (
+                                <div>
+                                    <i style={{ fontSize: "75%", marginLeft: "10px" }}>Agregar un valor y presionar Enter</i>
+                                    {menu}
+                                </div>
+                            )}
+                            notFoundContent={<></>}
+                            placeholder="Escribir un valor"                        
+                        >
+                            {/*tagItems.map(item => <Option key={item}>{item}</Option>)*/}
+                        </Select>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Guardar</Button>
@@ -64,16 +80,27 @@ class VariableEditPopup extends React.Component {
     }
 
     render() {
+        const { popupVisible } = this.state
         return(
             <>
                 <Popover
                     placement="bottom"
-                    title="Agregar variable"
+                    title={
+                        <Row>
+                            <Col flex="1 0 50%">Modificar variable</Col>
+                            <Col flex="1 0 50%" style={{textAlign: "end"}}>
+                                <Tooltip title="Cerrar">
+                                    <CloseOutlined onClick={ ()=>{this.setState({ popupVisible: false })}}/>
+                                </Tooltip>
+                            </Col>                          
+                        </Row>
+                    }
                     content={this.showEditVariableContent}
                     trigger="click"
+                    visible={popupVisible}
                 >
                     <Tooltip title="Agregar variable" color="#108ee9">
-                        <PlusOutlined style={{color:"#108ee9"}}/>
+                        <PlusOutlined style={{color:"#108ee9"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
                     </Tooltip>
                 </Popover>
             </>
