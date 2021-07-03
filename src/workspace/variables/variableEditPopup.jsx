@@ -14,6 +14,7 @@ import { withRouter } from "react-router";
 import { 
     PlusOutlined,
     CloseOutlined,
+    EditOutlined,
 } from '@ant-design/icons';
 
 class VariableEditPopup extends React.Component {
@@ -36,7 +37,7 @@ class VariableEditPopup extends React.Component {
     showEditVariableContent() {
         const { variable } = this.props
         const layout = {
-            labelCol: { span: 6 },
+            labelCol: { span: 8 },
             wrapperCol: { span: 18 },
         }
         return <>
@@ -50,6 +51,7 @@ class VariableEditPopup extends React.Component {
                         label="Nombre"
                         name="name"
                         initialValue={variable.name}
+                        rules={[{ required: true, message: "Debe ingresar un nombre"}]}
                     >
                         <Input/>
                     </Form.Item>
@@ -57,6 +59,7 @@ class VariableEditPopup extends React.Component {
                         label="Valores"
                         name="values"
                         initialValue={variable.values}
+                        rules={[{ required: true, message: "Debe ingresar al menos un valor"}]}
                     >
                         <Select 
                             mode="tags"
@@ -67,7 +70,7 @@ class VariableEditPopup extends React.Component {
                                 </div>
                             )}
                             notFoundContent={<></>}
-                            placeholder="Escribir un valor"                        
+                            placeholder="Escribir un valor"
                         >
                             {/*tagItems.map(item => <Option key={item}>{item}</Option>)*/}
                         </Select>
@@ -81,6 +84,7 @@ class VariableEditPopup extends React.Component {
 
     render() {
         const { popupVisible } = this.state
+        const { variable } = this.props
         return(
             <>
                 <Popover
@@ -99,9 +103,15 @@ class VariableEditPopup extends React.Component {
                     trigger="click"
                     visible={popupVisible}
                 >
+                    { (!variable.name || !variable.values) ? (
                     <Tooltip title="Agregar variable" color="#108ee9">
                         <PlusOutlined style={{color:"#108ee9"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
                     </Tooltip>
+                    ) : (
+                    <Tooltip title="Modificar variable" color="#108ee9">
+                        <EditOutlined style={{color:"#108ee9"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
+                    </Tooltip>
+                    )}
                 </Popover>
             </>
         );
