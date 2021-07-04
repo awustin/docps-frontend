@@ -103,7 +103,7 @@ class WorkspaceMain extends React.Component {
             //si falla , mensaje y volver atrás
             //Con el insert, obtener id insertado
             //Hacer fetchTestcase para cargar el testcase desde la BD
-            this.fetchTestcase({id: 777, testplanId: 7, testplanName: 'PLAN-002'})
+            this.fetchTestcase({id: 777, testplanId: testcase.testplanId, testplanName: testcase.testplanName})
             //Cargar mensaje de creado con exito
             this.addMessage('Caso de prueba creado con éxito','success')
             //redirigir a la vista de edición

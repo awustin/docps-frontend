@@ -9,11 +9,13 @@ import {
     Breadcrumb,
     Card,
     Divider,
-    Button
+    Button,
+    Tooltip
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
     EditOutlined,
+    LeftCircleOutlined,
 } from '@ant-design/icons';
 import * as d from '../../AppConsts.json';
 import TestcaseSteps from './testcaseSteps';
@@ -130,6 +132,15 @@ class Testcase extends React.Component {
                 </Breadcrumb>
                 )
             }
+            <div className="testcase-navigation" style={{margin: "50px"}}>
+                <Row>
+                    <Col>
+                        <Tooltip title="Atrás">
+                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.push("/testplans/id=" + testcase.testplanId)}}/>
+                        </Tooltip>
+                    </Col>
+                </Row>
+            </div>
             <div className="testcase-container" style={{margin: "50px"}}>
                 <Row style={{display: "flex", alignItems: "top"}}>
                     <Col flex="1 0 25%">
