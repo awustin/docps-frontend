@@ -15,7 +15,8 @@ class WorkspaceMain extends React.Component {
         this.addStep = this.addStep.bind(this)
         this.editStep = this.editStep.bind(this)
         this.deleteStep = this.deleteStep.bind(this)
-        this.addVariable = this.addVariable.bind(this)
+        this.editVariable = this.editVariable.bind(this)
+        this.deleteVariable = this.deleteVariable.bind(this)
         this.saveSteps = this.saveSteps.bind(this)
     }
 
@@ -187,7 +188,7 @@ class WorkspaceMain extends React.Component {
         }))
     }
 
-    addVariable(index, field, data) {
+    editVariable(index, field, data) {
         let { steps } = this.state.testcase
         let varType
         switch(field)
@@ -206,6 +207,34 @@ class WorkspaceMain extends React.Component {
         }
         steps[index][varType]['name'] = data.name
         steps[index][varType]['values'] = data.values
+        this.setState( prevState => ({
+            testcase: {
+                ...prevState.testcase,
+                steps: steps
+            }, 
+            modifiedSteps: true 
+        }))
+    }
+
+    deleteVariable(index, field) {
+        let { steps } = this.state.testcase
+        let varType
+        switch(field)
+        {
+            case 'action':
+                varType = 'actionVariable'
+                break
+            case 'result':
+                varType = 'resultVariable'
+                break
+            case 'data':
+                varType = 'dataVariable'
+                break
+            default:
+                break
+        }
+        steps[index][varType]['name'] = undefined
+        steps[index][varType]['values'] = undefined
         this.setState( prevState => ({
             testcase: {
                 ...prevState.testcase,
@@ -234,7 +263,7 @@ class WorkspaceMain extends React.Component {
                             editStep={this.editStep}
                             deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
-                            variablesOperations={{ addVariable: this.addVariable }}
+                            variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
                         />
@@ -249,7 +278,7 @@ class WorkspaceMain extends React.Component {
                             editStep={this.editStep}
                             deleteStep={this.deleteStep}
                             saveSteps={this.saveSteps}
-                            variablesOperations={{ addVariable: this.addVariable }}
+                            variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
                         />

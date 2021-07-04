@@ -3,18 +3,21 @@ import '../../CustomStyles.css';
 import {
     Popover,
     Tooltip,
+    Popconfirm,
     Form,
     Input,
     Button,
     Select,
     Row,
-    Col
+    Col,
+    message
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
     PlusOutlined,
     CloseOutlined,
     EditOutlined,
+    DeleteOutlined,
 } from '@ant-design/icons';
 
 class VariableEditPopup extends React.Component {
@@ -22,6 +25,7 @@ class VariableEditPopup extends React.Component {
         super(props)
         this.showEditVariableContent = this.showEditVariableContent.bind(this)
         this.handleEditVariable = this.handleEditVariable.bind(this)
+        this.handleDeleteVariable = this.handleDeleteVariable.bind(this)
     }
 
     state = {
@@ -30,8 +34,15 @@ class VariableEditPopup extends React.Component {
 
     handleEditVariable(data) {
         const { variablesOperations, field, stepIndex } = this.props
-        variablesOperations.addVariable(stepIndex,field,data)
+        variablesOperations.editVariable(stepIndex,field,data)
         this.setState({ popupVisible: false })
+    }
+
+    handleDeleteVariable() {
+        const { variablesOperations, field, stepIndex } = this.props
+        variablesOperations.deleteVariable(stepIndex,field)
+        this.setState({ popupVisible: false })
+        message.success("Variable eliminada.")
     }
 
     showEditVariableContent() {
@@ -40,6 +51,9 @@ class VariableEditPopup extends React.Component {
             labelCol: { span: 8 },
             wrapperCol: { span: 18 },
         }
+        const tailLayout = {
+          wrapperCol: { offset: 8, span: 18 },
+        };
         return <>
                 <Form {...layout}
                     name="variableForm"
@@ -72,11 +86,24 @@ class VariableEditPopup extends React.Component {
                             notFoundContent={<></>}
                             placeholder="Escribir un valor"
                         >
-                            {/*tagItems.map(item => <Option key={item}>{item}</Option>)*/}
                         </Select>
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">Guardar</Button>
+                        <Popconfirm
+                            title="¿Eliminar esta variable?"
+                            placement="bottom"
+                            onConfirm={this.handleDeleteVariable}
+                            okText="Eliminar"
+                            cancelText="No"
+                        >
+                            <Button 
+                                style={{marginLeft:"2%"}}
+                                disabled={(!variable.name && !variable.values)}
+                            >
+                                Eliminar
+                            </Button>
+                        </Popconfirm>
                     </Form.Item>
                 </Form>
             </>
@@ -102,15 +129,18 @@ class VariableEditPopup extends React.Component {
                     content={this.showEditVariableContent}
                     trigger="click"
                     visible={popupVisible}
+                    destroyTooltipOnHide={true}
                 >
                     { (!variable.name || !variable.values) ? (
                     <Tooltip title="Agregar variable" color="#108ee9">
-                        <PlusOutlined style={{color:"#108ee9"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
+                        <PlusOutlined style={{color:"#108ee9",fontSize:"120%"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
                     </Tooltip>
                     ) : (
+                    <>
                     <Tooltip title="Modificar variable" color="#108ee9">
-                        <EditOutlined style={{color:"#108ee9"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
+                        <EditOutlined style={{color:"#108ee9",fontSize:"120%"}} onClick={()=>{this.setState({ popupVisible: true })}}/>
                     </Tooltip>
+                    </>
                     )}
                 </Popover>
             </>
