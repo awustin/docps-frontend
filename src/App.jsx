@@ -20,7 +20,10 @@ class App extends Component {
 
   state = {
     loggedIn: true,
-    usr: 223,
+    usr: {
+      id: 223,
+      isAdmin: true
+    },
     error: undefined,
   };
 
@@ -36,7 +39,7 @@ class App extends Component {
             && authUser !== undefined
             && error === undefined
           ) {
-            this.setState({ loggedIn: true, usr: authUser, error: undefined })
+            this.setState({ loggedIn: true, usr: {id:authUser,isAdmin:true}, error: undefined })
           }
         } else {
           this.setState({ error: (response.message !== 'Network Error') ? response.message : 'NETWORK_ERROR' });
