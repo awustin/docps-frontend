@@ -7,34 +7,56 @@ import {
     Breadcrumb,
     Typography,
     Divider,
-    Select,
+    Modal,
     Form,
     Input,
     Button,
+    Alert,
     message
 } from 'antd';
 import {
-    PlusCircleOutlined,
-    EditOutlined,
-    SearchOutlined
+    ExclamationCircleOutlined,
 } from '@ant-design/icons';
 
 class UserCreateForm extends React.Component {
     constructor(props){
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.showAlerts = this.showAlerts.bind(this)
     }
+    state = { 
+        cancelModalvisible: false,
+        validationMessage: undefined,
+    };
 
     handleSubmit(values) {
         console.log(values)
-        //Validar nombre de usuario único
         //Validar correo único
+        this.setState({ validationMessage: {title:'El correo electrónico ya está en uso',description:'Debe ingresar otra dirección de correo electrónico'} })
+        //Validar nombre de usuario único
+        this.setState({ validationMessage: {title:'El nombre de usuario ya existe',description:'Debe ingresar otro nombre de usuario'} })        
         //Query para hacer el insert del usuario
         //Enviar el mail de verificacion al usuario nuevo
         message.success('Se ha enviado un mail de verificación al correo electrónico ingresado.')
     }
 
+    showAlerts() {
+        const { validationMessage } = this.state
+        if(validationMessage !== undefined)
+        {
+            return(
+                <Alert
+                message={validationMessage.title}
+                description={validationMessage.description}
+                type="error"
+                showIcon
+                />
+            )
+        }
+    }
+
     render() {
+        const { cancelModalvisible } = this.state
         const { user } = this.props
         const { Title } = Typography
         const layout = {
@@ -121,10 +143,34 @@ class UserCreateForm extends React.Component {
                     </Form.Item>
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">Crear</Button>
-                        <Button htmlType="button" onClick={() => this.props.history.push('/user')} style={{ margin: '0 8px' }}>Cancelar</Button>
+                        <Button htmlType="button" onClick={() => { this.setState({cancelModalvisible:true}) }} style={{ margin: '0 8px' }}>Cancelar</Button>
                     </Form.Item>
-                </Form>                
+                </Form>
+                <div className="alerts-container">
+                    {this.showAlerts()}
+                </div>
             </div>
+            <Modal
+                visible={cancelModalvisible}
+                closable={false}
+                width={300}
+                onOk={() => { 
+                    this.setState({cancelModalvisible:false}) 
+                    this.props.history.push('/user')
+                }}
+                onCancel={() => { this.setState({cancelModalvisible:false}) }}
+                okText="Salir"
+                cancelText="Cancelar"
+            >
+            <Row>
+                <Col flex="1 0 20%" style={{ textAlign:"center", fontSize:"160%", alignItems: "center" }}>
+                <ExclamationCircleOutlined style={{color:"#ffc02e"}} />
+                </Col>
+                <Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
+                ¿Salir de la creación del usuario?
+                </Col>
+            </Row>
+            </Modal>
             </>
         );
     }
