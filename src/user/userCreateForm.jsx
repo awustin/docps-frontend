@@ -1,6 +1,5 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
     Row,
     Col,
@@ -98,7 +97,7 @@ class UserCreateForm extends React.Component {
                     </Form.Item>
                     <Form.Item 
                         label="Correo electrónico"
-                        name="e-mail"
+                        name="email"
                         rules={[{ required: true, type: "email", message: 'Debe ingresar un correo electrónico válido.' }]}
                     >
                         <Input/>

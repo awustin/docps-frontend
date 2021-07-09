@@ -43,12 +43,14 @@ class AdminUserView extends React.Component {
                         </Tooltip>
                     </Col>
                     <Col flex="1 0 33%">
-                        <EditOutlined/>
-                        <Paragraph style={{ fontSize: "35%" }}>Modificar usuario</Paragraph>
+                        <Link to={{ pathname:"/user/search"}}>
+                            <SearchOutlined/>
+                            <Paragraph style={{ fontSize: "35%" }}>Buscar usuarios</Paragraph>
+                        </Link>
                     </Col>
                     <Col flex="1 0 33%">
-                        <SearchOutlined/>
-                        <Paragraph style={{ fontSize: "35%" }}>Buscar usuarios</Paragraph>
+                        <EditOutlined/>
+                        <Paragraph style={{ fontSize: "35%" }}>Modificar usuario</Paragraph>
                     </Col>
                 </Row>
             </div>
