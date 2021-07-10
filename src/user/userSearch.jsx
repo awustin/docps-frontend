@@ -21,6 +21,7 @@ import {
     DeleteOutlined,
     LeftCircleOutlined
 } from '@ant-design/icons';
+import UserEdit from './modals/userEdit';
 
 const { Title } = Typography
 
@@ -30,8 +31,10 @@ class UserSearch extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this)
       this.showResults = this.showResults.bind(this)
       this.statusTag = this.statusTag.bind(this)
+      this.reloadSearch = this.reloadSearch.bind(this)
     }
     state = {
+        lastValues: undefined,
         statusOptions: [
             {
                 value:'inactive',
@@ -47,18 +50,20 @@ class UserSearch extends React.Component {
             }
         ],
         results: undefined,
-        error: undefined
+        error: undefined,
+        visibleEdit: false,
+        editUserId: undefined
     }
 
     handleSubmit(values) { 
         //Query para buscar usuarios
-        console.log(values)
         let results = []
         let statuses = ['active','inactive']
         for (let index = 0; index < 21; index++) {
             results.push(
                 {
                     key: "item"+index*2,
+                    id: index*10,
                     createdOn: (index+1) +'/02/2021',
                     name: "Persona",
                     lastname: "Numero"+index,
@@ -67,7 +72,43 @@ class UserSearch extends React.Component {
                 }
             )
         }
-        this.setState({ results: results })
+        this.setState({ results: results, lastValues: values })
+    }
+
+    reloadSearch() {
+        const { lastValues } = this.state
+        if( lastValues !== undefined )
+        {
+            //Query para hacer la busqueda de usuarios con lastValues
+            let results = []
+            let statuses = ['active','inactive']
+            for (let index = 0; index < 21; index++) {
+                results.push(
+                    {
+                        key: "item"+index*2,
+                        id: index*10,
+                        createdOn: (index+1) +'/02/2021',
+                        name: "Persona Modificada ",
+                        lastname: "Numero"+index,
+                        email: "otrocorreo"+index+"@correo.com",
+                        status: statuses[Math.floor(Math.random() * statuses.length)]
+                    }
+                )
+            }
+            this.setState({ results: results })
+        }
+    }
+    
+    statusTag(status,itemKey) {
+        switch(status)
+        {
+            case 'active':
+                return <Tag key={itemKey+'09de8c'} color="#09de8c" onClick={()=>{console.log('Dar de baja')}}>De alta</Tag>
+            case 'inactive':
+                return <Tag key ={itemKey+'999997'} color="#999997" onClick={()=>{console.log('Dar de alta')}}>De baja</Tag>
+            default:
+                break
+        }
     }
 
     showResults() {
@@ -94,7 +135,7 @@ class UserSearch extends React.Component {
                                     {this.statusTag(item.status,item.key)}
                                 </Tooltip>,
                                 <Tooltip title="Modificar usuario" color="#108ee9">
-                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}}/>
+                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
                                 </Tooltip>,
                                 <Tooltip title="Eliminar usuario" color="#108ee9">
                                     <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
@@ -118,22 +159,10 @@ class UserSearch extends React.Component {
             </>
         )
     }
-    
-    statusTag(status,itemKey) {
-        switch(status)
-        {
-            case 'active':
-                return <Tag key={itemKey+'09de8c'} color="#09de8c" onClick={()=>{console.log('Dar de baja')}}>De alta</Tag>
-            case 'inactive':
-                return <Tag key ={itemKey+'999997'} color="#999997" onClick={()=>{console.log('Dar de alta')}}>De baja</Tag>
-            default:
-                break
-        }
-    }
 
     render() {
         const { user } = this.props
-        const { statusOptions } = this.state
+        const { statusOptions, visibleEdit, editUserId } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
@@ -200,6 +229,16 @@ class UserSearch extends React.Component {
                 </Form>
                 {this.showResults()}
             </div>
+            { (visibleEdit) ? (           
+                <UserEdit
+                    userId={editUserId}
+                    visibleEdit={visibleEdit}
+                    closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+                    reloadSearch={this.reloadSearch}
+                />
+            ) : (
+                <></>
+            )}
             </>
         );
     }
