@@ -1,17 +1,12 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import {
-    Row,
-    Col,
-    Breadcrumb,
-    Typography,
-    Divider,
     Modal,
     Form,
     Input,
-    Button,
     Alert,
-    message
+    Row,
+    Col
 } from 'antd';
 import {
     ExclamationCircleOutlined,
@@ -45,7 +40,8 @@ class UserEdit extends React.Component {
                 }
             ]
         },
-        validationMessage: undefined
+        validationMessage: undefined,
+        showCancelModal: false
     }
 
     componentDidMount() {
@@ -107,9 +103,13 @@ class UserEdit extends React.Component {
         }
     }
 
+    cancelEdit() {
+
+    }
+
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { user } = this.state
+        const { user, showCancelModal } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -118,6 +118,7 @@ class UserEdit extends React.Component {
         return(
             <>
                 {(user.id!==undefined)?(
+                    <>
                     <Modal
                         title="Modificar usuario"
                         visible={visibleEdit}
@@ -126,7 +127,7 @@ class UserEdit extends React.Component {
                         okText="Confirmar"
                         okButtonProps={{form:'editForm', key: 'submit', htmlType: 'submit'}}
                         cancelText="Cancelar"
-                        onCancel={closeEdit}
+                        onCancel={()=>{this.setState({showCancelModal:true})}}
                         destroyOnClose={true}                
                         maskClosable={false}
                         keyboard={false}
@@ -200,6 +201,28 @@ class UserEdit extends React.Component {
                         </Form>
                         {this.showAlerts()}
                     </Modal>
+                    <Modal
+                        visible={showCancelModal}
+                        closable={false}
+                        width={400}
+                        onOk={() => { 
+                            this.setState({showCancelModal:false})
+                            closeEdit()
+                        }}
+                        onCancel={() => { this.setState({showCancelModal:false}) }}
+                        okText="Salir"
+                        cancelText="Cancelar"
+                    >
+                        <Row>
+                            <Col flex="1 0 20%" style={{ textAlign:"center", fontSize:"160%", alignItems: "center" }}>
+                            <ExclamationCircleOutlined style={{color:"#ffc02e"}} />
+                            </Col>
+                            <Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
+                            ¿Salir de la modificación del usuario?
+                            </Col>
+                        </Row>
+                    </Modal>
+                    </>
                 ):(<></>)}
             </>
         );
