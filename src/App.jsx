@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import UserLogIn from './services/usersService';
 import LoginPage from './login/loginPage';
 import UserMain from './user/userMain';
+import GroupsMain from './groups/groupsMain';
 import ProjectsMain from './projects/projectsMain';
 import TestplansMain from './testplans/testplansMain';
 import WorkspaceMain from './workspace/workspaceMain';
@@ -61,6 +62,9 @@ class App extends Component {
           <Switch>
             <Route path="/user" render={() => (
               <UserMain user={usr} /> )}
+            />
+            <Route path="/groups" render={() => (
+              <GroupsMain user={usr} /> )}
             />
             <Route path="/projects" render={() => (
               <ProjectsMain user={usr} /> )}

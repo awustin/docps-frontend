@@ -12,7 +12,8 @@ import {
 import {
     PlusCircleOutlined,
     EditOutlined,
-    SearchOutlined
+    SearchOutlined,
+    UsergroupAddOutlined
 } from '@ant-design/icons';
 
 class AdminUserView extends React.Component {    
@@ -31,10 +32,11 @@ class AdminUserView extends React.Component {
                     <div>Bienvenido, usuario {user.id}</div>
                     <div>Usted es administrador</div>
                 </Row>
-                <Divider/>
-                <Title level={3}>Acciones</Title>
+                <Divider orientation="left">
+                    <Title level={5}>Usuarios</Title>
+                </Divider>
                 <Row style={{ textAlign: "center", fontSize: "300%"}}>
-                    <Col flex="1 0 33%">
+                    <Col flex="1 0 50%">
                         <Tooltip title="Crear usuario">
                             <Link to={{ pathname:"/user/create"}}>
                                 <PlusCircleOutlined/>
@@ -42,7 +44,7 @@ class AdminUserView extends React.Component {
                             </Link>
                         </Tooltip>
                     </Col>
-                    <Col flex="1 0 33%">
+                    <Col flex="1 0 50%">
                         <Tooltip title="Buscar usuarios">
                             <Link to={{ pathname:"/user/search"}}>
                                 <SearchOutlined/>
@@ -50,9 +52,30 @@ class AdminUserView extends React.Component {
                             </Link>
                         </Tooltip>
                     </Col>
+                </Row>
+                <Divider orientation="left">
+                    <Title level={5}>Grupos</Title>
+                </Divider>
+                <Row style={{ textAlign: "center", fontSize: "300%"}}>
+                    <Col flex="1 0 33%">
+                        <Tooltip title="Crear grupo">
+                            <Link to={{ pathname:"/groups/create"}}>
+                                <UsergroupAddOutlined />
+                                <Paragraph style={{ fontSize: "35%" }}>Crear grupo</Paragraph>
+                            </Link>
+                        </Tooltip>
+                    </Col>
+                    <Col flex="1 0 33%">
+                        <Tooltip title="Buscar grupos">
+                            <Link to={{ pathname:"/user/search"}}>
+                                <SearchOutlined/>
+                                <Paragraph style={{ fontSize: "35%" }}>Buscar grupos</Paragraph>
+                            </Link>
+                        </Tooltip>
+                    </Col>
                     <Col flex="1 0 33%">
                         <EditOutlined/>
-                        <Paragraph style={{ fontSize: "35%" }}>Modificar usuario</Paragraph>
+                        <Paragraph style={{ fontSize: "35%" }}>Modificar grupo</Paragraph>
                     </Col>
                 </Row>
             </div>
