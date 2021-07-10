@@ -22,6 +22,7 @@ import {
     LeftCircleOutlined
 } from '@ant-design/icons';
 import UserEdit from './modals/userEdit';
+import UserDelete from './modals/userDelete';
 
 const { Title } = Typography
 
@@ -52,6 +53,7 @@ class UserSearch extends React.Component {
         results: undefined,
         error: undefined,
         visibleEdit: false,
+        visibleDelete: false,
         editUserId: undefined
     }
 
@@ -138,7 +140,7 @@ class UserSearch extends React.Component {
                                     <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
                                 </Tooltip>,
                                 <Tooltip title="Eliminar usuario" color="#108ee9">
-                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
                                 </Tooltip>
                             ]}
                             style={{background: "#fff"}}
@@ -162,7 +164,7 @@ class UserSearch extends React.Component {
 
     render() {
         const { user } = this.props
-        const { statusOptions, visibleEdit, editUserId } = this.state
+        const { statusOptions, visibleEdit, visibleDelete, editUserId } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
@@ -234,6 +236,16 @@ class UserSearch extends React.Component {
                     userId={editUserId}
                     visibleEdit={visibleEdit}
                     closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+                    reloadSearch={this.reloadSearch}
+                />
+            ) : (
+                <></>
+            )}
+            { (visibleDelete) ? (           
+                <UserDelete
+                    userId={editUserId}
+                    visibleDelete={visibleDelete}
+                    closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
                     reloadSearch={this.reloadSearch}
                 />
             ) : (
