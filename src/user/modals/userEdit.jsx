@@ -6,11 +6,14 @@ import {
     Input,
     Alert,
     Row,
-    Col
+    Col,
+    Select
 } from 'antd';
 import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
+
+const { Option } = Select
 
 class UserEdit extends React.Component {
     constructor(props){
@@ -40,6 +43,16 @@ class UserEdit extends React.Component {
                 }
             ]
         },
+        statusOptions: [
+            {
+                value:'active',
+                name:'De alta'
+            },
+            {
+                value:'inactive',
+                name:'De baja'
+            }
+        ],
         validationMessage: undefined,
         showCancelModal: false
     }
@@ -109,7 +122,7 @@ class UserEdit extends React.Component {
 
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { user, showCancelModal } = this.state
+        const { user, showCancelModal, statusOptions } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -138,6 +151,15 @@ class UserEdit extends React.Component {
                             layout="horizontal"
                             onFinish={this.handleSubmit}
                         >
+                            <Form.Item
+                                label="Estado"
+                                name="status"
+                                initialValue={user.status}
+                            >
+                                <Select>
+                                    {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+                                </Select>
+                            </Form.Item>
                             <Form.Item 
                                 label="Nombre"
                                 name="name"
