@@ -114,7 +114,6 @@ class GroupCreateForm extends React.Component {
                     </Form.Item>
                     <Form.Item 
                         label="Miembros"
-                        name="members"
                         rules={[{ required: true, message: 'Ingrese al menos un miembro' }]}
                     >
                         <Transfer
@@ -135,7 +134,7 @@ class GroupCreateForm extends React.Component {
                         </Transfer>
                     </Form.Item>
                     <Form.List 
-                        name="groupAdminUsers"
+                        name="groupMembers"
                     >
                     {()=> (
                         <>
