@@ -24,6 +24,7 @@ class GroupCreateForm extends React.Component {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.showAlerts = this.showAlerts.bind(this)
+        this.getUserCompleteName = this.getUserCompleteName.bind(this)
     }
     state = { 
         userList: undefined,
@@ -49,6 +50,7 @@ class GroupCreateForm extends React.Component {
     }
 
     handleSubmit(values) {
+        console.log(values)
         //Validar nombre de usuario único
         this.setState({ validationMessage: {title:'El nombre de grupo ya existe',description:'Debe ingresar otro nombre de grupo'} })        
         //Query para hacer el insert del usuario
@@ -71,12 +73,17 @@ class GroupCreateForm extends React.Component {
         }
     }
 
+    getUserCompleteName(key) {
+        const { userList } = this.state
+        return userList.filter((u)=>{return u.key===key})[0].completeName
+    }
+
     render() {
         const { userList, targetUsers, cancelModalvisible } = this.state
         const { user } = this.props
         const { Title } = Typography
         const layout = {
-            labelCol: { span: 4 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 18 },
         }
         const tailLayout = {
@@ -123,9 +130,33 @@ class GroupCreateForm extends React.Component {
                             onChange={(sel)=>{this.setState({targetUsers:sel})}}
                             targetKeys={targetUsers}
                             listStyle={{height:"500px", width:"50%"}}
+                            locale={{itemUnit:"", itemsUnit:""}}
                         >
                         </Transfer>
-                    </Form.Item>                    
+                    </Form.Item>
+                    <Form.List 
+                        name="groupAdminUsers"
+                    >
+                    {()=> (
+                        <>
+                            {
+                                (targetUsers === undefined) ? [] : targetUsers.map((item)=>(
+                                        <Form.Item
+                                            label="Administrador/a de grupo"
+                                            name={[item,'isAdmin']}
+                                            valuePropName="checked"
+                                            initialValue={false}
+                                            key={item}
+                                        >
+                                            <Checkbox>{this.getUserCompleteName(item)}</Checkbox>
+                                        </Form.Item>
+                                        )
+                                    )
+                            }
+                        </>
+                        )
+                    }
+                    </Form.List>                
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">Crear</Button>
                         <Button htmlType="button" onClick={() => { this.setState({cancelModalvisible:true}) }} style={{ margin: '0 8px' }}>Cancelar</Button>
