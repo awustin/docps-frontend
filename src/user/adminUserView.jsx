@@ -67,7 +67,7 @@ class AdminUserView extends React.Component {
                     </Col>
                     <Col flex="1 0 33%">
                         <Tooltip title="Buscar grupos">
-                            <Link to={{ pathname:"/user/search"}}>
+                            <Link to={{ pathname:"/groups/search"}}>
                                 <SearchOutlined/>
                                 <Paragraph style={{ fontSize: "35%" }}>Buscar grupos</Paragraph>
                             </Link>
