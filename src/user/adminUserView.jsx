@@ -15,6 +15,7 @@ import {
     SearchOutlined,
     UsergroupAddOutlined
 } from '@ant-design/icons';
+import UserBadge from './userBadge';
 
 class AdminUserView extends React.Component {    
     render() {
@@ -28,10 +29,9 @@ class AdminUserView extends React.Component {
             </Breadcrumb>            
             <div className="user-view-container" style={{margin: "50px"}}>
                 <Title level={3}>¡Bienvenido!</Title>
-                <Row>
-                    <div>Bienvenido, usuario {user.id}</div>
-                    <div>Usted es administrador</div>
-                </Row>
+                <UserBadge
+                    user={user}
+                />
                 <Divider orientation="left">
                     <Title level={5}>Usuarios</Title>
                 </Divider>
