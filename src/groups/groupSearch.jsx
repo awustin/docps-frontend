@@ -20,6 +20,7 @@ import {
     DeleteOutlined,
     LeftCircleOutlined
 } from '@ant-design/icons';
+import GroupEdit from './modals/groupEdit';
 
 const { Title } = Typography
 
@@ -211,8 +212,13 @@ class GroupSearch extends React.Component {
                 </Form>
                 {this.showResults()}
             </div>
-            { (visibleEdit) ? (           
-                <div>Hola =) </div>
+            { (visibleEdit) ? (
+                <GroupEdit
+                    userId={editUserId}
+                    visibleEdit={visibleEdit}
+                    closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+                    reloadSearch={this.reloadSearch}
+                />
             ) : (
                 <></>
             )}
