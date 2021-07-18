@@ -21,6 +21,7 @@ import {
     LeftCircleOutlined
 } from '@ant-design/icons';
 import GroupEdit from './modals/groupEdit';
+import GroupDelete from './modals/groupDelete';
 
 const { Title } = Typography
 
@@ -222,8 +223,13 @@ class GroupSearch extends React.Component {
             ) : (
                 <></>
             )}
-            { (visibleDelete) ? (           
-                <div>Chau =) </div>
+            { (visibleDelete) ? (
+				<GroupDelete
+                    userId={editUserId}
+                    visibleDelete={visibleDelete}
+                    closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+                    reloadSearch={this.reloadSearch}
+                />
             ) : (
                 <></>
             )}
