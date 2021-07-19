@@ -58,13 +58,8 @@ class AppLayout extends React.Component {
               <SubMenu key="sub2" icon={<ExperimentOutlined style={{ fontSize: '150%'}}/>} title="Planes de prueba">
                 <Menu.Item key="4"><Link to="/testplans/create">Crear plan de prueba</Link></Menu.Item>
                 <Menu.Item key="5"><Link to="/testplans/search">Buscar planes de prueba</Link></Menu.Item>
-                <Menu.Item key="6"><Link to="/testplans/export">Exportar</Link></Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" icon={<ThunderboltOutlined style={{ fontSize: '150%'}}/>} title="Ejecuciones">
-                <Menu.Item key="7"><Link to="/executions/create">Crear Ejecucion</Link></Menu.Item>
-                <Menu.Item key="8"><Link to="/executions/view">Listar Ejecuciones</Link></Menu.Item>
-              </SubMenu>
-              <Menu.Item key="9" icon={<BarChartOutlined style={{ fontSize: '150%'}}/>}>
+              <Menu.Item key="6" icon={<BarChartOutlined style={{ fontSize: '150%'}}/>}>
                 <Link to="/reports">Reportes</Link>
               </Menu.Item>
             </Menu>
