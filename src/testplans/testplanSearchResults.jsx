@@ -5,10 +5,12 @@ import {
     List,
     Avatar,
     Tag,
+	Tooltip
 } from 'antd';
 import { 
     EditOutlined,
     DeleteOutlined,
+	ExportOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -56,8 +58,19 @@ class TestplanSearchResults extends React.Component {
                         actions={[
                             item.tags.map( tag => <Tag key={item.key+tag}>{tag}</Tag> ),
                             this.statusTag(item.status,item.key),
-                            <Link to={{ pathname: "/testplans/id=" + item.testplanId }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/></Link>,
-                            <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+                            <Tooltip title="Modificar plan de pruebas" color="#108ee9">
+								<Link to={{ pathname: "/testplans/id=" + item.testplanId }} style={{color:"#000"}}>
+									<EditOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/>
+								</Link>
+							</Tooltip>,
+                            <Tooltip title="Eliminar plan de pruebas" color="#108ee9">
+								<DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+							</Tooltip>,
+                            <Tooltip title="Exportar" color="#108ee9">
+								<Link to={{ pathname: "/testplans/export" }} style={{color:"#000"}}>
+									<ExportOutlined style={{ fontSize: '150%'}} onClick={() => this.handleEditTestplanClick(item)}/>
+								</Link>
+							</Tooltip>
                         ]}
                         style={{background: "#fff"}}
                     >

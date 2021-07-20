@@ -6,6 +6,7 @@ import AppLayout from '../AppLayout';
 import TestplanForm from './testplanForm';
 import TestplanSearch from './testplanSearch';
 import Testplan from './testplan';
+import TestplanExport from './testplanExport';
 
 class TestplansMain extends React.Component {
     constructor(props){
@@ -100,6 +101,9 @@ class TestplansMain extends React.Component {
                     />
                     <Route path="/testplans/p=:projectId&id=:testplanId" render={() => (
                         <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan} updateTestplan={this.updateTestplan}/>)}
+                    />
+                    <Route path="/testplans/export" render={() => (
+                        <TestplanExport testplan={testplan}/>)}
                     />
                     <Route path="/testplans" render={() => (
                         <div> Not found :( </div>)}
