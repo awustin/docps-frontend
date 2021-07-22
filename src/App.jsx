@@ -22,13 +22,23 @@ class App extends Component {
   state = {
     loggedIn: true,
     usr: {
-      id: 223,
-      isAdmin: true
+			id: 223,
+			currentGroup: {
+				id: 344,
+				name: 'Pulpos'
+			},
+      isAdmin: true,
+			memberOf: [
+				{id:344, name:'Pulpos'},
+				{id:999, name:'Águilas'}, 
+				{id:101, name:'Leones'}
+			]
     },
     error: undefined,
   };
 
   userLogIn(params) {
+	  //Query para loggear. Trae el id de usuario, si es admin y el id del grupo al q está loggeado. Ademas una lista con los grupos de los q es miembro
     UserLogIn(params)
       .then((response) => {
         const { usr, error } = this.state;
@@ -74,9 +84,6 @@ class App extends Component {
             />
             <Route path="/workspace" render={() => (
               <WorkspaceMain user={usr} /> )}
-            />
-            <Route path="/executions" render={() => (
-              <ExecutionsMain user={usr} /> )}
             />
             <Route path="/reports" render={() => (
               <ReportsMain user={usr} /> )}
