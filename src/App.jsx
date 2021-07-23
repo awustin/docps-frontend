@@ -15,8 +15,9 @@ import './App.css';
 
 class App extends Component {
   constructor(props) {
-    super(props);
-    this.userLogIn = this.userLogIn.bind(this);
+    super(props)
+    this.userLogIn = this.userLogIn.bind(this)
+		this.changeGroup = this.changeGroup.bind(this)
   }
 
   state = {
@@ -61,6 +62,27 @@ class App extends Component {
   userLogOut() {
     this.setState({ usr: undefined, error: undefined, loggedIn: false });
   }
+	
+	changeGroup(value) {
+		let { usr } = this.state
+		//Query para traer datos de otro grupo (name)
+		let group = {id: value, name: undefined}
+		switch(value)
+		{
+			case 344:
+				group.name = 'Pulpos'
+				break
+			case 999:
+				group.name = 'Águilas'
+				break
+			case 101:
+				group.name = 'Leones'
+				break
+		}
+		console.log(group)
+		usr.currentGroup = group
+		this.setState({usr:usr})
+	}
 
   render() {
     const { loggedIn, usr, error } = this.state;
@@ -86,7 +108,7 @@ class App extends Component {
               <WorkspaceMain user={usr} /> )}
             />
             <Route path="/reports" render={() => (
-              <ReportsMain user={usr} /> )}
+              <ReportsMain user={usr} funcs={{changeGroup:this.changeGroup}}/> )}
             />
             <Route path="/login" render={() => (
               <Redirect to="/user"/>)}

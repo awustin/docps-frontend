@@ -6,13 +6,14 @@ import ReportsMainView from './reportsMainView';
 
 class ReportsMain extends React.Component {
     render() {
-				const { user } = this.props
+				const { user, funcs } = this.props
         return(
             <AppLayout>
                 <Switch>
                     <Route path="/reports" render={() => (
                         <ReportsMainView
 													user={user}
+													funcs={funcs}
 												/>)}
                     />
                     <Route path="/reports/search" render={() => (
