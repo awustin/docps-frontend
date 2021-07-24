@@ -84,8 +84,9 @@ class TestplansMain extends React.Component {
 
     render() {
         const { project, testplan } = this.state
+        const { user } = this.props
         return(
-            <AppLayout>
+            <AppLayout user={user}>
                 <Switch>
                     <Route exact path="/testplans/create" render={() => (
                         <TestplanForm project={{}}/>)}

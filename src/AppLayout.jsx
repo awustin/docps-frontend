@@ -8,7 +8,8 @@ import {
   ThunderboltOutlined,
   ExperimentOutlined,
   FileDoneOutlined,
-  FolderOutlined
+  FolderOutlined,
+	TeamOutlined
 } from '@ant-design/icons';
 
 
@@ -21,7 +22,15 @@ class AppLayout extends React.Component {
   }
 
   state = {
-    collapsed: false
+    collapsed: false,
+		menuOptions: 
+		[
+			{key:'user', label:'Usuarios', icon:<UserOutlined style={{ fontSize: '150%'}}/>, toPath:'/user'},
+			{key:'groups', label:'Grupos', icon:<TeamOutlined style={{ fontSize: '150%'}}/>, toPath:'/groups/search'},
+			{key:'projects', label:'Proyectos', icon:<FolderOutlined style={{ fontSize: '150%'}}/>, toPath:'/projects/search'},
+			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/search'},
+			{key:'reports', label:'Reportes', icon:<BarChartOutlined style={{ fontSize: '150%'}}/>, toPath:'/reports'}
+		]
   };
 
   componentDidUpdate() {
@@ -42,26 +51,13 @@ class AppLayout extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { collapsed } = this.state;
+    const { collapsed, menuOptions } = this.state;
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
           <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
             <Menu theme="dark" mode="inline">
-              <Menu.Item key="1" icon={<UserOutlined style={{ fontSize: '150%'}}/>}>
-                <Link to="/user">Usuario</Link>
-              </Menu.Item>
-              <SubMenu key="sub1" icon={<FolderOutlined style={{ fontSize: '150%'}}/>} title="Proyectos">
-                <Menu.Item key="2"><Link to="/projects/create">Crear proyecto</Link></Menu.Item>
-                <Menu.Item key="3"><Link to="/projects/search">Buscar proyectos</Link></Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub2" icon={<ExperimentOutlined style={{ fontSize: '150%'}}/>} title="Planes de prueba">
-                <Menu.Item key="4"><Link to="/testplans/create">Crear plan de prueba</Link></Menu.Item>
-                <Menu.Item key="5"><Link to="/testplans/search">Buscar planes de prueba</Link></Menu.Item>
-              </SubMenu>
-              <Menu.Item key="6" icon={<BarChartOutlined style={{ fontSize: '150%'}}/>}>
-                <Link to="/reports">Reportes</Link>
-              </Menu.Item>
+							{menuOptions.map(e=>(<Menu.Item key={e.key+'Custom'} icon={e.icon}><Link to={e.toPath}>{e.label}</Link></Menu.Item>))}
             </Menu>
           </Sider>
           <Layout className="site-layout">

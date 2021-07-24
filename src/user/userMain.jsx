@@ -10,7 +10,7 @@ class UserMain extends React.Component {
     render() {
         const { user } = this.props
         return(
-            <AppLayout>
+            <AppLayout user={user}>
                 <Switch>
                     <Route exact path="/user" render={() => (
                         (user.isAdmin) ? (

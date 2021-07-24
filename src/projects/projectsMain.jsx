@@ -8,8 +8,9 @@ import Project from '../projects/project';
 
 class ProjectsMain extends React.Component {
     render() {
+        const { user } = this.props
         return(
-            <AppLayout>
+            <AppLayout user={user}>
                 <Switch>
                     <Route path="/projects/create" render={() => (
                         <ProjectForm/>)}

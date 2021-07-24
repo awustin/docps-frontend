@@ -9,7 +9,7 @@ class GroupsMain extends React.Component {
     render() {
         const { user } = this.props
         return(
-            <AppLayout>
+            <AppLayout user={user}>
                 <Switch>
                     <Route path="/groups/create" render={() => (
                         (user.isAdmin) ? (

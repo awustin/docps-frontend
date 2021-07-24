@@ -8,7 +8,7 @@ class ReportsMain extends React.Component {
     render() {
 				const { user, funcs } = this.props
         return(
-            <AppLayout>
+            <AppLayout user={user}>
                 <Switch>
                     <Route path="/reports" render={() => (
                         <ReportsMainView
