@@ -7,20 +7,24 @@ import {
     Breadcrumb,
     Typography,
     Divider,
-    Tooltip
+    Tooltip,
+		Card,
+		Avatar,
+		Space
 } from 'antd';
 import {
-    PlusCircleOutlined,
-    EditOutlined,
-    SearchOutlined,
-    UsergroupAddOutlined
+    SettingTwoTone,
+    UserOutlined,
+    TeamOutlined,
+    UsergroupAddOutlined,
+		AntDesignOutlined
 } from '@ant-design/icons';
 import UserBadge from './userBadge';
 
-class AdminUserView extends React.Component {    
+class AdminUserView extends React.Component {
     render() {
         const { user } = this.props
-        const { Title, Paragraph } = Typography
+        const { Title, Paragraph, Text } = Typography
         return(
             <>
             <Breadcrumb>
@@ -33,42 +37,42 @@ class AdminUserView extends React.Component {
                     user={user}
                 />
                 <Divider orientation="left">
-                    <Title level={5}>Administrar usuarios y grupos</Title>
+                    <Text type="secondary">Administrar usuarios y grupos</Text>
                 </Divider>
-                <Row style={{ textAlign: "center", fontSize: "300%"}}>
-                    <Col flex="1 0 25%">
-                        <Tooltip title="Crear usuario">
-                            <Link to={{ pathname:"/user/create"}}>
-                                <PlusCircleOutlined/>
-                                <Paragraph style={{ fontSize: "35%" }}>Crear usuario</Paragraph>
-                            </Link>
-                        </Tooltip>
-                    </Col>
-                    <Col flex="1 0 25%">
-                        <Tooltip title="Buscar usuarios">
-                            <Link to={{ pathname:"/user/search"}}>
-                                <SearchOutlined/>
-                                <Paragraph style={{ fontSize: "35%" }}>Buscar usuarios</Paragraph>
-                            </Link>
-                        </Tooltip>
-                    </Col>
-                    <Col flex="1 0 25%">
-                        <Tooltip title="Crear grupo">
-                            <Link to={{ pathname:"/groups/create"}}>
-                                <UsergroupAddOutlined />
-                                <Paragraph style={{ fontSize: "35%" }}>Crear grupo</Paragraph>
-                            </Link>
-                        </Tooltip>
-                    </Col>
-                    <Col flex="1 0 25%">
-                        <Tooltip title="Buscar grupos">
-                            <Link to={{ pathname:"/groups/search"}}>
-                                <SearchOutlined/>
-                                <Paragraph style={{ fontSize: "35%" }}>Buscar grupos</Paragraph>
-                            </Link>
-                        </Tooltip>
-                    </Col>
-                </Row>
+								<Row gutter={16} style={{ marginBlockStart:"5%" }}>
+									<Col span={12}>
+										<Link to={{ pathname:"/user/search"}}>
+											<Card
+												hoverable
+												style={{ textAlign: "center" }}
+												title="Gestión de usuarios"
+											>
+													<Space direction="vertical">
+														<UserOutlined															
+															style={{ fontSize:"400%", color:"#2fcade"}}
+														/>
+													</Space>
+											</Card>
+										</Link>
+									</Col>
+									<Col span={12}>
+										<Link to={{ pathname:"/groups/search"}}>
+											<Card
+												hoverable
+												style={{ textAlign: "center" }}
+												title="Gestión de grupos"
+											>
+												<Space direction="vertical">
+													<Space direction="vertical">
+														<TeamOutlined															
+															style={{ fontSize:"400%", color:"#deaf2f"}}
+														/>
+													</Space>
+												</Space>
+											</Card>
+										</Link>
+									</Col>
+								</Row>                
             </div>
             </>
         );
