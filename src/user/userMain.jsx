@@ -12,7 +12,7 @@ class UserMain extends React.Component {
         return(
             <AppLayout user={user}>
                 <Switch>
-                    <Route exact path="/user" render={() => (
+                    <Route exact path="/home" render={() => (
                         (user.isAdmin) ? (
                             <AdminUserView
                                 user={user}

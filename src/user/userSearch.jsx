@@ -185,7 +185,7 @@ class UserSearch extends React.Component {
                 <Row>
                     <Col>
                         <Tooltip title="Atrás">
-                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.push("/user")}}/>
+                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
                         </Tooltip>
                     </Col>
                 </Row>

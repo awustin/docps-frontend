@@ -92,6 +92,9 @@ class App extends Component {
         (loggedIn) ? (
           <div>
           <Switch>
+            <Route path="/home" render={() => (
+              <UserMain user={usr} /> )}
+            />
             <Route path="/user" render={() => (
               <UserMain user={usr} /> )}
             />
@@ -111,10 +114,10 @@ class App extends Component {
               <ReportsMain user={usr} funcs={{changeGroup:this.changeGroup}}/> )}
             />
             <Route path="/login" render={() => (
-              <Redirect to="/user"/>)}
+              <Redirect to="/home"/>)}
             />
             <Route exact path="/" render={() => (
-              <Redirect to="/user"/>)}
+              <Redirect to="/home"/>)}
             />
             <Route path="/" render={() => (
               <div> Not found :( </div>)}
