@@ -26,7 +26,7 @@ import UserDelete from './modals/userDelete';
 
 const { Title } = Typography
 
-class UserSearch extends React.Component {
+class UserSearchPane extends React.Component {
     constructor(props) {
       super(props)
       this.handleSubmit = this.handleSubmit.bind(this)
@@ -168,69 +168,60 @@ class UserSearch extends React.Component {
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
-            labelCol: { span: 7 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 18 },
+            wrapperCol: { span: 18 },
         }
         const tailLayout = {
-          wrapperCol: { offset: 7, span: 12 },
+          wrapperCol: { span: 12 },
         }
         return(            
             <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Usuario</Breadcrumb.Item>                
-                <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-                <Breadcrumb.Item>Buscar usuarios</Breadcrumb.Item> 
-            </Breadcrumb>
-            <div className="user-search-navigation" style={{margin: "50px"}}>
-                <Row>
-                    <Col>
-                        <Tooltip title="Atrás">
-                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
-                        </Tooltip>
-                    </Col>
-                </Row>
-            </div>
-            <div className="user-search-container" style={{margin: "50px"}}>
-                <Title level={2}>Buscar usuarios</Title>
-                <Divider dashed></Divider>
-                <Form {...layout}
-                    name="userSearch"
-                    layout="horizontal"
-                    onFinish={this.handleSubmit}
-                >
-                    <Form.Item
-                        label="Nombre"
-                        name="name"
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item 
-                        label="Correo electrónico"
-                        name="email"
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item 
-                        label="Fecha de creación"
-                        name="createdOn"
-                    >
-                        <RangePicker/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Estado"
-                        name="status"
-                        initialValue={statusOptions[2].value}
-                    >
-                        <Select>
-                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">Buscar</Button>
-                    </Form.Item>
-                </Form>
+							<Form {...layout}
+									name="userSearch"
+									layout="vertical"
+									style={{ marginBlockStart:"1%" }}
+									onFinish={this.handleSubmit}
+							>
+							<Row>
+								<Col span={12}>
+									<Form.Item
+											label="Nombre"
+											name="name"
+									>
+											<Input/>
+									</Form.Item>
+									<Form.Item 
+											label="Correo electrónico"
+											name="email"
+									>
+											<Input/>
+									</Form.Item>
+								</Col>
+								<Col span={12}>
+									<Form.Item 
+											label="Fecha de creación"
+											name="createdOn"
+									>
+											<RangePicker/>
+									</Form.Item>
+									<Form.Item
+											label="Estado"
+											name="status"
+											initialValue={statusOptions[2].value}
+									>
+											<Select>
+													{statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+											</Select>
+									</Form.Item>
+								</Col>
+							</Row>
+							<Row span={12}>
+								<Form.Item {...tailLayout}>
+										<Button type="primary" htmlType="submit">Buscar</Button>
+								</Form.Item>
+							</Row>
+							</Form>
                 {this.showResults()}
-            </div>
             { (visibleEdit) ? (           
                 <UserEdit
                     userId={editUserId}
@@ -256,4 +247,4 @@ class UserSearch extends React.Component {
     }
 }
 
-export default withRouter(UserSearch);
+export default withRouter(UserSearchPane);

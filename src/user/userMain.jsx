@@ -5,6 +5,7 @@ import AppLayout from '../AppLayout';
 import AdminUserView from './adminUserView';
 import UserCreateForm from './userCreateForm';
 import UserSearch from './userSearch';
+import UserManagement from './userManagement';
 
 class UserMain extends React.Component {
     render() {
@@ -15,6 +16,16 @@ class UserMain extends React.Component {
                     <Route exact path="/home" render={() => (
                         (user.isAdmin) ? (
                             <AdminUserView
+                                user={user}
+                            />
+                        ) : (
+                            <div>Ud no es administrador</div>
+                        )                        
+                        )}
+                    />
+                    <Route path="/user/admin" render={() => (
+                        (user.isAdmin) ? (
+                            <UserManagement
                                 user={user}
                             />
                         ) : (

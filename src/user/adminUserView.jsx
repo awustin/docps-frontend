@@ -41,7 +41,7 @@ class AdminUserView extends React.Component {
                 </Divider>
 								<Row gutter={16} style={{ marginBlockStart:"5%" }}>
 									<Col span={12}>
-										<Link to={{ pathname:"/user/search"}}>
+										<Link to={{ pathname:"/user/admin"}}>
 											<Card
 												hoverable
 												style={{ textAlign: "center" }}
