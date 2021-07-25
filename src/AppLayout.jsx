@@ -25,11 +25,11 @@ class AppLayout extends React.Component {
     collapsed: false,
 		menuOptions: 
 		[
-			{key:'user', label:'Usuarios', icon:<UserOutlined style={{ fontSize: '150%'}}/>, toPath:'/user'},
-			{key:'groups', label:'Grupos', icon:<TeamOutlined style={{ fontSize: '150%'}}/>, toPath:'/groups/search'},
-			{key:'projects', label:'Proyectos', icon:<FolderOutlined style={{ fontSize: '150%'}}/>, toPath:'/projects/search'},
-			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/search'},
-			{key:'reports', label:'Reportes', icon:<BarChartOutlined style={{ fontSize: '150%'}}/>, toPath:'/reports'}
+			{key:'user', label:'Usuarios', icon:<UserOutlined style={{ fontSize: '150%'}}/>, toPath:'/user', onlyAdmin: false},
+			{key:'groups', label:'Grupos', icon:<TeamOutlined style={{ fontSize: '150%'}}/>, toPath:'/groups/search', onlyAdmin: true},
+			{key:'projects', label:'Proyectos', icon:<FolderOutlined style={{ fontSize: '150%'}}/>, toPath:'/projects/search', onlyAdmin: false},
+			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/search', onlyAdmin: false},
+			{key:'reports', label:'Reportes', icon:<BarChartOutlined style={{ fontSize: '150%'}}/>, toPath:'/reports', onlyAdmin: false}
 		]
   };
 
@@ -57,7 +57,11 @@ class AppLayout extends React.Component {
         <Layout style={{ minHeight: '100vh' }}>
           <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
             <Menu theme="dark" mode="inline">
-							{menuOptions.map(e=>(<Menu.Item key={e.key+'Custom'} icon={e.icon}><Link to={e.toPath}>{e.label}</Link></Menu.Item>))}
+							{
+								menuOptions
+								.filter( item => !item.onlyAdmin || user.isAdmin )
+								.map( e => (<Menu.Item key={e.key} icon={e.icon}><Link to={e.toPath}>{e.label}</Link></Menu.Item>) )
+							}
             </Menu>
           </Sider>
           <Layout className="site-layout">
