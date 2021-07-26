@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Route,Switch } from 'react-router-dom';
+import { Route,Switch,Redirect } from 'react-router-dom';
 import AppLayout from '../AppLayout';
 import AdminUserView from './adminUserView';
 import UserCreateForm from './userCreateForm';
@@ -12,7 +12,7 @@ class UserMain extends React.Component {
         return(
             <AppLayout user={user}>
                 <Switch>
-                    <Route exact path="/home" render={() => (
+                    <Route exact path="/user/home" render={() => (
                         (user.isAdmin) ? (
                             <AdminUserView
                                 user={user}
@@ -22,7 +22,7 @@ class UserMain extends React.Component {
                         )                        
                         )}
                     />
-                    <Route path="/user/admin" render={() => (
+                    <Route exact path="/user/admin" render={() => (
                         (user.isAdmin) ? (
                             <UserManagement
                                 user={user}
@@ -32,15 +32,8 @@ class UserMain extends React.Component {
                         )                        
                         )}
                     />
-                    <Route path="/user/create" render={() => (
-                        (user.isAdmin) ? (
-                            <UserCreateForm
-                                user={user}
-                            />
-                        ) : (
-                            <div>Ud no es administrador</div>
-                        )                        
-                        )}
+                    <Route path="/user" render={() => (
+											<Redirect to="/user/home"/>)}
                     />
                 </Switch>
             </AppLayout>

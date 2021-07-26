@@ -23,6 +23,7 @@ import {
 } from '@ant-design/icons';
 import UserBadge from './userBadge';
 import UserSearchPane from './userSearchPane';
+import UserCreateForm from './userCreateForm';
 
 class UserManagement extends React.Component {
     render() {
@@ -55,6 +56,9 @@ class UserManagement extends React.Component {
 									/>									
 								</TabPane>
 								<TabPane key="create" tab={<><UserAddOutlined />Crear usuario</>}>
+									<UserCreateForm
+										user={user}
+									/>
 								</TabPane>
 							</Tabs>
 						</div>
