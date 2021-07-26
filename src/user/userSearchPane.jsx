@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import '../CustomStyles.css';
 import {
     Typography,
     Divider,
@@ -24,9 +25,9 @@ import {
 import UserEdit from './modals/userEdit';
 import UserDelete from './modals/userDelete';
 
-const { Title } = Typography
+const { Title,Text } = Typography
 
-class UserSearch extends React.Component {
+class UserSearchPane extends React.Component {
     constructor(props) {
       super(props)
       this.handleSubmit = this.handleSubmit.bind(this)
@@ -39,11 +40,11 @@ class UserSearch extends React.Component {
         statusOptions: [
             {
                 value:'inactive',
-                name:'Dado de baja'
+                name:'Inactivo'
             },
             {
                 value:'active',
-                name:'Dado de alta'
+                name:'Activo'
             },
             {
                 value:'any',
@@ -57,7 +58,7 @@ class UserSearch extends React.Component {
         editUserId: undefined
     }
 
-    handleSubmit(values) { 
+    handleSubmit(values) {
         //Query para buscar usuarios
         let results = []
         let statuses = ['active','inactive']
@@ -74,7 +75,7 @@ class UserSearch extends React.Component {
                 }
             )
         }
-        this.setState({ results: results, lastValues: values })
+				this.setState({ results: results, lastValues: values })
     }
 
     reloadSearch() {
@@ -105,26 +106,24 @@ class UserSearch extends React.Component {
         switch(status)
         {
             case 'active':
-                return <Tag key={itemKey+'09de8c'} color="#09de8c" onClick={()=>{console.log('Dar de baja')}}>De alta</Tag>
+                return <Tag key={itemKey+'green'} color="green" onClick={()=>{console.log('Dar de baja')}}>Activo</Tag>
             case 'inactive':
-                return <Tag key ={itemKey+'999997'} color="#999997" onClick={()=>{console.log('Dar de alta')}}>De baja</Tag>
+                return <Tag key ={itemKey+'red'} color="volcano" onClick={()=>{console.log('Dar de alta')}}>Inactivo</Tag>
             default:
                 break
         }
     }
 
     showResults() {
-        const { results } = this.state
+        const { results,loading } = this.state
         if(results !== undefined)
         return (
             <>
-            <Divider dashed/>
             <div className="user-search-results">
-                <Title level={4}>Resultados</Title>
                 <List
                     size="small"
                     pagination={{
-                        pageSize: 9
+                        pageSize: 15
                         }}
                     dataSource={results}
                     bordered={false}
@@ -133,9 +132,9 @@ class UserSearch extends React.Component {
                             key={item.key}
                             span={4}
                             actions={[
-                                <Tooltip title="Modificar estado" color="#108ee9">
-                                    {this.statusTag(item.status,item.key)}
-                                </Tooltip>,
+																<>
+																{this.statusTag(item.status,item.key)}
+																</>,
                                 <Tooltip title="Modificar usuario" color="#108ee9">
                                     <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
                                 </Tooltip>,
@@ -143,7 +142,8 @@ class UserSearch extends React.Component {
                                     <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
                                 </Tooltip>
                             ]}
-                            style={{background: "#fff"}}
+														className={'list-item-'+item.status}
+                            style={{ background: "#fff" }}
                         >
                             <List.Item.Meta
                                 avatar={<Avatar src={item.avatar} />}
@@ -168,69 +168,67 @@ class UserSearch extends React.Component {
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
-            labelCol: { span: 7 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 18 },
+            wrapperCol: { span: 20 },
         }
         const tailLayout = {
-          wrapperCol: { offset: 7, span: 12 },
+          wrapperCol: { span: 12 },
         }
         return(            
             <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Usuario</Breadcrumb.Item>                
-                <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-                <Breadcrumb.Item>Buscar usuarios</Breadcrumb.Item> 
-            </Breadcrumb>
-            <div className="user-search-navigation" style={{margin: "50px"}}>
-                <Row>
-                    <Col>
-                        <Tooltip title="Atrás">
-                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
-                        </Tooltip>
-                    </Col>
-                </Row>
-            </div>
-            <div className="user-search-container" style={{margin: "50px"}}>
-                <Title level={2}>Buscar usuarios</Title>
-                <Divider dashed></Divider>
-                <Form {...layout}
-                    name="userSearch"
-                    layout="horizontal"
-                    onFinish={this.handleSubmit}
-                >
-                    <Form.Item
-                        label="Nombre"
-                        name="name"
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item 
-                        label="Correo electrónico"
-                        name="email"
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item 
-                        label="Fecha de creación"
-                        name="createdOn"
-                    >
-                        <RangePicker/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Estado"
-                        name="status"
-                        initialValue={statusOptions[2].value}
-                    >
-                        <Select>
-                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">Buscar</Button>
-                    </Form.Item>
-                </Form>
+						<Row>
+							<Col span={7}>
+								<Form {...layout}
+										name="userSearch"
+										layout="vertical"
+										style={{ marginBlockStart:"1%" }}
+										onFinish={this.handleSubmit}
+								>
+									<Row>
+										<Col span={24}>
+											<Form.Item
+													label="Nombre"
+													name="name"
+											>
+													<Input/>
+											</Form.Item>
+											<Form.Item 
+													label="Correo electrónico"
+													name="email"
+											>
+													<Input/>
+											</Form.Item>
+											<Form.Item 
+													label="Fecha de creación"
+													name="createdOn"
+											>
+													<RangePicker/>
+											</Form.Item>
+											<Form.Item
+													label="Estado"
+													name="status"
+													initialValue={statusOptions[2].value}
+											>
+													<Select>
+															{statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+													</Select>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row span={16}>
+										<Form.Item {...tailLayout}>
+												<Button type="primary" htmlType="submit">Buscar</Button>
+										</Form.Item>
+									</Row>
+								</Form>
+							</Col>
+							<Col span={1}>
+							<Divider type="vertical" style={{ height:"100%" }} dashed/>
+							</Col>
+							<Col span={16}>
                 {this.showResults()}
-            </div>
+							</Col>
+						</Row>
             { (visibleEdit) ? (           
                 <UserEdit
                     userId={editUserId}
@@ -256,4 +254,4 @@ class UserSearch extends React.Component {
     }
 }
 
-export default withRouter(UserSearch);
+export default withRouter(UserSearchPane);

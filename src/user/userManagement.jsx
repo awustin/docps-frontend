@@ -22,7 +22,7 @@ import {
 		UserAddOutlined
 } from '@ant-design/icons';
 import UserBadge from './userBadge';
-import UserSearchPane from './userSearchNEW';
+import UserSearchPane from './userSearchPane';
 
 class UserManagement extends React.Component {
     render() {
@@ -46,7 +46,7 @@ class UserManagement extends React.Component {
 							</Row>
 						</div>
 						<div className="user-admin-container" style={{margin: "50px"}}>
-							<Title level={4} style={{ marginBlockEnd:"0px" }}>Gestión de usuarios</Title>
+							<Title level={2} style={{ marginBlockEnd:"0px" }}>Gestión de usuarios</Title>
 							<Divider/>
 							<Tabs defaultActiveKey="search">
 								<TabPane key="search" tab={<><SearchOutlined />Buscar usuarios</>}>

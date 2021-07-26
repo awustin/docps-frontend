@@ -1,3 +1,15 @@
 .ant-popover.ant-popover-placement-bottom {
     width: 20%;
   }
+	
+.list-item-active:hover {
+	border-left-style: solid;
+	border-left-color: #4de879;
+	border-left-width: 8px;
+	}
+	
+.list-item-inactive:hover {
+	border-left-style: solid;
+	border-left-color: #f55742;
+	border-left-width: 8px;
+	}
