@@ -2,8 +2,7 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import { Route,Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
-import GroupCreateForm from './groupCreateForm';
-import GroupSearch from './groupSearch';
+import GroupManagement from './groupManagement';
 
 class GroupsMain extends React.Component {
     render() {
@@ -11,19 +10,9 @@ class GroupsMain extends React.Component {
         return(
             <AppLayout user={user}>
                 <Switch>
-                    <Route path="/groups/create" render={() => (
+                    <Route path="/groups/admin" render={() => (
                         (user.isAdmin) ? (
-                            <GroupCreateForm
-                                user={user}
-                            />
-                        ) : (
-                            <div>Ud no es administrador</div>
-                        )                        
-                        )}
-                    />
-                    <Route path="/groups/search" render={() => (
-                        (user.isAdmin) ? (
-                            <GroupSearch
+                            <GroupManagement
                                 user={user}
                             />
                         ) : (

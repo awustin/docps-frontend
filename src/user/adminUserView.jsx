@@ -7,24 +7,19 @@ import {
     Breadcrumb,
     Typography,
     Divider,
-    Tooltip,
 		Card,
-		Avatar,
 		Space
 } from 'antd';
 import {
-    SettingTwoTone,
     UserOutlined,
     TeamOutlined,
-    UsergroupAddOutlined,
-		AntDesignOutlined
 } from '@ant-design/icons';
 import UserBadge from './userBadge';
 
 class AdminUserView extends React.Component {
     render() {
         const { user } = this.props
-        const { Title, Paragraph, Text } = Typography
+        const { Title, Text } = Typography
         return(
             <>
             <Breadcrumb>
@@ -56,7 +51,7 @@ class AdminUserView extends React.Component {
 										</Link>
 									</Col>
 									<Col span={12}>
-										<Link to={{ pathname:"/groups/search"}}>
+										<Link to={{ pathname:"/groups/admin"}}>
 											<Card
 												hoverable
 												style={{ textAlign: "center" }}

@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
     Row,
     Col,
@@ -7,29 +8,35 @@ import {
     Typography,
     Divider,
     Tooltip,
+		Card,
+		Avatar,
+		Space,
 		Tabs
 } from 'antd';
 import {
+    UserOutlined,
+    TeamOutlined,
     LeftCircleOutlined,
+		AntDesignOutlined,
 		SearchOutlined,
 		UserAddOutlined
 } from '@ant-design/icons';
-import UserSearchPane from './userSearchPane';
-import UserCreateForm from './userCreateForm';
+import GroupSearchPane from './groupSearchPane';
+import GroupCreateForm from './groupCreateForm';
 
-class UserManagement extends React.Component {
+class GroupManagement extends React.Component {
     render() {
         const { user } = this.props
-        const { Title } = Typography
+        const { Title, Paragraph, Text } = Typography
 				const { TabPane } = Tabs
         return(
             <>
             <Breadcrumb>
                 <Breadcrumb.Item>Usuario</Breadcrumb.Item>
                 <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-                <Breadcrumb.Item>Gestión de usuarios</Breadcrumb.Item>
+                <Breadcrumb.Item>Gestión de grupos</Breadcrumb.Item>
             </Breadcrumb>						
-						<div className="user-admin-navigation" style={{margin: "50px"}}>
+						<div className="group-admin-navigation" style={{margin: "50px"}}>
 							<Row>
 									<Col flex="1 0 25%">
 											<Tooltip title="Atrás">
@@ -38,17 +45,17 @@ class UserManagement extends React.Component {
 									</Col>
 							</Row>
 						</div>
-						<div className="user-admin-container" style={{margin: "50px"}}>
-							<Title level={2} style={{ marginBlockEnd:"0px" }}>Gestión de usuarios</Title>
+						<div className="group-admin-container" style={{margin: "50px"}}>
+							<Title level={2} style={{ marginBlockEnd:"0px" }}>Gestión de grupos</Title>
 							<Divider/>
 							<Tabs defaultActiveKey="search">
-								<TabPane key="search" tab={<><SearchOutlined />Buscar usuarios</>}>
-									<UserSearchPane
-											user={user}
+								<TabPane key="search" tab={<><SearchOutlined />Buscar grupos</>}>
+									<GroupSearchPane
+										user={user}
 									/>									
 								</TabPane>
-								<TabPane key="create" tab={<><UserAddOutlined />Crear usuario</>}>
-									<UserCreateForm
+								<TabPane key="create" tab={<><UserAddOutlined />Crear grupo</>}>
+									<GroupCreateForm
 										user={user}
 									/>
 								</TabPane>
@@ -59,4 +66,4 @@ class UserManagement extends React.Component {
     }
 }
 
-export default withRouter(UserManagement);
+export default withRouter(GroupManagement);

@@ -2,13 +2,11 @@ import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
 import {
-    Typography,
     Divider,
     Form,
     Input,
     Button,    
     Select,
-    Breadcrumb,
     DatePicker,
     List,
     Tag,
@@ -19,13 +17,10 @@ import {
 } from 'antd';
 import {
     EditOutlined,
-    DeleteOutlined,
-    LeftCircleOutlined
+    DeleteOutlined
 } from '@ant-design/icons';
 import UserEdit from './modals/userEdit';
 import UserDelete from './modals/userDelete';
-
-const { Title,Text } = Typography
 
 class UserSearchPane extends React.Component {
     constructor(props) {
@@ -115,7 +110,7 @@ class UserSearchPane extends React.Component {
     }
 
     showResults() {
-        const { results,loading } = this.state
+        const { results } = this.state
         if(results !== undefined)
         return (
             <>
@@ -163,7 +158,6 @@ class UserSearchPane extends React.Component {
     }
 
     render() {
-        const { user } = this.props
         const { statusOptions, visibleEdit, visibleDelete, editUserId } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
@@ -233,7 +227,7 @@ class UserSearchPane extends React.Component {
                 <UserEdit
                     userId={editUserId}
                     visibleEdit={visibleEdit}
-                    closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+                    closeEdit={(()=>{this.setState({ visibleEdit: false })})}
                     reloadSearch={this.reloadSearch}
                 />
             ) : (
@@ -243,7 +237,7 @@ class UserSearchPane extends React.Component {
                 <UserDelete
                     userId={editUserId}
                     visibleDelete={visibleDelete}
-                    closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+                    closeDelete={(()=>{this.setState({ visibleDelete: false })})}
                     reloadSearch={this.reloadSearch}
                 />
             ) : (

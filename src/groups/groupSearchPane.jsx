@@ -1,13 +1,13 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import '../CustomStyles.css';
 import {
-    Typography,
     Divider,
     Form,
     Input,
     Button,    
     Select,
-    Breadcrumb,
+    DatePicker,
     List,
     Tag,
     Avatar,
@@ -17,15 +17,12 @@ import {
 } from 'antd';
 import {
     EditOutlined,
-    DeleteOutlined,
-    LeftCircleOutlined
+    DeleteOutlined
 } from '@ant-design/icons';
 import GroupEdit from './modals/groupEdit';
 import GroupDelete from './modals/groupDelete';
 
-const { Title } = Typography
-
-class GroupSearch extends React.Component {
+class GroupSearchPane extends React.Component {
     constructor(props) {
       super(props)
       this.handleSubmit = this.handleSubmit.bind(this)
@@ -38,11 +35,11 @@ class GroupSearch extends React.Component {
         statusOptions: [
             {
                 value:'inactive',
-                name:'Dado de baja'
+                name:'Inactivo'
             },
             {
                 value:'active',
-                name:'Dado de alta'
+                name:'Activo'
             },
             {
                 value:'any',
@@ -56,7 +53,7 @@ class GroupSearch extends React.Component {
         editUserId: undefined
     }
 
-    handleSubmit(values) { 
+    handleSubmit(values) {
         //Query para buscar grupos
         let results = []
         let statuses = ['active','inactive']
@@ -102,9 +99,9 @@ class GroupSearch extends React.Component {
         switch(status)
         {
             case 'active':
-                return <Tag key={itemKey+'09de8c'} color="#09de8c">De alta</Tag>
+                return <Tag key={itemKey+'green'} color="green" onClick={()=>{console.log('Dar de baja')}}>Activo</Tag>
             case 'inactive':
-                return <Tag key ={itemKey+'999997'} color="#999997">De baja</Tag>
+                return <Tag key ={itemKey+'red'} color="volcano" onClick={()=>{console.log('Dar de alta')}}>Inactivo</Tag>
             default:
                 break
         }
@@ -115,13 +112,11 @@ class GroupSearch extends React.Component {
         if(results !== undefined)
         return (
             <>
-            <Divider dashed/>
             <div className="group-search-results">
-                <Title level={4}>Resultados</Title>
                 <List
                     size="small"
                     pagination={{
-                        pageSize: 9
+                        pageSize: 15
                         }}
                     dataSource={results}
                     bordered={false}
@@ -130,7 +125,9 @@ class GroupSearch extends React.Component {
                             key={item.key}
                             span={4}
                             actions={[
-                                    this.statusTag(item.status,item.key),
+																<>
+																{this.statusTag(item.status,item.key)}
+																</>,
                                 <Tooltip title="Modificar grupo" color="#108ee9">
                                     <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
                                 </Tooltip>,
@@ -138,7 +135,8 @@ class GroupSearch extends React.Component {
                                     <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
                                 </Tooltip>
                             ]}
-                            style={{background: "#fff"}}
+														className={'list-item-'+item.status}
+                            style={{ background: "#fff" }}
                         >
                             <List.Item.Meta
                                 avatar={<Avatar src={item.avatar} />}
@@ -158,77 +156,74 @@ class GroupSearch extends React.Component {
     }
 
     render() {
-        const { user } = this.props
         const { statusOptions, visibleEdit, visibleDelete, editUserId } = this.state
         const { Option } = Select
         const layout = {
-            labelCol: { span: 7 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 18 },
+            wrapperCol: { span: 20 },
         }
         const tailLayout = {
-          wrapperCol: { offset: 7, span: 12 },
+          wrapperCol: { span: 12 },
         }
         return(            
             <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Usuario</Breadcrumb.Item>                
-                <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-                <Breadcrumb.Item>Buscar grupos</Breadcrumb.Item> 
-            </Breadcrumb>
-            <div className="group-search-navigation" style={{margin: "50px"}}>
-                <Row>
-                    <Col>
-                        <Tooltip title="Atrás">
-                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
-                        </Tooltip>
-                    </Col>
-                </Row>
-            </div>
-            <div className="group-search-container" style={{margin: "50px"}}>
-                <Title level={3}>Buscar grupos</Title>
-                <Divider dashed></Divider>
-                <Form {...layout}
-                    name="groupSearch"
-                    layout="horizontal"
-                    onFinish={this.handleSubmit}
-                >
-                    <Form.Item
-                        label="Nombre"
-                        name="name"
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Estado"
-                        name="status"
-                        initialValue={statusOptions[2].value}
-                    >
-                        <Select>
-                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item {...tailLayout}>
-                        <Button type="primary" htmlType="submit">Buscar</Button>
-                    </Form.Item>
-                </Form>
+						<Row>
+							<Col span={7}>
+								<Form {...layout}
+										name="groupSearch"
+										layout="vertical"
+										style={{ marginBlockStart:"1%" }}
+										onFinish={this.handleSubmit}
+								>
+									<Row>
+										<Col span={24}>
+											<Form.Item
+													label="Nombre"
+													name="name"
+											>
+													<Input/>
+											</Form.Item>
+											<Form.Item
+													label="Estado"
+													name="status"
+													initialValue={statusOptions[2].value}
+											>
+													<Select>
+															{statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+													</Select>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row span={16}>
+										<Form.Item {...tailLayout}>
+												<Button type="primary" htmlType="submit">Buscar</Button>
+										</Form.Item>
+									</Row>
+								</Form>
+							</Col>
+							<Col span={1}>
+							<Divider type="vertical" style={{ height:"100%" }} dashed/>
+							</Col>
+							<Col span={16}>
                 {this.showResults()}
-            </div>
+							</Col>
+						</Row>
             { (visibleEdit) ? (
                 <GroupEdit
-                    userId={editUserId}
-                    visibleEdit={visibleEdit}
-                    closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
-                    reloadSearch={this.reloadSearch}
+									userId={editUserId}
+									visibleEdit={visibleEdit}
+									closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+									reloadSearch={this.reloadSearch}
                 />
             ) : (
                 <></>
             )}
             { (visibleDelete) ? (
-				<GroupDelete
-                    userId={editUserId}
-                    visibleDelete={visibleDelete}
-                    closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
-                    reloadSearch={this.reloadSearch}
+								<GroupDelete
+									userId={editUserId}
+									visibleDelete={visibleDelete}
+									closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+									reloadSearch={this.reloadSearch}
                 />
             ) : (
                 <></>
@@ -238,4 +233,4 @@ class GroupSearch extends React.Component {
     }
 }
 
-export default withRouter(GroupSearch);
+export default withRouter(GroupSearchPane);

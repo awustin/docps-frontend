@@ -3,7 +3,6 @@ import React from 'react';
 import { Route,Switch,Redirect } from 'react-router-dom';
 import AppLayout from '../AppLayout';
 import AdminUserView from './adminUserView';
-import UserCreateForm from './userCreateForm';
 import UserManagement from './userManagement';
 
 class UserMain extends React.Component {
