@@ -15,6 +15,7 @@ import {
     TeamOutlined,
 } from '@ant-design/icons';
 import UserBadge from './userBadge';
+import CommonUserOptions from './commonUserOptions';
 
 class AdminUserView extends React.Component {
     render() {
@@ -31,6 +32,8 @@ class AdminUserView extends React.Component {
                 <UserBadge
                     user={user}
                 />
+								<CommonUserOptions
+								/>
                 <Divider orientation="left">
                     <Text type="secondary">Administrar usuarios y grupos</Text>
                 </Divider>
@@ -44,7 +47,7 @@ class AdminUserView extends React.Component {
 											>
 													<Space direction="vertical">
 														<UserOutlined															
-															style={{ fontSize:"400%", color:"#2fcade"}}
+															style={{ fontSize:"400%", color:"#FF785A"}}
 														/>
 													</Space>
 											</Card>
@@ -60,7 +63,7 @@ class AdminUserView extends React.Component {
 												<Space direction="vertical">
 													<Space direction="vertical">
 														<TeamOutlined															
-															style={{ fontSize:"400%", color:"#deaf2f"}}
+															style={{ fontSize:"400%", color:"#FF785A"}}
 														/>
 													</Space>
 												</Space>

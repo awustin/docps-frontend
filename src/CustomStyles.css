@@ -1,15 +1,34 @@
+/* CSS HEX */
+--oxford-blue: #071e33ff;
+--gainsboro: #e0e0e0ff;
+--white: #ffffffff;
+--green-blue-crayola: #228cdbff;
+--outrageous-orange: #ff785aff;
+
 .ant-popover.ant-popover-placement-bottom {
     width: 20%;
-  }
+ }
+	
+.list-item-active {
+	border-left-style: solid;
+	border-left-color: #fff;
+	border-left-width: 8px;
+}
 	
 .list-item-active:hover {
 	border-left-style: solid;
 	border-left-color: #4de879;
 	border-left-width: 8px;
-	}
+}
+
+.list-item-inactive {
+	border-left-style: solid;
+	border-left-color: #fff;
+	border-left-width: 8px;
+}
 	
 .list-item-inactive:hover {
 	border-left-style: solid;
 	border-left-color: #f55742;
 	border-left-width: 8px;
-	}
+}
