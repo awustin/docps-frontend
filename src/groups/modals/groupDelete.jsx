@@ -10,6 +10,7 @@ import {
 import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
+import MessageModal from '../../common/messageModal';
 
 class GroupDelete extends React.Component {
     constructor(props){
@@ -20,8 +21,11 @@ class GroupDelete extends React.Component {
 		message: {
 			def: '¿Desea eliminar este grupo?',
 			hasActiveUsers: 'Este grupo contiene usuarios que están dados de alta, ¿desea eliminarlo de todas formas?',
-			validationError: 'No se puede eliminar',
-			validationDetails: 'Este grupo contiene proyectos'
+			validate: {
+				title:'No se eliminó el grupo',
+				description:'Este grupo contiene proyectos, por lo que no se puede eliminar',
+				type:'validate'
+			}
 		},
 		hasActiveUsers: false,
 		validDeletion: true
@@ -32,8 +36,8 @@ class GroupDelete extends React.Component {
 		this.setState({ hasActiveUsers: true })	
 	}
 
-    handleSubmit(values) {
-        const { userId, closeDelete, reloadSearch } = this.props
+	handleSubmit(values) {
+		const { userId, closeDelete, reloadSearch } = this.props
 		//Query para verificar que no tenga proyectos (SI-> denegar (blocking warning))
 		let valid = false
 		if(valid)
@@ -46,7 +50,7 @@ class GroupDelete extends React.Component {
 		{
 			this.setState({ validDeletion: false })
 		}
-    }
+	}
 
     render() {
         const { closeDelete, visibleDelete } = this.props
@@ -76,23 +80,13 @@ class GroupDelete extends React.Component {
 				) 
 				: 
 				(
-				<Modal
-                    visible={visibleDelete}
-                    closable={false}
-                    width={400}
-					footer={[
-						<Button type="primary" key="close" onClick={closeDelete}>
-						  Aceptar
-						</Button>
-					]}
-                >
-					<Alert
-						message={message.validationError}
-						description={message.validationDetails}
-						type="error"
-						showIcon
+					<MessageModal								
+						type={message.validate.type}
+						title={message.validate.title}
+						description={message.validate.description}
+						visible={!validDeletion}
+						onClose={closeDelete}
 					/>
-                </Modal>
 				)
 			}				
             </>
