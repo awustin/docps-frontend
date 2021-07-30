@@ -19,6 +19,7 @@ import {
     EditOutlined,
     DeleteOutlined
 } from '@ant-design/icons';
+import ProjectEdit from './modals/projectEdit';
 
 class ProjectSearchPane extends React.Component {
     constructor(props) {
@@ -26,14 +27,16 @@ class ProjectSearchPane extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this)
       this.showResults = this.showResults.bind(this)
       this.reloadSearch = this.reloadSearch.bind(this)
+			this.selectGroupsHandle = this.selectGroupsHandle.bind(this)
     }
     state = {
         lastValues: undefined,
         results: undefined,
+				groupOptions: [],
         error: undefined,
         visibleEdit: false,
         visibleDelete: false,
-        editUserId: undefined
+        editProjectId: undefined
     }
 
     handleSubmit(values) {
@@ -54,7 +57,7 @@ class ProjectSearchPane extends React.Component {
 							)
 					}					
 				}				
-        this.setState({ results: results, groups: groups, lastValues: values })
+        this.setState({ results: results, lastValues: values })
     }
 
     reloadSearch() {
@@ -71,7 +74,7 @@ class ProjectSearchPane extends React.Component {
 											key: "project"+(g*10+index),
 											id: (g*10+index)*10,
 											createdOn: (index+1) +'/02/2021',
-											name: 'G'+g+'P'+index+" Proyecto",
+											name: 'G'+g+'P'+index+" Proyecto modificado",
 											testplanCount: Math.floor(Math.random() * 30),
 											group: groups[g]
 									}
@@ -81,6 +84,16 @@ class ProjectSearchPane extends React.Component {
         this.setState({ results: results, groups: groups })
 			}
     }
+		
+		selectGroupsHandle() {
+			//Query para traer los grupos elegibles
+		this.setState({ groupOptions: [
+			{key:0,name:'Pumas'},
+			{key:1,name:'Águilas'},
+			{key:2,name:'Pulpos'},
+			{key:3,name:'Leones'}
+		] })
+		}
 
 		groupResultsByGroup() {
       const { results } = this.state
@@ -98,50 +111,56 @@ class ProjectSearchPane extends React.Component {
 			})
 			return groupedResults
 		}
-    
-    showResults() {
+   
+   showResults() {
 			const { results, groups } = this.state
+			
+			const editHandle = (function(id) {
+				this.setState({ visibleEdit: true, editProjectId: id })
+			}).bind(this)
+			
 			if(results !== undefined) {
 				let groupedResults = this.groupResultsByGroup()
 				let listSections = []
 				
 				Object.keys(groupedResults).forEach( function(e) {
 						listSections.push(
-							<Divider orientation="left">
+							<Divider key={e+'Divider'} orientation="left">
 								{e}
 							</Divider>
 						)
 						
 						listSections.push(
 							<List
-										size="small"
-										pagination={{
-												size: "small",
-												pageSize: 20
-												}}
-										dataSource={groupedResults[e]}
-										bordered={false}
-										renderItem={item => (
-												<List.Item
-														key={item.key}
-														span={4}
-														actions={[
-																<Tooltip title="Modificar proyecto" color="#108ee9">
-																		<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
-																</Tooltip>,
-																<Tooltip title="Eliminar proyecto" color="#108ee9">
-																		<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
-																</Tooltip>
-														]}
-														className={'list-item project'}
-														style={{ background: "#fff" }}
-												>
-														<List.Item.Meta
-																title={item.name}
-																/>
-														{item.testplanCount} planes de pruebas
-												</List.Item>
-										)}
+								key={e+'List'}
+								size="small"
+								pagination={{
+										size: "small",
+										pageSize: 20
+										}}
+								dataSource={groupedResults[e]}
+								bordered={false}
+								renderItem={item => (
+									<List.Item
+											key={item.key}
+											span={4}
+											actions={[
+													<Tooltip title="Modificar proyecto" color="#108ee9">
+															<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
+													</Tooltip>,
+													<Tooltip title="Eliminar proyecto" color="#108ee9">
+															<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{this.setState({ visibleDelete: true, editProjectId: item.id })}}/>
+													</Tooltip>
+											]}
+											className={'list-item project'}
+											style={{ background: "#fff" }}
+									>
+											<List.Item.Meta
+													title={item.name}
+													/>
+											{item.testplanCount} planes de pruebas
+									</List.Item>
+									)}
 								/>						
 						)
 						
@@ -159,7 +178,7 @@ class ProjectSearchPane extends React.Component {
     }
 		
     render() {
-        const { visibleEdit, visibleDelete, editUserId } = this.state
+        const { groupOptions, visibleEdit, visibleDelete, editProjectId } = this.state
         const { Option } = Select
         const layout = {
             labelCol: { span: 18 },
@@ -196,11 +215,9 @@ class ProjectSearchPane extends React.Component {
 															allowClear
 															style={{ width: '100%' }}
 															placeholder="Seleccione uno o más grupos"
+															onDropdownVisibleChange={this.selectGroupsHandle}
 													>
-															<Option key="Pumas">Pumas</Option>
-															<Option key="Leones">Leones</Option>
-															<Option key="Águilas">Águilas</Option>
-															<Option key="Tiburones">Tiburones</Option>
+														{groupOptions.map(i=><Option key={i.key}>{i.name}</Option>)}
 													</Select>
 											</Form.Item>
 										</Col>
@@ -220,7 +237,12 @@ class ProjectSearchPane extends React.Component {
 							</Col>
 						</Row>
             { (visibleEdit) ? (
-                <>Hola</>
+                <ProjectEdit
+										projectId={editProjectId}
+										visibleEdit={visibleEdit}
+										closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+										reloadSearch={this.reloadSearch}
+                />
             ) : (
                 <></>
             )}

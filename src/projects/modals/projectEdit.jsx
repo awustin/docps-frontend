@@ -1,80 +1,133 @@
-import { hot } from 'react-hot-loader';
+import { withRouter } from "react-router";
 import React from 'react';
 import {
-    Typography,
-    Button,
+    Modal,
     Form,
     Input,
-    Modal,
+    Row,
+    Col,
+		Typography,
+		Tooltip
 } from 'antd';
+import {
+    ExclamationCircleOutlined,
+} from '@ant-design/icons';
+
+const { Title } = Typography
 
 class ProjectEdit extends React.Component {
     constructor(props){
         super(props)
-        this.handleOk = this.handleOk.bind(this)
-        this.handleCancel = this.handleCancel.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
     state = {
-        confirmLoading: false,
-        newProjectName: ''
+			project: {
+					id: undefined,
+					createdOn: undefined,
+					name: undefined,
+					group: undefined
+			},
+			dirty: false,
+			field: {
+				name: undefined,
+			},
+			showMessageModal: false,
+			message: {
+				title:undefined,
+				description:undefined,
+				type: undefined
+				},
+			validationMessage: undefined,
+			showCancelModal: false
     }
 
-    setVisible(value) {
-        this.setState({ visible: value })
+    componentDidMount() {
+        const { projectId } = this.props
+        //Query para traer toda la info del proyecto
+        let project = {
+            id: 999,
+            createdOn: '1/06/2021',
+            name: 'DOCPS-0001: Tests de integración',
+            group: 'Pumas'            
+        }
+        this.setState({ project: project, field:{name:project.name} })
     }
 
-    setConfirmLoading(value) {
-        this.setState({ confirmLoading: value })
-    }
-
-    setProjectName(value) {
-        this.setState({ projectName: value })
-    }
-    
-    handleCancel() {
-        const { isEditModalVisible } = this.props
-        isEditModalVisible(false);
-    }
-    
-    handleOk() {
-        const { newProjectName } = this.state
-        const { isEditModalVisible, updateProjectName } = this.props
-        this.setConfirmLoading(true);
-        updateProjectName(newProjectName);
-        isEditModalVisible(false);
-        this.setConfirmLoading(false);
+    handleSubmit(values) {
+        const { closeEdit, reloadSearch } = this.props
+        //Validar nombre único
+        this.setState({ validationMessage: {title:'Un proyecto con ese nombre ya existe',description:'Debe ingresar otro nombre'} })        
+        //Query para hacer el insert del proyecto
+        //Enviar el mail de verificacion al usuario nuevo
+        closeEdit()
+        reloadSearch()
     }
 
     render() {
-        const { visible, projectName } = this.props
-        const { confirmLoading } = this.state
-        const { Title } = Typography
+        const { visibleEdit, closeEdit } = this.props
+        const { project, showCancelModal, showMessageModal, statusOptions, dirty, field } = this.state
+        const layout = {
+            labelCol: { span: 7 },
+            wrapperCol: { span: 12 },
+        }
+        
         return(
-            <> 
-            <Modal
-                title="Editar proyecto"
-                visible={visible}
-                onOk={this.handleOk}
-                okText={'Guardar'}
-                confirmLoading={confirmLoading}
-                onCancel={this.handleCancel}
-                cancelText={'Cancelar'}
-                destroyOnClose={true}
-            >
-                <Form>
-                    <Form.Item
-                        label="Nombre"
-                        name="projectName"
-                        initialValue={projectName}
-                        rules={[{ required: true, message: 'El nombre del proyecto está vacío.' }]}
+            <>
+                {(project.id!==undefined)?(
+                    <>
+                    <Modal
+                        title={"Proyecto"}
+                        visible={visibleEdit}
+                        closable={false}
+                        width={700}
+                        okText="Confirmar"
+                        okButtonProps={{form:'editForm', key: 'submit', htmlType: 'submit', disabled: !dirty}}
+                        cancelText="Cancelar"
+                        onCancel={()=>{this.setState({showCancelModal:true})}}
+                        destroyOnClose={true}                
+                        maskClosable={false}
+                        keyboard={false}
                     >
-                        <Input/>
-                    </Form.Item>
-                </Form>
-            </Modal>
+												<Title level={4} 
+													editable={{
+														tooltip: <Tooltip>Modificar nombre</Tooltip>,
+														autoSize: { minRows: 1, maxRows: 2 },
+														onChange: ((e)=>{
+															this.setState({ dirty: true, field:{name:e} })
+														})
+													}}
+												>
+													{field.name}													
+												</Title>
+                    </Modal>
+                    <Modal
+                        visible={showCancelModal}
+                        closable={false}
+                        width={400}
+                        onOk={() => { 
+                            this.setState({showCancelModal:false})
+                            closeEdit()
+                        }}
+                        onCancel={() => { 
+															this.setState({showCancelModal:false}) 
+														}}
+                        okText="Salir"
+                        cancelText="Cancelar"
+                    >
+                        <Row>
+                            <Col flex="1 0 20%" style={{ textAlign:"center", fontSize:"160%", alignItems: "center" }}>
+                            <ExclamationCircleOutlined style={{color:"#ffc02e"}} />
+                            </Col>
+                            <Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
+                            ¿Salir de la modificación del proyecto?
+                            </Col>
+                        </Row>
+                    </Modal>
+                    </>
+                ):(<></>)}
             </>
         );
     }
 }
 
-export default hot(module)(ProjectEdit);
+export default withRouter(ProjectEdit);
