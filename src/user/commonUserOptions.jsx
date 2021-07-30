@@ -27,7 +27,7 @@ class CommonUserOptions extends React.Component {
 			<Divider/>
 			<Row gutter={16} style={{ marginBlockStart:"5%" }}>
 				<Col span={6}>
-					<Link to={{ pathname:"/projects/search"}}>
+					<Link to={{ pathname:"/projects/manage"}}>
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}

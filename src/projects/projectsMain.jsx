@@ -1,17 +1,24 @@
-import { hot } from 'react-hot-loader';
+import { withRouter } from "react-router";
 import React from 'react';
 import { Route,Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
 import ProjectForm from '../projects/projectForm';
 import ProjectSearch from '../projects/projectSearch';
 import Project from '../projects/project';
+import ProjectManagement from './projectManagement';
 
 class ProjectsMain extends React.Component {
     render() {
         const { user } = this.props
         return(
             <AppLayout user={user}>
-                <Switch>
+                <Switch>								
+										<Route path="/projects/manage" render={() => (
+											<ProjectManagement
+												user={user}
+											/>
+											)}
+										/>
                     <Route path="/projects/create" render={() => (
                         <ProjectForm/>)}
                     />
@@ -30,4 +37,4 @@ class ProjectsMain extends React.Component {
     }
 }
 
-export default hot(module)(ProjectsMain);
+export default withRouter(ProjectsMain);
