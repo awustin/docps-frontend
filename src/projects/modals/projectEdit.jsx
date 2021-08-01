@@ -1,5 +1,7 @@
 import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
 import React from 'react';
+import '../../CustomStyles.css';
 import {
     Modal,
     Form,
@@ -7,65 +9,162 @@ import {
     Row,
     Col,
 		Typography,
-		Tooltip
+		Tooltip,
+		Button,
+		Divider,
+		List,
+		Skeleton,
+		Tag
 } from 'antd';
 import {
-    ExclamationCircleOutlined,
+	ExclamationCircleOutlined,
+	PlusCircleOutlined,
+	EditOutlined,
+	DeleteOutlined
 } from '@ant-design/icons';
+import MessageModal from '../../common/messageModal';
 
-const { Title } = Typography
+const { Title,Text } = Typography
 
 class ProjectEdit extends React.Component {
-    constructor(props){
-        super(props)
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
-    state = {
-			project: {
-					id: undefined,
-					createdOn: undefined,
-					name: undefined,
-					group: undefined
-			},
-			dirty: false,
-			field: {
+	constructor(props){
+		super(props)
+		this.handleSubmit = this.handleSubmit.bind(this)
+		this.showTestplans = this.showTestplans.bind(this)
+		this.statusTag = this.statusTag.bind(this)
+	}
+
+	state = {
+		project: {
+				id: undefined,
+				createdOn: undefined,
 				name: undefined,
+				group: undefined,
+				testplanList: []
+		},
+		dirty: false,
+		field: {
+			name: undefined,
+		},
+		showMessageModal: false,
+		message: {
+			title:undefined,
+			description:undefined,
+			type: undefined
 			},
-			showMessageModal: false,
-			message: {
-				title:undefined,
-				description:undefined,
-				type: undefined
-				},
-			validationMessage: undefined,
-			showCancelModal: false
-    }
+		loading: true,
+		showCancelModal: false
+	}
 
-    componentDidMount() {
-        const { projectId } = this.props
-        //Query para traer toda la info del proyecto
-        let project = {
-            id: 999,
-            createdOn: '1/06/2021',
-            name: 'DOCPS-0001: Tests de integración',
-            group: 'Pumas'            
-        }
-        this.setState({ project: project, field:{name:project.name} })
-    }
+	componentDidMount() {
+		const { projectId } = this.props
+		//Query para traer toda la info del proyecto 
+		let project = {
+				id: 999,
+				createdOn: '1/06/2021',
+				name: 'DOCPS-0001: Tests de integración',
+				group: 'Pumas'
+		}
+		this.setState({ project: project, field:{name:project.name} })
+		//Query para traer la lista de planes de prueba
+		let list = []
+		let statuses = ['Not executed','In progress','Passed','Failed']
+		for (let index = 0; index < 5; index++) {
+				list.push({
+						title: 'DOCPS-15' + index,
+						key: index + 1,
+						id: index + 1,
+						dateModified: '15/04/2021',
+						status: statuses[Math.floor(Math.random() * statuses.length)]
+				})                        
+		}
+		project.testplanList=list
+		setTimeout(()=>this.setState({ project: project, loading:false }), 1000)			
+	}
 
-    handleSubmit(values) {
-        const { closeEdit, reloadSearch } = this.props
-        //Validar nombre único
-        this.setState({ validationMessage: {title:'Un proyecto con ese nombre ya existe',description:'Debe ingresar otro nombre'} })        
-        //Query para hacer el insert del proyecto
-        //Enviar el mail de verificacion al usuario nuevo
-        closeEdit()
-        reloadSearch()
-    }
+	handleSubmit() {
+		 const { closeEdit, reloadSearch } = this.props
+			const { field } = this.state
+			/*
+			//Validar nombre vacío
+			this.setState({
+					showMessageModal: true, 
+					message: {
+						title:'Nombre vacío',
+						description:'Debe ingresar otro nombre.',
+						type:'validate'
+					}
+				})
+			//Validar nombre único
+			this.setState({
+					showMessageModal: true, 
+					message: {
+						title:'Un proyecto con ese nombre ya existe',
+						description:'Debe ingresar otro nombre.',
+						type:'validate'
+					}
+				})
+			*/
+			//Query para hacer el update del proyecto
+			closeEdit()
+			reloadSearch()
+	}
+
+	statusTag(status) {
+		switch(status)
+		{
+				case 'Not executed':
+						return <Tag color="#999997">No ejecutado</Tag>
+				case 'In progress':
+						return <Tag color="#ebcf52">En progreso</Tag>
+				case 'Passed':
+						return <Tag color="#09de8c">Pasó</Tag>
+				case 'Failed':
+						return <Tag color="#f50">Falló</Tag>
+		}
+	}
+		
+		showTestplans() {
+			const { project, loading } = this.state
+			return(
+				<Skeleton
+					loading={loading}	
+					paragraph={{ rows: 4 }}
+					active
+				>
+					<List
+							size="small"
+							pagination={{
+									pageSize: 10
+									}}
+							dataSource={project.testplanList}
+							bordered={true}
+							renderItem={item => (
+									<List.Item
+											key={item.key}
+											span={4}
+											actions={[
+													this.statusTag(item.status),
+													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+													<DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+											]}
+											style={{background: "#fff"}}
+											className="modal-list-item"
+									>
+											<List.Item.Meta
+													title={item.title}
+													description={'Última modificación: ' + item.dateModified}
+													/>
+									</List.Item>
+							)}
+					/>
+				</Skeleton>
+			)
+		}
 
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { project, showCancelModal, showMessageModal, statusOptions, dirty, field } = this.state
+        const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -79,26 +178,42 @@ class ProjectEdit extends React.Component {
                         title={"Proyecto"}
                         visible={visibleEdit}
                         closable={false}
-                        width={700}
+                        width={800}
                         okText="Confirmar"
-                        okButtonProps={{form:'editForm', key: 'submit', htmlType: 'submit', disabled: !dirty}}
+                        okButtonProps={{onClick:this.handleSubmit, disabled: !dirty}}
                         cancelText="Cancelar"
                         onCancel={()=>{this.setState({showCancelModal:true})}}
                         destroyOnClose={true}                
                         maskClosable={false}
                         keyboard={false}
                     >
-												<Title level={4} 
-													editable={{
-														tooltip: <Tooltip>Modificar nombre</Tooltip>,
-														autoSize: { minRows: 1, maxRows: 2 },
-														onChange: ((e)=>{
-															this.setState({ dirty: true, field:{name:e} })
-														})
-													}}
-												>
-													{field.name}													
-												</Title>
+													<Text className="modal-title-label">Nombre</Text>
+													<Title 
+														className="modal-editable-title"
+														level={4}
+														editable={{
+															tooltip: <Tooltip>Modificar nombre</Tooltip>,
+															autoSize: { minRows: 1, maxRows: 2 },
+															onChange: ((e)=>{
+																this.setState({ dirty: true, field:{name:e} })
+															})
+														}}
+													>
+														{field.name}													
+													</Title>
+													<Row style={{alignItems: "center", marginBlockStart:"5%", paddingBottom: "1%"}}>
+															<Col flex="1 0 70%">
+																	<Title className="modal-subtitle" level={4}>Planes de pruebas</Title>
+															</Col>
+															<Col flex="1 0 30%" style={{textAlign: "end"}}>
+																	<Link to={{ pathname:"/testplans/create?p=" + project.projectId + "&n=" + project.projectName }}>
+																			<Button type="primary" style={{display: "inline-flex", alignItems: "center"}}>
+																					<PlusCircleOutlined style={{ paddingTop: "1px", fontSize:"120%" }}/>Crear plan de pruebas
+																			</Button>
+																	</Link>
+															</Col>
+													</Row>
+													{this.showTestplans()}
                     </Modal>
                     <Modal
                         visible={showCancelModal}
@@ -123,6 +238,13 @@ class ProjectEdit extends React.Component {
                             </Col>
                         </Row>
                     </Modal>
+											<MessageModal								
+												type={message.type}
+												title={message.title}
+												description={message.description}
+												visible={showMessageModal}
+												onClose={()=>this.setState({ showMessageModal: false })}
+											/>
                     </>
                 ):(<></>)}
             </>

@@ -32,3 +32,18 @@
 	border-left-color: #f55742;
 	border-left-width: 8px;
 }
+
+.modal-editable-title {
+	margin-top: 0px !important;
+}
+
+.modal-title-label {
+	color: #228cdbff !important;
+	font-weight: 200 !important;
+	margin-bottom: 0px !important;
+}
+
+.modal-subtitle {
+	color: #949494 !important;
+	font-weight: 400 !important;
+}
