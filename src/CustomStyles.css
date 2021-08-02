@@ -43,7 +43,6 @@
 	margin-bottom: 0px !important;
 }
 
-.modal-subtitle {
-	color: #949494 !important;
-	font-weight: 400 !important;
+.modal-list-item:hover {
+	background-color: #cce4ff !important;
 }

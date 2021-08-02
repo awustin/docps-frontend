@@ -69,7 +69,7 @@ class ProjectEdit extends React.Component {
 		//Query para traer la lista de planes de prueba
 		let list = []
 		let statuses = ['Not executed','In progress','Passed','Failed']
-		for (let index = 0; index < 5; index++) {
+		for (let index = 0; index < 10; index++) {
 				list.push({
 						title: 'DOCPS-15' + index,
 						key: index + 1,
@@ -129,13 +129,14 @@ class ProjectEdit extends React.Component {
 			return(
 				<Skeleton
 					loading={loading}	
-					paragraph={{ rows: 4 }}
+					paragraph={{ rows: 7 }}
 					active
 				>
 					<List
 							size="small"
 							pagination={{
-									pageSize: 10
+									pageSize: 7,
+									size: "small"
 									}}
 							dataSource={project.testplanList}
 							bordered={true}
@@ -145,8 +146,8 @@ class ProjectEdit extends React.Component {
 											span={4}
 											actions={[
 													this.statusTag(item.status),
-													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#000"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
-													<DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#228cdbff"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
+													<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} />
 											]}
 											style={{background: "#fff"}}
 											className="modal-list-item"
@@ -201,9 +202,10 @@ class ProjectEdit extends React.Component {
 													>
 														{field.name}													
 													</Title>
+													<Divider/>
 													<Row style={{alignItems: "center", marginBlockStart:"5%", paddingBottom: "1%"}}>
 															<Col flex="1 0 70%">
-																	<Title className="modal-subtitle" level={4}>Planes de pruebas</Title>
+																	<Title className="modal-subtitle" level={5}>Planes de pruebas</Title>
 															</Col>
 															<Col flex="1 0 30%" style={{textAlign: "end"}}>
 																	<Link to={{ pathname:"/testplans/create?p=" + project.projectId + "&n=" + project.projectName }}>
