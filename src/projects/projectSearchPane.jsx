@@ -20,6 +20,7 @@ import {
     DeleteOutlined
 } from '@ant-design/icons';
 import ProjectEdit from './modals/projectEdit';
+import ProjectDelete from './modals/projectDelete';
 
 class ProjectSearchPane extends React.Component {
     constructor(props) {
@@ -29,14 +30,15 @@ class ProjectSearchPane extends React.Component {
       this.reloadSearch = this.reloadSearch.bind(this)
 			this.selectGroupsHandle = this.selectGroupsHandle.bind(this)
     }
+
     state = {
-        lastValues: undefined,
-        results: undefined,
-				groupOptions: [],
-        error: undefined,
-        visibleEdit: false,
-        visibleDelete: false,
-        editProjectId: undefined
+			lastValues: undefined,
+			results: undefined,
+			groupOptions: [],
+			error: undefined,
+			visibleEdit: false,
+			visibleDelete: false,
+			editProjectId: undefined
     }
 
     handleSubmit(values) {
@@ -119,6 +121,10 @@ class ProjectSearchPane extends React.Component {
 				this.setState({ visibleEdit: true, editProjectId: id })
 			}).bind(this)
 			
+			const deleteHandle = (function(id) {
+				this.setState({ visibleDelete: true, editProjectId: id })
+			}).bind(this)
+			
 			if(results !== undefined) {
 				let groupedResults = this.groupResultsByGroup()
 				let listSections = []
@@ -149,7 +155,7 @@ class ProjectSearchPane extends React.Component {
 															<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
 													</Tooltip>,
 													<Tooltip title="Eliminar proyecto" color="#108ee9">
-															<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{this.setState({ visibleDelete: true, editProjectId: item.id })}}/>
+															<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
 													</Tooltip>
 											]}
 											className={'list-item project'}
@@ -247,7 +253,12 @@ class ProjectSearchPane extends React.Component {
                 <></>
             )}
             { (visibleDelete) ? (
-								<>Eliminar</>
+                <ProjectDelete
+										projectId={editProjectId}
+										visibleDelete={visibleDelete}
+										closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+										reloadSearch={this.reloadSearch}
+                />
             ) : (
                 <></>
             )}
