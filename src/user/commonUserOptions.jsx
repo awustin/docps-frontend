@@ -42,7 +42,7 @@ class CommonUserOptions extends React.Component {
 					</Link>
 				</Col>
 				<Col span={6}>
-					<Link to={{ pathname:"/testplans/search"}}>
+					<Link to={{ pathname:"/testplans/manage"}}>
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}

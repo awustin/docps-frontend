@@ -30,7 +30,7 @@ class AppLayout extends React.Component {
 			{key:'user', label:'Usuarios', icon:<UserOutlined style={{ fontSize: '150%'}}/>, toPath:'/user/admin', onlyAdmin: true},
 			{key:'groups', label:'Grupos', icon:<TeamOutlined style={{ fontSize: '150%'}}/>, toPath:'/groups/admin', onlyAdmin: true},
 			{key:'projects', label:'Proyectos', icon:<FolderOutlined style={{ fontSize: '150%'}}/>, toPath:'/projects/manage', onlyAdmin: false},
-			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/search', onlyAdmin: false},
+			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/manage', onlyAdmin: false},
 			{key:'reports', label:'Reportes', icon:<BarChartOutlined style={{ fontSize: '150%'}}/>, toPath:'/reports', onlyAdmin: false}
 		]
   };

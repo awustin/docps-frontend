@@ -3,6 +3,7 @@ import React from 'react';
 import { Route,Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
 import AppLayout from '../AppLayout';
+import TestplanManagement from './testplanManagement';
 import TestplanForm from './testplanForm';
 import TestplanSearch from './testplanSearch';
 import Testplan from './testplan';
@@ -88,6 +89,11 @@ class TestplansMain extends React.Component {
         return(
             <AppLayout user={user}>
                 <Switch>
+                    <Route exact path="/testplans/manage" render={() => (
+                        <TestplanManagement 
+															user={user}
+														/>)}
+                    />
                     <Route exact path="/testplans/create" render={() => (
                         <TestplanForm project={{}}/>)}
                     />
