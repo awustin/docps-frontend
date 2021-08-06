@@ -5,7 +5,6 @@ import { withRouter } from "react-router";
 import AppLayout from '../AppLayout';
 import TestplanManagement from './testplanManagement';
 import TestplanForm from './testplanForm';
-import TestplanSearch from './testplanSearch';
 import Testplan from './testplan';
 import TestplanExport from './testplanExport';
 
@@ -99,9 +98,6 @@ class TestplansMain extends React.Component {
                     />
                     <Route path="/testplans/create?p=:projectId&n=:projectName" render={() => (
                         <TestplanForm project={project} setProject={this.setProject}/>)}
-                    />
-                    <Route path="/testplans/search" render={() => (
-                        <TestplanSearch setTestplan={this.setTestplan}/>)}
                     />
                     <Route exact path="/testplans/id=:testplanId" render={() => (
                         <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan} updateTestplan={this.updateTestplan}/>)}

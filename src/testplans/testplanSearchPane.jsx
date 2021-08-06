@@ -1,0 +1,300 @@
+import { withRouter } from "react-router";
+import React from 'react';
+import '../CustomStyles.css';
+import {
+    Divider,
+    Form,
+    Input,
+    Button,    
+    Select,
+    List,
+    Tag,
+    Avatar,
+    Tooltip,
+    Row,
+    Col,
+    DatePicker,
+} from 'antd';
+import {
+    EditOutlined,
+    DeleteOutlined
+} from '@ant-design/icons';
+
+class TestplanSearchPane extends React.Component {
+	constructor(props) {
+		super(props)
+		this.handleSubmit = this.handleSubmit.bind(this)
+		this.showResults = this.showResults.bind(this)
+		this.reloadSearch = this.reloadSearch.bind(this)
+		this.getProjectOptions = this.getProjectOptions.bind(this)
+		this.getTagOptions = this.getTagOptions.bind(this)
+	}
+
+	state = {
+		lastValues: undefined,
+		results: undefined,
+		groupOptions: [],
+		projectOptions: [],
+		tagOptions: [],
+		error: undefined,
+		visibleEdit: false,
+		visibleDelete: false,
+		editTestplanId: undefined,
+	}
+	
+	componentDidMount() {
+	//Query para traer los grupos a los q puede agregar planes
+		this.setState({ groupOptions: [
+			{key:0,name:'Pumas'},
+			{key:1,name:'Águilas'},
+			{key:2,name:'Pulpos'},
+			{key:3,name:'Leones'}
+			] 
+		})	
+	}
+
+	handleSubmit(values) {
+		//Query para buscar planes
+		let results = []
+		let statuses = ['Not executed','In progress','Passed','Failed']
+		for (let index = 0; index < 21; index++) {
+			results.push(
+				{
+					key: "testplan"+index*2,
+					testplanId: index,
+					testplanName: "DOCPS-" + index*11,
+					description: "Este es un plan de pruebas",
+					tags: ["test","etiqueta"],
+					createdOn: '10/02/2021',
+					status: statuses[Math.floor(Math.random() * statuses.length)]
+				}
+			)            
+		}			
+		this.setState({ results: results, lastValues: values })
+	}
+
+	reloadSearch() {
+	const { lastValues } = this.state
+	if( lastValues !== undefined )
+	{
+	//Query para hacer la busqueda de proyectos con lastValues
+	let results = []
+	let groups = ['Pumas','Leones','Aguilas','Tiburones']
+	for (let g = 0; g < groups.length; g++) {
+	for (let index = 0; index < 4; index++) {
+	results.push(
+	{
+		key: "project"+(g*10+index),
+		id: (g*10+index)*10,
+		createdOn: (index+1) +'/02/2021',
+		name: 'G'+g+'P'+index+" Proyecto modificado",
+		testplanCount: Math.floor(Math.random() * 30),
+		group: groups[g]
+	}
+	)
+	}					
+	}
+	this.setState({ results: results, groups: groups })
+	}
+	}
+	
+	getProjectOptions(groupId) {
+	//Query para traer los proyectos elegibles del grupo elegido
+		let list = []
+		for (let index = 0; index < 5; index++) {
+			list.push(
+				{
+					id: index,
+					name: "G"+groupId+"PROY-" + index,                   
+				}
+		)
+		}
+		this.setState({ projectOptions: list })
+	}
+	
+	getTagOptions() {
+		//Query para traer etiquetas
+		let list = []
+		for (let index = 0; index < 5; index++) {
+			list.push({
+				tag: "TAG" + index
+			})
+		}
+		this.setState({ tagOptions: list  })
+	}	
+
+	showResults() {
+		const { results, groups } = this.state
+
+		const editHandle = (function(id) {
+		this.setState({ visibleEdit: true, editProjectId: id })
+		}).bind(this)
+
+		const deleteHandle = (function(id) {
+		this.setState({ visibleDelete: true, editProjectId: id })
+		}).bind(this)
+
+		if(results !== undefined) {
+		let groupedResults = this.groupResultsByGroup()
+		let listSections = []
+
+		Object.keys(groupedResults).forEach( function(e) {
+		listSections.push(
+		<Divider key={e+'Divider'} orientation="left">
+		{e}
+		</Divider>
+		)
+
+		listSections.push(
+		<List
+		key={e+'List'}
+		size="small"
+		pagination={{
+		size: "small",
+		pageSize: 20
+		}}
+		dataSource={groupedResults[e]}
+		bordered={false}
+		renderItem={item => (
+		<List.Item
+			key={item.key}
+			span={4}
+			actions={[
+					<Tooltip title="Modificar proyecto" color="#108ee9">
+							<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
+					</Tooltip>,
+					<Tooltip title="Eliminar proyecto" color="#108ee9">
+							<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
+					</Tooltip>
+			]}
+			className={'list-item project'}
+			style={{ background: "#fff" }}
+		>
+			<List.Item.Meta
+					title={item.name}
+					/>
+			{item.testplanCount} planes de pruebas
+		</List.Item>
+		)}
+		/>						
+		)
+
+		}
+	)
+
+	return (
+	<>
+	<div className="search-results">
+	{listSections}
+	</div>
+	</>
+	)
+	}
+	}
+
+	render() {
+		const { groupOptions, projectOptions, tagOptions, visibleEdit, visibleDelete, editTestplanId } = this.state
+		const { Option } = Select
+		const { RangePicker } = DatePicker
+		const layout = {
+			labelCol: { span: 18 },
+			wrapperCol: { span: 20 },
+		}
+		const tailLayout = {
+			wrapperCol: { span: 12 },
+		}
+		return(            
+			<>
+			<Row>
+				<Col span={7}>
+				<Form {...layout}
+					name="testplanSearch"
+					layout="vertical"
+					style={{ marginBlockStart:"1%" }}
+					onFinish={this.handleSubmit}
+				>
+					<Row>
+						<Col span={24}>
+                    <Form.Item
+                        label="Grupo"
+                        name="group"
+                        rules={[{ required: true, message: 'Seleccione un grupo.' }]}
+                    >
+                        <Select
+                            allowClear
+                            placeholder="Seleccione un grupo"
+																onChange={id=>this.getProjectOptions(id)}
+                        >
+                            {groupOptions.map(e => (<Option key={e.key}>{e.name}</Option>))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Proyecto"
+                        name="projects"
+                        rules={[{ required: true, message: 'Seleccione uno o mas proyectos.' }]}
+                    >
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            placeholder="Seleccione uno o más proyectos"                       
+                        >
+                            {projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item 
+                        label="Nombre"
+                        name="testplanName"
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item 
+                        label="Fecha de creación"
+                        name="createdOn"
+                    >
+                        <RangePicker/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Etiquetas"
+                        name="testplanTags"
+                    >
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            placeholder="Seleccione una o más etiquetas"  
+																onDropdownVisibleChange={this.getTagOptions}
+                        >
+                            {tagOptions.map(item => (<Option key={item.tag}>{item.tag}</Option>))}
+                        </Select>
+                    </Form.Item>
+						</Col>
+					</Row>
+					<Row span={16}>
+						<Form.Item {...tailLayout}>
+								<Button type="primary" htmlType="submit">Buscar</Button>
+						</Form.Item>
+					</Row>
+					</Form>
+				</Col>
+				<Col span={1}>
+					<Divider type="vertical" style={{ height:"100%" }} dashed/>
+				</Col>
+				<Col span={16}>
+				{this.showResults()}
+				</Col>
+			</Row>
+			{ (visibleEdit) ? (
+			'Edit'
+			) : (
+			<></>
+			)}
+			{ (visibleDelete) ? (
+			'Delete'
+			) : (
+			<></>
+			)}
+			</>
+		);
+	}
+	}
+
+export default withRouter(TestplanSearchPane);

@@ -14,6 +14,7 @@ import {
 		SearchOutlined,
 		FolderAddOutlined
 } from '@ant-design/icons';
+import TestplanSearchPane from './testplanSearchPane';
 
 class TestplanManagement extends React.Component {
     render() {
@@ -41,7 +42,9 @@ class TestplanManagement extends React.Component {
 			<Divider/>
 			<Tabs defaultActiveKey="search">
 				<TabPane key="search" tab={<><SearchOutlined />Buscar planes de pruebas</>}>
-					Buscar
+					<TestplanSearchPane
+						user={user}
+					/>
 				</TabPane>
 				<TabPane key="create" tab={<><FolderAddOutlined />Crear plan de pruebas</>}>
 					Crear
