@@ -15,6 +15,7 @@ import {
 		FolderAddOutlined
 } from '@ant-design/icons';
 import ProjectSearchPane from './projectSearchPane';
+import ProjectCreateForm from './projectCreateForm';
 
 class ProjectManagement extends React.Component {
     render() {
@@ -47,6 +48,9 @@ class ProjectManagement extends React.Component {
 									/>
 								</TabPane>
 								<TabPane key="create" tab={<><FolderAddOutlined />Crear proyecto</>}>
+									<ProjectCreateForm
+										user={user}
+									/>
 								</TabPane>
 							</Tabs>
 						</div>
