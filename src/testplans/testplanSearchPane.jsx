@@ -1,6 +1,7 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
+import { Link } from 'react-router-dom';
 import {
     Divider,
     Form,
@@ -14,11 +15,15 @@ import {
     Row,
     Col,
     DatePicker,
+		Typography
 } from 'antd';
 import {
     EditOutlined,
-    DeleteOutlined
+    DeleteOutlined,
+		ExportOutlined
 } from '@ant-design/icons';
+
+const { Text } = Typography;
 
 class TestplanSearchPane extends React.Component {
 	constructor(props) {
@@ -66,7 +71,8 @@ class TestplanSearchPane extends React.Component {
 					description: "Este es un plan de pruebas",
 					tags: ["test","etiqueta"],
 					createdOn: '10/02/2021',
-					status: statuses[Math.floor(Math.random() * statuses.length)]
+					status: statuses[Math.floor(Math.random() * statuses.length)],
+					projectName: 'PROY99'
 				}
 			)            
 		}			
@@ -127,70 +133,84 @@ class TestplanSearchPane extends React.Component {
 		const { results, groups } = this.state
 
 		const editHandle = (function(id) {
-		this.setState({ visibleEdit: true, editProjectId: id })
+			this.setState({ visibleEdit: true, editTestplanId: id })
 		}).bind(this)
 
 		const deleteHandle = (function(id) {
-		this.setState({ visibleDelete: true, editProjectId: id })
+			this.setState({ visibleDelete: true, editTestplanId: id })
 		}).bind(this)
+		
+		const statusTag = (function(status,key) {
+			switch(status)
+			{
+				case 'Not executed':
+						return <Tag key={key+'999997'} color="#999997">No ejecutado</Tag>
+				case 'In progress':
+						return <Tag key ={key+'ebcf52'} color="#ebcf52">En progreso</Tag>
+				case 'Passed':
+						return <Tag key={key+'09de8c'} color="#09de8c">Pasó</Tag>
+				case 'Failed':
+						return <Tag key={key+'f50'} color="#f50">Falló</Tag>
+			}			
+		}).bind(this)
+		
+		let list = []
 
 		if(results !== undefined) {
-		let groupedResults = this.groupResultsByGroup()
-		let listSections = []
-
-		Object.keys(groupedResults).forEach( function(e) {
-		listSections.push(
-		<Divider key={e+'Divider'} orientation="left">
-		{e}
-		</Divider>
-		)
-
-		listSections.push(
-		<List
-		key={e+'List'}
-		size="small"
-		pagination={{
-		size: "small",
-		pageSize: 20
-		}}
-		dataSource={groupedResults[e]}
-		bordered={false}
-		renderItem={item => (
-		<List.Item
-			key={item.key}
-			span={4}
-			actions={[
-					<Tooltip title="Modificar proyecto" color="#108ee9">
-							<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
-					</Tooltip>,
-					<Tooltip title="Eliminar proyecto" color="#108ee9">
-							<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
-					</Tooltip>
-			]}
-			className={'list-item project'}
-			style={{ background: "#fff" }}
-		>
-			<List.Item.Meta
-					title={item.name}
-					/>
-			{item.testplanCount} planes de pruebas
-		</List.Item>
-		)}
-		/>						
-		)
+			list.push(
+				<List
+					size="small"
+					pagination={{
+						size: "small",
+						pageSize: 20
+						}}
+					dataSource={results}
+					bordered={false}
+					renderItem={item => (
+						<List.Item
+							key={item.key}
+							span={4}
+							actions={[
+									<Text type="secondary">{item.createdOn}</Text>,
+                item.tags.map( tag => <Tag key={item.key+tag}>{tag}</Tag> ),
+                statusTag(item.status,item.key),									
+									<Tooltip title="Modificar plan de pruebas" color="#108ee9">
+										<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
+									</Tooltip>,
+									<Tooltip title="Eliminar plan de pruebas" color="#108ee9">
+										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
+									</Tooltip>,
+									<Tooltip title="Exportar" color="#108ee9">
+										<Link to={{ pathname: "/testplans/export" }} style={{color:"#000"}}>
+											<ExportOutlined style={{ fontSize: '150%'}} onClick={() => alert('Exportar')}/>
+										</Link>
+									</Tooltip>
+							]}
+							className={'list-item testplan'}
+							style={{ background: "#fff" }}
+						>
+							<List.Item.Meta									
+									description=<div className={'list-item description'}>
+										{'Proyecto: ' + item.projectName}
+									</div>
+								/>
+									{item.testplanName}
+						</List.Item>
+				)}
+				/>						
+			)
 
 		}
-	)
 
-	return (
-	<>
-	<div className="search-results">
-	{listSections}
-	</div>
-	</>
-	)
+		return (
+			<>
+				<div className="search-results">
+					{list}
+				</div>
+			</>
+		)
 	}
-	}
+
 
 	render() {
 		const { groupOptions, projectOptions, tagOptions, visibleEdit, visibleDelete, editTestplanId } = this.state

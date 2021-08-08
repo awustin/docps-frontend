@@ -46,3 +46,13 @@
 .modal-list-item:hover {
 	background-color: #cce4ff !important;
 }
+
+.list-item .description {
+	font-size: 90%;
+	color: #228cdbff !important;
+	font-weight: 200 !important;
+}
+
+.list-item.testplan:hover {
+	background-color: #cce4ff !important;
+}
