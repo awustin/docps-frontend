@@ -22,6 +22,7 @@ import {
     DeleteOutlined,
 		ExportOutlined
 } from '@ant-design/icons';
+import TestplanDelete from './modals/testplanDelete';
 
 const { Text } = Typography;
 
@@ -154,11 +155,10 @@ class TestplanSearchPane extends React.Component {
 			}			
 		}).bind(this)
 		
-		let list = []
+		let list;
 
 		if(results !== undefined) {
-			list.push(
-				<List
+			list = <List
 					size="small"
 					pagination={{
 						size: "small",
@@ -171,8 +171,8 @@ class TestplanSearchPane extends React.Component {
 							key={item.key}
 							span={4}
 							actions={[
-									<Text type="secondary">{item.createdOn}</Text>,
-                item.tags.map( tag => <Tag key={item.key+tag}>{tag}</Tag> ),
+									<Text key={item.key+'created'} type="secondary">{item.createdOn}</Text>,
+                item.tags.map( tag => <Tag className={'hideable'} key={item.key+tag}>{tag}</Tag> ),
                 statusTag(item.status,item.key),									
 									<Tooltip title="Modificar plan de pruebas" color="#108ee9">
 										<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
@@ -189,7 +189,7 @@ class TestplanSearchPane extends React.Component {
 							className={'list-item testplan'}
 							style={{ background: "#fff" }}
 						>
-							<List.Item.Meta									
+							<List.Item.Meta
 									description=<div className={'list-item description'}>
 										{'Proyecto: ' + item.projectName}
 									</div>
@@ -197,9 +197,7 @@ class TestplanSearchPane extends React.Component {
 									{item.testplanName}
 						</List.Item>
 				)}
-				/>						
-			)
-
+				/>
 		}
 
 		return (
@@ -308,7 +306,12 @@ class TestplanSearchPane extends React.Component {
 			<></>
 			)}
 			{ (visibleDelete) ? (
-			'Delete'
+				<TestplanDelete
+					testplanId={editTestplanId}
+					visibleDelete={visibleDelete}
+					closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+					reloadSearch={this.reloadSearch}				
+				/>
 			) : (
 			<></>
 			)}

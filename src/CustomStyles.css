@@ -48,11 +48,18 @@
 }
 
 .list-item .description {
-	font-size: 90%;
+	font-size: 0.8vw;
 	color: #228cdbff !important;
 	font-weight: 200 !important;
 }
 
 .list-item.testplan:hover {
 	background-color: #cce4ff !important;
+}
+
+
+@media only screen and (max-width: 1450px) {
+	.hideable { 
+		display: none !important; 
+	}
 }

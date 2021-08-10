@@ -23,6 +23,7 @@ import {
 	DeleteOutlined
 } from '@ant-design/icons';
 import MessageModal from '../../common/messageModal';
+import TestplanDelete from '../../testplans/modals/testplanDelete';
 
 const { Title,Text } = Typography
 
@@ -32,6 +33,7 @@ class ProjectEdit extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		this.showTestplans = this.showTestplans.bind(this)
 		this.statusTag = this.statusTag.bind(this)
+		this.reloadTestplanSearch = this.reloadTestplanSearch.bind(this)
 	}
 
 	state = {
@@ -53,7 +55,9 @@ class ProjectEdit extends React.Component {
 			type: undefined
 			},
 		loading: true,
-		showCancelModal: false
+		showCancelModal: false,
+		visibleTestplanDelete: false,
+		editTestplanId: undefined
 	}
 
 	componentDidMount() {
@@ -80,6 +84,24 @@ class ProjectEdit extends React.Component {
 		}
 		project.testplanList=list
 		setTimeout(()=>this.setState({ project: project, loading:false }), 1000)			
+	}
+	
+	reloadTestplanSearch() {
+		const { projectId } = this.props
+		this.setState({ loading:true })
+		//Query para traer la lista de planes de prueba
+		let list = []
+		let statuses = ['Not executed','In progress','Passed','Failed']
+		for (let index = 0; index < 10; index++) {
+				list.push({
+						title: 'DOCPS-15 MODIF' + index,
+						key: index + 1,
+						id: index + 1,
+						dateModified: '15/04/2021',
+						status: statuses[Math.floor(Math.random() * statuses.length)]
+				})                        
+		}
+		setTimeout(()=>this.setState({ project: { ...this.state.project, testplanList: list}, loading:false }), 1000)	
 	}
 
 	handleSubmit() {
@@ -146,8 +168,12 @@ class ProjectEdit extends React.Component {
 											span={4}
 											actions={[
 													this.statusTag(item.status),
-													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#228cdbff"}}><EditOutlined style={{ fontSize: '150%'}} /></Link>,
-													<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} />
+													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#228cdbff"}}>
+														<EditOutlined style={{ fontSize: '150%'}} />
+													</Link>,
+													<Tooltip title="Eliminar plan de pruebas" color="#108ee9">
+														<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>this.setState({ visibleTestplanDelete:true, editTestplanId:item.id })}/>
+													</Tooltip>
 											]}
 											style={{background: "#fff"}}
 											className="modal-list-item"
@@ -165,7 +191,7 @@ class ProjectEdit extends React.Component {
 
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field } = this.state
+        const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field, visibleTestplanDelete, editTestplanId } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -249,6 +275,17 @@ class ProjectEdit extends React.Component {
 											/>
                     </>
                 ):(<></>)}
+								
+									{ (visibleTestplanDelete) ? (
+										<TestplanDelete
+											testplanId={editTestplanId}
+											visibleDelete={visibleTestplanDelete}
+											closeDelete={(()=>{this.setState({ visibleTestplanDelete: false })}).bind(this)}
+											reloadSearch={this.reloadTestplanSearch}				
+										/>
+									) : (
+									<></>
+									)}
             </>
         );
     }
