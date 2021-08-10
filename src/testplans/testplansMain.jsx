@@ -13,7 +13,6 @@ class TestplansMain extends React.Component {
         super(props)
         this.setTestplan = this.setTestplan.bind(this)
         this.setProject = this.setProject.bind(this)
-        this.fetchTestplan = this.fetchTestplan.bind(this)
         this.updateTestplan = this.updateTestplan.bind(this)
     }
 
@@ -50,28 +49,6 @@ class TestplansMain extends React.Component {
         })
     }
 
-    fetchTestplan(projectId, testplanId) {
-        //Query
-        let project = {
-            projectId: projectId,
-            projectName: 'PRO-124'
-        }
-        let testplan = {
-            key: 'item'+testplanId,
-            testplanId: testplanId,
-            testplanName: 'ISSUE-1: Pruebas',
-            description: 'Plan de pruebas para una funcionalidad',
-            tags: ['integración','QA'],
-            createdOn: '21/03/2021',
-            status: 'Passed',
-            projectId: projectId,
-            projectName: 'PRO-124',
-            groupId: 1,
-            groupName: 'Pumas'
-        }
-        this.setState({ project: project, testplan: testplan })
-    }
-
     updateTestplan(values) {
         //Query
         const { testplan } = this.state
@@ -100,7 +77,10 @@ class TestplansMain extends React.Component {
                         <TestplanForm project={project} setProject={this.setProject}/>)}
                     />
                     <Route exact path="/testplans/id=:testplanId" render={() => (
-                        <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan} updateTestplan={this.updateTestplan}/>)}
+                        <Testplan
+															user={user}															
+														/>
+													)}
                     />
                     <Route path="/testplans/p=:projectId&id=:testplanId" render={() => (
                         <Testplan testplan={testplan} fetchTestplan={this.fetchTestplan} updateTestplan={this.updateTestplan}/>)}

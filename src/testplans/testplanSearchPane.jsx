@@ -20,7 +20,8 @@ import {
 import {
     EditOutlined,
     DeleteOutlined,
-		ExportOutlined
+		ExportOutlined,
+		EyeOutlined
 } from '@ant-design/icons';
 import TestplanDelete from './modals/testplanDelete';
 
@@ -44,7 +45,6 @@ class TestplanSearchPane extends React.Component {
 		tagOptions: [],
 		error: undefined,
 		visibleEdit: false,
-		visibleDelete: false,
 		editTestplanId: undefined,
 	}
 	
@@ -66,6 +66,7 @@ class TestplanSearchPane extends React.Component {
 		for (let index = 0; index < 21; index++) {
 			results.push(
 				{
+					id: index*11+5,
 					key: "testplan"+index*2,
 					testplanId: index,
 					testplanName: "DOCPS-" + index*11,
@@ -81,28 +82,29 @@ class TestplanSearchPane extends React.Component {
 	}
 
 	reloadSearch() {
-	const { lastValues } = this.state
-	if( lastValues !== undefined )
-	{
-	//Query para hacer la busqueda de proyectos con lastValues
-	let results = []
-	let groups = ['Pumas','Leones','Aguilas','Tiburones']
-	for (let g = 0; g < groups.length; g++) {
-	for (let index = 0; index < 4; index++) {
-	results.push(
-	{
-		key: "project"+(g*10+index),
-		id: (g*10+index)*10,
-		createdOn: (index+1) +'/02/2021',
-		name: 'G'+g+'P'+index+" Proyecto modificado",
-		testplanCount: Math.floor(Math.random() * 30),
-		group: groups[g]
-	}
-	)
-	}					
-	}
-	this.setState({ results: results, groups: groups })
-	}
+		const { lastValues } = this.state
+		if( lastValues !== undefined )
+		{
+			//Query para hacer la busqueda de planes con lastValues
+			let results = []
+			let statuses = ['Not executed','In progress','Passed','Failed']
+			for (let index = 0; index < 21; index++) {
+				results.push(
+					{
+						id: index*3+7,
+						key: "testplan"+index*2,
+						testplanId: index,
+						testplanName: "MODIF-" + index*11,
+						description: "Este es un plan de pruebas",
+						tags: ["test","etiqueta"],
+						createdOn: '10/02/2021',
+						status: statuses[Math.floor(Math.random() * statuses.length)],
+						projectName: 'PROY99'
+					}
+				)            
+			}			
+			this.setState({ results: results })
+			}
 	}
 	
 	getProjectOptions(groupId) {
@@ -132,10 +134,6 @@ class TestplanSearchPane extends React.Component {
 
 	showResults() {
 		const { results, groups } = this.state
-
-		const editHandle = (function(id) {
-			this.setState({ visibleEdit: true, editTestplanId: id })
-		}).bind(this)
 
 		const deleteHandle = (function(id) {
 			this.setState({ visibleDelete: true, editTestplanId: id })
@@ -174,8 +172,10 @@ class TestplanSearchPane extends React.Component {
 									<Text key={item.key+'created'} type="secondary">{item.createdOn}</Text>,
                 item.tags.map( tag => <Tag className={'hideable'} key={item.key+tag}>{tag}</Tag> ),
                 statusTag(item.status,item.key),									
-									<Tooltip title="Modificar plan de pruebas" color="#108ee9">
-										<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{editHandle(item.id)}}/>
+									<Tooltip title="Ver plan de pruebas" color="#108ee9">
+										<Link to={{ pathname: "/testplans/id="+item.id }} style={{color:"#228cdbff"}}>
+											<EyeOutlined style={{ fontSize: '150%', color: "#228cdbff"}} />
+										</Link>
 									</Tooltip>,
 									<Tooltip title="Eliminar plan de pruebas" color="#108ee9">
 										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>

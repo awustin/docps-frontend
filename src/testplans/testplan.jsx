@@ -11,16 +11,23 @@ import {
     List,
     Avatar,
     Tooltip,
+		Space,
+		Select,
+		Input
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
     EditOutlined,
     DeleteOutlined,
     PlusCircleOutlined,
+		LeftCircleOutlined,
+		PlusOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import TestplanEdit from './modals/testplanEdit';
 import ViewExecutions from '../executions/viewExecutions';
+
+const { Title,Text } = Typography;
+const { Option } = Select;
 
 class Testplan extends React.Component {
     constructor(props){
@@ -28,40 +35,74 @@ class Testplan extends React.Component {
         this.handleEditClick = this.handleEditClick.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
-        this.fetchTestcases = this.fetchTestcases.bind(this)
     }
     state = {
-        showEditModal: false,
-        testcases: []
+			showEditModal: false,
+			testplan: {
+				id: undefined,
+				key: undefined,
+				testplanId: undefined,
+				testplanName: undefined,
+				description: undefined,
+				tags: [],
+				createdOn: undefined,
+				status: undefined,
+				projectId: undefined,
+				projectName: undefined,
+				groupId: undefined,
+				groupName: undefined,
+				cases: []					
+			},
+			field: {
+				name: undefined,
+				description: undefined,
+				status: undefined,
+				tags: []
+			},
+			dirty: false
     }
 
-    componentDidMount() {
-        const { fetchTestplan } = this.props
-        if(Object.keys(this.props).includes("match") && fetchTestplan !== undefined )
+    componentWillMount() {
+        if(Object.keys(this.props).includes("match"))
         {
-            let projectId = this.props.match.params.projectId
-            let testplanId = this.props.match.params.testplanId
-            fetchTestplan(projectId, testplanId)
+						let testplanId = this.props.match.params.testplanId
+						//Query para buscar plan de pruebas y sus casos
+						let statuses = ['Not executed','In progress','Passed','Failed']
+						let testplan = {
+								id: testplanId,
+								key: 'item'+testplanId,
+								testplanId: testplanId,
+								testplanName: 'PLAN-888: Pruebas',
+								description: 'Plan de pruebas para una funcionalidad',
+								tags: ['TEST','INTEGRACION'],
+								createdOn: '21/03/2021',
+								status: 'Passed',
+								projectId: 9874,
+								projectName: 'PRO-124',
+								groupId: 1,
+								groupName: 'Pumas',
+								cases: []
+						}
+						for (let index = 0; index < 5; index++) {
+								let item = {
+										id: testplanId+'.'+index*2,
+										key: 'case'+index*2,
+										caseId: index,
+										caseName: 'CASO-'+index,
+										status: statuses[Math.floor(Math.random() * statuses.length)],
+										modifiedOn: '1/02/2021'
+								}
+								testplan.cases.push(item)            
+						}
+						//
+						let editables = {
+							name: testplan.testplanName,	
+							description: testplan.description,
+							status: testplan.status,
+							tags: testplan.tags
+						}
+						this.setState({ testplan: testplan, field: editables })
         }
-        this.fetchTestcases()
-    }
-
-    fetchTestcases() {
-        //Query
-        let cases = []
-        let statuses = ['Not executed','In progress','Passed','Failed']
-        for (let index = 0; index < 5; index++) {
-            let item = {
-                id: index*2,
-                key: 'case'+index*2,
-                caseId: index,
-                caseName: 'CasoDePrueba-'+index,
-                status: statuses[Math.floor(Math.random() * statuses.length)],
-                modifiedOn: '1/02/2021'
-            }
-            cases.push(item)            
-        }
-        this.setState({ testcases: cases })
     }
 
     handleEditClick() {
@@ -102,88 +143,131 @@ class Testplan extends React.Component {
         this.setState({ showEditModal: value })
     }
 
-    render() {
-        const { testplan, updateTestplan } = this.props
-        const { testcases } = this.state
-        const { showEditModal } = this.state
-        const { Title,Text } = Typography
-        return(
-            <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
-                <Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
-            </Breadcrumb>
-            <div className="testplan-description-container" style={{margin: "50px"}}>
-                <Title level={3}>Plan de prueba</Title>
-                <Row style={{display: "flex", alignItems: "top"}}>
-                    <Col flex="1 0 75%">
-                        <Descriptions column={1} size="small" labelStyle={{width: "100px"}} bordered>
-                            <Descriptions.Item label="Nombre"><Text strong>{testplan.testplanName}</Text></Descriptions.Item>
-                            <Descriptions.Item label="Descripción">{testplan.description} {testplan.description} {testplan.description}</Descriptions.Item>
-                            <Descriptions.Item label="Estado">{this.statusTag(testplan.status)}</Descriptions.Item>
-                            <Descriptions.Item label="Etiquetas">{testplan.tags.map(tag => <Tag key={testplan.key + tag}>{tag}</Tag>)}</Descriptions.Item>
-                        </Descriptions>
-                    </Col>
-                    <Col flex="1 0 25%" style={{textAlign: "end"}}>
-                        <Button type="primary" onClick={this.handleEditClick}>Modificar</Button>
-                        <TestplanEdit 
-                            id={testplan.testplanId} 
-                            testplanAttributes={[testplan.testplanName,testplan.description,testplan.tags]} 
-                            updateTestplan={updateTestplan}
-                            visible={showEditModal} 
-                            isEditModalVisible={this.isEditModalVisible} 
-                        />
-                    </Col>                    
-                </Row>
-                <Divider dashed></Divider>
-            </div>
-            <div className="testplan-testcases-container"  style={{margin: "50px"}}>
-                <Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
-                    <Col flex="1 0 75%">
-                        <Title level={4}>Casos de prueba</Title>
-                    </Col>                    
-                    <Col flex="1 0 25%" style={{textAlign: "end"}}>
-                        <Link to={{ pathname:"/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName}}>
-                            <Button style={{display: "inline-flex", alignItems: "center"}}>
-                                <PlusCircleOutlined style={{ color: "#b0b0b0", paddingTop: "1px"}}/>Crear caso de prueba
-                            </Button>
-                        </Link>
-                    </Col>
-                </Row>
-                <List
-                    size="small"
-                    pagination={{
-                        pageSize: 5
-                        }}
-                    dataSource={testcases}
-                    bordered={false}
-                    renderItem={item => (
-                        <List.Item
-                            key={item.key}
-                            span={4}
-                            actions={[
-                                <Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}>
-                                    <Tooltip title="Modificar caso de prueba" color="#108ee9">
-                                        <EditOutlined style={{ fontSize: '150%'}} />
-                                    </Tooltip>
-                                </Link>,
-                                <ViewExecutions id={item.id}/>,
-                                <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
-                            ]}
-                            style={{background: "#fff"}}
-                        >
-                            <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
-                                title={item.caseName}
-                                description={'Última modificación: ' + item.modifiedOn}
-                                />
-                        </List.Item>
-                    )}
-                />
-            </div>
-            </>
-        );
-    }
-}
+	render() {
+		const { user } = this.props
+		const { testplan, field, dirty, showEditModal } = this.state
+		return(
+			<>
+				<Breadcrumb>
+					<Breadcrumb.Item>Usuario</Breadcrumb.Item>
+					<Breadcrumb.Item>{user.id}</Breadcrumb.Item>
+					<Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
+					<Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
+				</Breadcrumb>					
+				<div className="navigation" style={{margin: "50px"}}>
+					<Row>
+						<Col flex="1 0 25%">
+							<Tooltip title="Atrás">
+								<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
+							</Tooltip>
+						</Col>
+					</Row>
+				</div>
+				<div className="testplan-description-container" style={{margin: "50px"}}>
+					<Row>
+						<Col flex="1 0 55%">
+							<Text className="modal-title-label">Nombre</Text>
+							<Title 
+								className="modal-editable-title"
+								level={3}
+								editable={{
+									tooltip: <Tooltip>Modificar nombre</Tooltip>,
+									autoSize: { minRows: 1, maxRows: 2 },
+									onChange: ((e)=>{
+										this.setState({ dirty: true, field:{...this.state.field, name: e} })
+									})
+								}}
+							>
+								{field.name}													
+							</Title>
+						</Col>
+						<Col flex="1 0 45%">
+							<Space direction="vertical">
+								<Text className="modal-title-label">Estado</Text>
+								{this.statusTag(testplan.status)}
+							</Space>
+						</Col>
+					</Row>
+					
+					<Row>
+						<Col flex="1 0 55%">			
+							<Space direction="vertical">	
+								<Text className="modal-title-label">Descripción</Text>
+								<Text 
+									className="modal-editable-text"
+									editable={{
+										tooltip: <Tooltip>Modificar descripción</Tooltip>,
+										autoSize: { minRows: 1, maxRows: 2 },
+										onChange: ((e)=>{
+											this.setState({ field: {...this.state.field, description: e}, dirty: true })
+										})
+									}}
+								>
+									{field.description}													
+								</Text>
+							</Space>
+						</Col>
+						<Col flex="1 0 45%">
+							<Space direction="vertical">			
+								<Text className="modal-title-label">Etiquetas</Text>
+								<Select
+									mode="tags"
+									defaultValue={field.tags}                            
+								>
+									{field.tags.map(item => <Option key={item}>{item}</Option>)}
+								</Select>
+							</Space>	
+						</Col>						
+					</Row>
+					<Row style={{ flexDirection: "row-reverse", marginBlock: "3%" }}>
+						<Button type="primary" disabled={!dirty}>Guardar cambios</Button>
+					</Row>
+					<Divider dashed></Divider>
+					<Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
+						<Col flex="1 0 75%">
+							<Title level={4}>Casos de prueba</Title>
+						</Col>                    
+						<Col flex="1 0 25%" style={{textAlign: "end"}}>
+							<Link to={{ pathname:"/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName}}>
+								<Button type="primary" style={{display: "inline-flex", alignItems: "center"}}>
+									<PlusCircleOutlined/>Crear caso de prueba
+								</Button>
+							</Link>
+						</Col>
+					</Row>
+					<List
+						size="small"
+						pagination={{
+						pageSize: 5
+						}}
+						dataSource={testplan.cases}
+						bordered={false}
+						renderItem={item => (
+							<List.Item
+								key={item.key}
+								span={4}
+								actions={[
+									<Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}>
+										<Tooltip title="Modificar caso de prueba" color="#108ee9">
+											<EditOutlined style={{ fontSize: '150%'}} />
+										</Tooltip>
+									</Link>,
+									<ViewExecutions id={item.id}/>,
+									<DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
+								]}
+								style={{background: "#fff"}}
+							>
+								<List.Item.Meta
+									title={item.caseName}
+									description={'Última modificación: ' + item.modifiedOn}
+								/>
+							</List.Item>
+						)}
+					/>
+				</div>
+			</>
+		);
+	}
+	}
 
 export default React.memo(withRouter(Testplan));
