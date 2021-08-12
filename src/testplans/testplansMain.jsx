@@ -4,7 +4,6 @@ import { Route,Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
 import AppLayout from '../AppLayout';
 import TestplanManagement from './testplanManagement';
-import TestplanForm from './testplanForm';
 import Testplan from './testplan';
 import TestplanExport from './testplanExport';
 
@@ -69,12 +68,6 @@ class TestplansMain extends React.Component {
                         <TestplanManagement 
 															user={user}
 														/>)}
-                    />
-                    <Route exact path="/testplans/create" render={() => (
-                        <TestplanForm project={{}}/>)}
-                    />
-                    <Route path="/testplans/create?p=:projectId&n=:projectName" render={() => (
-                        <TestplanForm project={project} setProject={this.setProject}/>)}
                     />
                     <Route exact path="/testplans/id=:testplanId" render={() => (
                         <Testplan

@@ -14,6 +14,7 @@ import {
 		SearchOutlined,
 		FolderAddOutlined
 } from '@ant-design/icons';
+import TestplanCreateForm from './testplanCreateForm';
 import TestplanSearchPane from './testplanSearchPane';
 
 class TestplanManagement extends React.Component {
@@ -47,7 +48,9 @@ class TestplanManagement extends React.Component {
 					/>
 				</TabPane>
 				<TabPane key="create" tab={<><FolderAddOutlined />Crear plan de pruebas</>}>
-					Crear
+					<TestplanCreateForm
+						user={user}
+					/>
 				</TabPane>
 			</Tabs>
 		</div>
