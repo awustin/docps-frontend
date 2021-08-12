@@ -228,7 +228,8 @@ class Testplan extends React.Component {
 				<Breadcrumb>
 					<Breadcrumb.Item>Usuario</Breadcrumb.Item>
 					<Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-					<Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
+					<Breadcrumb.Item>{testplan.groupName}</Breadcrumb.Item>
+					<Breadcrumb.Item>{testplan.projectName}</Breadcrumb.Item>
 					<Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
 				</Breadcrumb>					
 				<div className="navigation" style={{margin: "50px"}}>

@@ -168,7 +168,7 @@ class ProjectEdit extends React.Component {
 											span={4}
 											actions={[
 													this.statusTag(item.status),
-													<Link to={{ pathname: "/testplans/p=" + project.projectId + "&id=" + item.id }} style={{color:"#228cdbff"}}>
+													<Link to={{ pathname: "/testplans/id=" + item.id }} style={{color:"#228cdbff"}}>
 														<EditOutlined style={{ fontSize: '150%'}} />
 													</Link>,
 													<Tooltip title="Eliminar plan de pruebas" color="#108ee9">
