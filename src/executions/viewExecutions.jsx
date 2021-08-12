@@ -90,7 +90,7 @@ class ViewExecutions extends React.Component {
         return(
             <>
                 <Tooltip title="Mostrar ejecuciones" color="#108ee9">
-                    <ThunderboltOutlined style={{ fontSize: '150%', color: "#000"}} onClick={this.handleClick} />
+                    <ThunderboltOutlined style={{ fontSize: '150%', color: "#108ee9"}} onClick={this.handleClick} />
                 </Tooltip>
                 <ExecutionList
                     list={executions}

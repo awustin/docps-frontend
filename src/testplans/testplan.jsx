@@ -25,19 +25,20 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ViewExecutions from '../executions/viewExecutions';
+import MessageModal from '../common/messageModal';
 
 const { Title,Text } = Typography;
 const { Option } = Select;
 
 class Testplan extends React.Component {
     constructor(props){
-        super(props)
-        this.handleEditClick = this.handleEditClick.bind(this)
-        this.statusTag = this.statusTag.bind(this)
-        this.isEditModalVisible = this.isEditModalVisible.bind(this)
+			super(props)
+			this.handleSubmit = this.handleSubmit.bind(this)
+			this.statusTag = this.statusTag.bind(this)
+			this.searchTags = this.searchTags.bind(this)
+			this.showTestCases = this.showTestCases.bind(this)
     }
     state = {
-			showEditModal: false,
 			testplan: {
 				id: undefined,
 				key: undefined,
@@ -57,9 +58,16 @@ class Testplan extends React.Component {
 				name: undefined,
 				description: undefined,
 				status: undefined,
-				tags: []
+				tags: [],
+				options: [],
 			},
-			dirty: false
+			dirty: false,			
+			showMessageModal: false,
+			message: {
+				title:undefined,
+				description:undefined,
+				type: undefined
+			},
     }
 
     componentWillMount() {
@@ -99,14 +107,41 @@ class Testplan extends React.Component {
 							name: testplan.testplanName,	
 							description: testplan.description,
 							status: testplan.status,
-							tags: testplan.tags
+							tags: testplan.tags,
+							options: testplan.tags
 						}
 						this.setState({ testplan: testplan, field: editables })
         }
     }
 
-    handleEditClick() {
-        this.setState({ showEditModal: true })
+    handleSubmit() {
+			const { testplan, field } = this.state
+			if(!field.name)
+			{
+				this.setState({ 
+					showMessageModal: true, 
+					message: {
+						title:'Nombre vacío',
+						description:'Debe ingresar un nombre para el plan de pruebas.',
+						type:'validate'
+					},
+					field: {...this.state.field, name: testplan.testplanName}
+				})
+			}
+			else
+			{
+				//Query para guardar los cambios
+				this.setState({ 
+					success: true,
+					showMessageModal: true, 
+					message: {
+						title:'Plan de pruebas modificado',
+						description:'El plan de pruebas fue modificado con éxito',
+						type:'success'
+					}
+				})
+				//Query para buscar plan de pruebas y sus casos				
+			}
     }
 
     statusTag(status) {
@@ -138,14 +173,56 @@ class Testplan extends React.Component {
                 )
         }
     }
-    
-    isEditModalVisible(value) {
-        this.setState({ showEditModal: value })
-    }
+    		
+		searchTags(value) {
+			const { field } = this.state 
+			//Query para disparar la búsqueda de etiquetas
+			let results = ['un','deux','troi','quatre','cinq']			
+			this.setState({ field: {...this.state.field, options: results } })
+		}
+		
+		showTestCases() {
+			const { testplan } = this.state
+			return (
+					<List
+						size="small"
+						pagination={{
+						pageSize: 5
+						}}
+						dataSource={testplan.cases}
+						bordered={false}
+						renderItem={item => (
+							<List.Item
+								key={item.key}
+								span={4}
+								actions={[
+									this.statusTag(item.status,item.key),
+									<Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}>
+										<Tooltip title="Modificar caso de prueba" color="#108ee9">
+											<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} />
+										</Tooltip>
+									</Link>,
+									<ViewExecutions id={item.id}/>,
+									<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} />
+								]}
+								className={'list-item testcase'}
+								style={{background: "#fff"}}
+							>
+							<List.Item.Meta
+									description=<div className={'list-item description'}>
+										{'Últ. modificación: ' + item.modifiedOn}
+									</div>
+								/>
+								{item.caseName}
+							</List.Item>
+						)}
+					/>			
+			)
+		}
 
 	render() {
 		const { user } = this.props
-		const { testplan, field, dirty, showEditModal } = this.state
+		const { testplan, field, dirty, message, showMessageModal } = this.state
 		return(
 			<>
 				<Breadcrumb>
@@ -158,7 +235,7 @@ class Testplan extends React.Component {
 					<Row>
 						<Col flex="1 0 25%">
 							<Tooltip title="Atrás">
-								<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
+								<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.push('/testplans/manage')}}/>
 							</Tooltip>
 						</Col>
 					</Row>
@@ -212,15 +289,18 @@ class Testplan extends React.Component {
 								<Text className="modal-title-label">Etiquetas</Text>
 								<Select
 									mode="tags"
-									defaultValue={field.tags}                            
+									defaultValue={field.tags}
+									onSearch={this.searchTags}
+									onChange={(e)=>this.setState({ field: {...this.state.field, tags: e}, dirty: true })}
+									dropdownMatchSelectWidth={false}
 								>
-									{field.tags.map(item => <Option key={item}>{item}</Option>)}
+									{field.options.map(item => <Option key={item}>{item}</Option>)}
 								</Select>
 							</Space>	
 						</Col>						
 					</Row>
 					<Row style={{ flexDirection: "row-reverse", marginBlock: "3%" }}>
-						<Button type="primary" disabled={!dirty}>Guardar cambios</Button>
+						<Button type="primary" disabled={!dirty} onClick={this.handleSubmit}>Guardar cambios</Button>
 					</Row>
 					<Divider dashed></Divider>
 					<Row style={{display: "flex", alignItems: "center", paddingBottom: "1%"}}>
@@ -235,36 +315,15 @@ class Testplan extends React.Component {
 							</Link>
 						</Col>
 					</Row>
-					<List
-						size="small"
-						pagination={{
-						pageSize: 5
-						}}
-						dataSource={testplan.cases}
-						bordered={false}
-						renderItem={item => (
-							<List.Item
-								key={item.key}
-								span={4}
-								actions={[
-									<Link to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName}} style={{color:"#000"}}>
-										<Tooltip title="Modificar caso de prueba" color="#108ee9">
-											<EditOutlined style={{ fontSize: '150%'}} />
-										</Tooltip>
-									</Link>,
-									<ViewExecutions id={item.id}/>,
-									<DeleteOutlined style={{ fontSize: '150%', color: "#000"}} />
-								]}
-								style={{background: "#fff"}}
-							>
-								<List.Item.Meta
-									title={item.caseName}
-									description={'Última modificación: ' + item.modifiedOn}
-								/>
-							</List.Item>
-						)}
-					/>
+					{this.showTestCases()}
 				</div>
+				<MessageModal								
+					type={message.type}
+					title={message.title}
+					description={message.description}
+					visible={showMessageModal}
+					onClose={()=>this.setState({ showMessageModal: false })}
+				/>
 			</>
 		);
 	}
