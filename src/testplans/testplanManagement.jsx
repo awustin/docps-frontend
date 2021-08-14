@@ -28,7 +28,7 @@ class TestplanManagement extends React.Component {
 			<Breadcrumb.Item>Usuario</Breadcrumb.Item>
 			<Breadcrumb.Item>{user.id}</Breadcrumb.Item>
 			<Breadcrumb.Item>Gestión de planes de pruebas</Breadcrumb.Item>
-		</Breadcrumb>						
+		</Breadcrumb>
 		<div className="navigation" style={{margin: "50px"}}>
 			<Row>
 				<Col flex="1 0 25%">

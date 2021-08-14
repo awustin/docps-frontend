@@ -12,7 +12,8 @@ import {
 		Select,
 		Card,
 		Statistic,
-		Skeleton
+		Skeleton,
+		Tooltip
 } from 'antd';
 import {
     PlusCircleOutlined,
@@ -21,7 +22,8 @@ import {
     UsergroupAddOutlined,
 		AntDesignOutlined,
 		ExperimentOutlined,
-		FileExcelOutlined		
+		FileExcelOutlined,
+		LeftCircleOutlined		
 } from '@ant-design/icons';
 
 class ReportsMainView extends React.Component {
@@ -66,7 +68,16 @@ class ReportsMainView extends React.Component {
             <Breadcrumb>
                 <Breadcrumb.Item>Reportes</Breadcrumb.Item>                
                 <Breadcrumb.Item>{user.currentGroup.name}</Breadcrumb.Item>
-            </Breadcrumb>            
+            </Breadcrumb>						
+						<div className="navigation" style={{margin: "50px"}}>
+							<Row>
+								<Col flex="1 0 25%">
+								<Tooltip title="Atrás">
+									<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.push('/user/home')}}/>
+								</Tooltip>
+								</Col>
+							</Row>
+						</div>
             <div className="reports-view-container" style={{margin: "50px"}}>
                 <Title level={3}>Reportes</Title>
                 <Divider/>

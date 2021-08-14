@@ -6,6 +6,7 @@ import {
     Space,
     Typography,
     Avatar,
+		Tag
 } from 'antd';
 import {
     AntDesignOutlined,
@@ -61,7 +62,7 @@ class UserBadge extends React.Component {
                             <Text strong style={{fontSize:"115%"}}>{userInfo.completeName}</Text>
                             <Text strong>{userInfo.job}</Text>
                             <Text>{userInfo.email}</Text>
-                            <Text type="secondary">{userInfo.username}</Text>
+															{(userInfo.isAdmin)?(<Tag color="volcano">Administrador del sistema</Tag>):(<></>)}
                         </Space>
                     </Col>
                 </Row>                

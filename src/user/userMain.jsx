@@ -2,7 +2,7 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import { Route,Switch,Redirect } from 'react-router-dom';
 import AppLayout from '../AppLayout';
-import AdminUserView from './adminUserView';
+import UserHome from './userHome';
 import UserManagement from './userManagement';
 
 class UserMain extends React.Component {
@@ -12,14 +12,9 @@ class UserMain extends React.Component {
             <AppLayout user={user}>
                 <Switch>
                     <Route exact path="/user/home" render={() => (
-                        (user.isAdmin) ? (
-                            <AdminUserView
-                                user={user}
-                            />
-                        ) : (
-                            <div>Ud no es administrador</div>
-                        )                        
-                        )}
+												<UserHome
+													user={user}
+												/>)}
                     />
                     <Route exact path="/user/admin" render={() => (
                         (user.isAdmin) ? (

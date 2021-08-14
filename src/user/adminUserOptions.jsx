@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { 
     Row,
     Col,
-    Breadcrumb,
     Typography,
     Divider,
 		Card,
@@ -14,26 +13,13 @@ import {
     UserOutlined,
     TeamOutlined,
 } from '@ant-design/icons';
-import UserBadge from './userBadge';
-import CommonUserOptions from './commonUserOptions';
 
-class AdminUserView extends React.Component {
+class AdminUserOptions extends React.Component {
     render() {
         const { user } = this.props
         const { Title, Text } = Typography
         return(
             <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Usuario</Breadcrumb.Item>                
-                <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
-            </Breadcrumb>            
-            <div className="user-view-container" style={{margin: "50px"}}>
-                <Title level={3}>¡Bienvenido!</Title>
-                <UserBadge
-                    user={user}
-                />
-								<CommonUserOptions
-								/>
                 <Divider orientation="left">
                     <Text type="secondary">Administrar usuarios y grupos</Text>
                 </Divider>
@@ -70,11 +56,10 @@ class AdminUserView extends React.Component {
 											</Card>
 										</Link>
 									</Col>
-								</Row>                
-            </div>
+								</Row>
             </>
         );
     }
 }
 
-export default withRouter(AdminUserView);
+export default withRouter(AdminUserOptions);
