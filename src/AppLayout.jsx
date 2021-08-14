@@ -10,7 +10,8 @@ import {
   FileDoneOutlined,
   FolderOutlined,
 	TeamOutlined,
-	HomeOutlined
+	HomeOutlined,
+	PoweroffOutlined
 } from '@ant-design/icons';
 
 
@@ -20,6 +21,7 @@ const { SubMenu } = Menu;
 class AppLayout extends React.Component {
   constructor(props) {
     super(props);
+		this.menuOnClick = this.menuOnClick.bind(this)
   }
 
   state = {
@@ -32,6 +34,10 @@ class AppLayout extends React.Component {
 			{key:'projects', label:'Proyectos', icon:<FolderOutlined style={{ fontSize: '150%'}}/>, toPath:'/projects/manage', onlyAdmin: false},
 			{key:'testplans', label:'Planes de prueba', icon:<ExperimentOutlined style={{ fontSize: '150%'}}/>, toPath:'/testplans/manage', onlyAdmin: false},
 			{key:'reports', label:'Reportes', icon:<BarChartOutlined style={{ fontSize: '150%'}}/>, toPath:'/reports', onlyAdmin: false}
+		],
+		otherOptions:
+		[
+			{key:'logout', label:'Cerrar Sesión', icon:<PoweroffOutlined style={{ fontSize: '150%'}}/>, onlyAdmin: false}
 		]
   };
 
@@ -50,19 +56,29 @@ class AppLayout extends React.Component {
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
+	
+	menuOnClick(option) {
+		if(option.key === 'logout')
+			alert('Log out')
+	}
 
   render() {
     const { user } = this.props;
-    const { collapsed, menuOptions } = this.state;
+    const { collapsed, menuOptions, otherOptions } = this.state;
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
           <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-            <Menu theme="dark" mode="inline">
+            <Menu theme="dark" mode="inline" onClick={this.menuOnClick}>
 							{
 								menuOptions
 								.filter( item => !item.onlyAdmin || user.isAdmin )
 								.map( e => (<Menu.Item key={e.key} icon={e.icon}><Link to={e.toPath}>{e.label}</Link></Menu.Item>) )
+							}
+							{								
+								otherOptions
+								.filter( item => !item.onlyAdmin || user.isAdmin )
+								.map( e => (<Menu.Item key={e.key} icon={e.icon}>{e.label}</Menu.Item>) )
 							}
             </Menu>
           </Sider>

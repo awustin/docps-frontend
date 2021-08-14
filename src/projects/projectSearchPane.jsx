@@ -38,6 +38,7 @@ class ProjectSearchPane extends React.Component {
 			error: undefined,
 			visibleEdit: false,
 			visibleDelete: false,
+			visibleCreateTestplan: false,
 			editProjectId: undefined
     }
 

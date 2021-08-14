@@ -24,6 +24,7 @@ import {
 } from '@ant-design/icons';
 import MessageModal from '../../common/messageModal';
 import TestplanDelete from '../../testplans/modals/testplanDelete';
+import ProjectTestplanCreate from './projectTestplanCreate';
 
 const { Title,Text } = Typography
 
@@ -57,6 +58,7 @@ class ProjectEdit extends React.Component {
 		loading: true,
 		showCancelModal: false,
 		visibleTestplanDelete: false,
+		visibleCreateTestplan: false,
 		editTestplanId: undefined
 	}
 
@@ -191,7 +193,7 @@ class ProjectEdit extends React.Component {
 
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field, visibleTestplanDelete, editTestplanId } = this.state
+        const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field, visibleTestplanDelete, visibleCreateTestplan, editTestplanId } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -234,11 +236,9 @@ class ProjectEdit extends React.Component {
 																	<Title className="modal-subtitle" level={5}>Planes de pruebas</Title>
 															</Col>
 															<Col flex="1 0 30%" style={{textAlign: "end"}}>
-																	<Link to={{ pathname:"/testplans/create?p=" + project.projectId + "&n=" + project.projectName }}>
-																			<Button type="primary" style={{display: "inline-flex", alignItems: "center"}}>
-																					<PlusCircleOutlined style={{ paddingTop: "1px", fontSize:"120%" }}/>Crear plan de pruebas
-																			</Button>
-																	</Link>
+																	<Button type="primary" shape="round" icon={<PlusCircleOutlined style={{ fontSize:"110%" }}/>} onClick={()=>this.setState({ visibleCreateTestplan:true })}>
+																			Crear plan de pruebas
+																	</Button>
 															</Col>
 													</Row>
 													{this.showTestplans()}
@@ -285,6 +285,16 @@ class ProjectEdit extends React.Component {
 										/>
 									) : (
 									<></>
+									)}
+									{ (visibleCreateTestplan) ? (
+											<ProjectTestplanCreate
+													projectId={project.id}
+													visibleCreateTestplan={visibleCreateTestplan}
+													close={(()=>{this.setState({ visibleCreateTestplan: false })}).bind(this)}
+													reloadSearch={this.reloadTestplanSearch}
+											/>
+									) : (
+											<></>
 									)}
             </>
         );
