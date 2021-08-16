@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import UserLogIn from './services/usersService';
+import {UserLogIn, getGroupById} from './services/usersService';
 import LoginPage from './login/loginPage';
 import UserMain from './user/userMain';
 import GroupsMain from './groups/groupsMain';
@@ -65,23 +65,14 @@ class App extends Component {
 	
 	changeGroup(value) {
 		let { usr } = this.state
-		//Query para traer datos de otro grupo (name)
-		let group = {id: value, name: undefined}
-		switch(value)
-		{
-			case 344:
-				group.name = 'Pulpos'
-				break
-			case 999:
-				group.name = 'Águilas'
-				break
-			case 101:
-				group.name = 'Leones'
-				break
-		}
-		console.log(group)
-		usr.currentGroup = group
-		this.setState({usr:usr})
+		getGroupById(value)
+			.then( (result) => {
+				let { success, id, name } = result
+				if(success)
+				{
+					this.setState({ usr:{...this.state.usr, currentGroup:{ id: id, name: name } } })					
+				}
+			})
 	}
 
   render() {

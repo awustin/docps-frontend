@@ -1,5 +1,8 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import {
+	getCurrentUserInfoById,
+} from '../services/usersService';
 import { 
     Row,
     Col,
@@ -16,6 +19,7 @@ class UserBadge extends React.Component {
     constructor(props) {
         super(props)
     }
+
     state = {
         userInfo: {
             id: undefined,
@@ -30,18 +34,11 @@ class UserBadge extends React.Component {
 
     componentDidMount() {
         const { user } = this.props
-        //Query para traer info de usuario
-        this.setState({
-            userInfo: {
-                id: 1239,
-                completeName: "Agustín García",
-                email: "correopersonal123@correo.com",
-                username: "agustin.garcia",
-                job: "Software Engineer",
-                avatar: "image",
-                isAdmin: true
-            }
-        })
+        getCurrentUserInfoById(user.id).then( (result) => {
+					const { success, user } = result
+					if(success)
+						this.setState({ userInfo: user })
+				 })
     }
 
     render() {
@@ -52,15 +49,15 @@ class UserBadge extends React.Component {
             <div className="user-badge" style={{margin: "50px"}}>
                 <Row style={{ height:"100%" }}>
                     <Col flex="1 0 15%" style={{textAlign:"center",alignSelf:"center"}}>
-                        <Avatar
+                        <Avatar className="default-avatar-1"
                             size={{ xs: 85, sm: 85, md: 85, lg: 100, xl: 120, xxl: 120 }}
-                            icon={<AntDesignOutlined />}
+                            icon={<AntDesignOutlined/>}
                         />
                     </Col>
                     <Col flex="1 0 75%">
                         <Space direction="vertical">
-                            <Text strong style={{fontSize:"115%"}}>{userInfo.completeName}</Text>
-                            <Text strong>{userInfo.job}</Text>
+                            <Text className="badge-name">{userInfo.completeName}</Text>
+                            <Text >{userInfo.job}</Text>
                             <Text>{userInfo.email}</Text>
 															{(userInfo.isAdmin)?(<Tag color="volcano">Administrador del sistema</Tag>):(<></>)}
                         </Space>

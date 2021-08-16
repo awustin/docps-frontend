@@ -15,6 +15,9 @@ import {
 import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
+import {
+	createUser
+} from '../services/usersService';
 import MessageModal from '../common/messageModal';
 
 class UserCreateForm extends React.Component {
@@ -34,39 +37,60 @@ class UserCreateForm extends React.Component {
     };
 
     handleSubmit(values) {
-        //Validar correo único
-        /*
-				this.setState({ 
-					showMessageModal: true, 
-					message: {
-						title:'El correo electrónico ya está en uso',
-						description:'Debe ingresar otra dirección de correo electrónico',
-						type:'validate'
-					}
-				})
-				*/
-        //Validar nombre de usuario único
-        /*
-				this.setState({ 
-					showMessageModal: true, 
-					message: {
-						title:'El nombre de usuario ya está en uso',
-						description:'Debe ingresar otro nombre de usuario',
-						type:'validate'
-					}
-				})
-				*/
-        //Query para hacer el insert del usuario
-        //Enviar el mail de verificacion al usuario nuevo
-        this.setState({ 
-					success: true,
-					showMessageModal: true, 
-					message: {
-						title:'Usuario creado',
-						description:'El mail de verificación fue enviado a '+values.email,
-						type:'success'
-					}
-				})
+			createUser(values).then((result)=>{
+				if(!result.success)
+				{
+						if(!result.hasOwnProperty('validate'))
+							this.setState({ 
+								showMessageModal: true, 
+								message: {
+									title:'Se produjo un error',
+									description:'Inténtelo de nuevo',
+									type:'validate'
+								}
+							})
+						else
+						{
+							switch(result.validate)
+							{
+								case 'EXISTING EMAIL':
+									this.setState({ 
+										showMessageModal: true, 
+										message: {
+											title:'El correo electrónico ya está en uso',
+											description:'Debe ingresar otra dirección de correo electrónico',
+											type:'validate'
+										}
+									})
+									break
+								case 'EXISTING NAME':
+									this.setState({ 
+										showMessageModal: true, 
+										message: {
+											title:'El nombre de usuario ya está en uso',
+											description:'Debe ingresar otro nombre de usuario',
+											type:'validate'
+										}
+									})
+									break
+								default:
+									break
+							}						
+						}				
+				}
+				else
+				{
+					this.setState({ 
+						success: true,
+						showMessageModal: true, 
+						message: {
+							title:'Usuario creado',
+							description:'El mail de verificación fue enviado a '+values.email,
+							type:'success'
+						}
+					})				
+				}
+			})
     }
 		
 		closeMessageModal() {

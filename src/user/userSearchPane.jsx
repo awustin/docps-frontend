@@ -2,6 +2,9 @@ import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
 import {
+	searchUsers
+} from '../services/usersService';
+import {
     Divider,
     Form,
     Input,
@@ -54,46 +57,26 @@ class UserSearchPane extends React.Component {
     }
 
     handleSubmit(values) {
-        //Query para buscar usuarios
-        let results = []
-        let statuses = ['active','inactive']
-        for (let index = 0; index < 21; index++) {
-            results.push(
-                {
-                    key: "item"+index*2,
-                    id: index*10,
-                    createdOn: (index+1) +'/02/2021',
-                    name: "Persona",
-                    lastname: "Numero"+index,
-                    email: "micorreopersonal"+index+"@correo.com",
-                    status: statuses[Math.floor(Math.random() * statuses.length)]
-                }
-            )
-        }
-				this.setState({ results: results, lastValues: values })
+				searchUsers(values).then((result)=>{
+					let { success, users } = result
+					if(success)
+					{
+						this.setState({ results: users, lastValues: values })						
+					}
+				})
     }
 
     reloadSearch() {
         const { lastValues } = this.state
         if( lastValues !== undefined )
         {
-            //Query para hacer la busqueda de usuarios con lastValues
-            let results = []
-            let statuses = ['active','inactive']
-            for (let index = 0; index < 21; index++) {
-                results.push(
-                    {
-                        key: "item"+index*2,
-                        id: index*10,
-                        createdOn: (index+1) +'/02/2021',
-                        name: "Persona Modificada ",
-                        lastname: "Numero"+index,
-                        email: "otrocorreo"+index+"@correo.com",
-                        status: statuses[Math.floor(Math.random() * statuses.length)]
-                    }
-                )
-            }
-            this.setState({ results: results })
+						searchUsers(lastValues).then((result)=>{
+							let { success, users } = result
+							if(success)
+							{
+								this.setState({ results: users })						
+							}
+						})
         }
     }
     

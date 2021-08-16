@@ -1,6 +1,10 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import {
+	getUserInfoById,
+	updateUser
+} from '../../services/usersService';
+import {
     Modal,
     Form,
     Input,
@@ -16,109 +20,126 @@ import {
 const { Option } = Select
 
 class UserEdit extends React.Component {
-    constructor(props){
-        super(props)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.showAlerts = this.showAlerts.bind(this)
-    }
-    state = {
-        user: {
-            id: undefined,
-            createdOn: undefined,
-            name: undefined,
-            lastname: undefined,
-            email: undefined,
-            status: undefined,
-            username: undefined,
-            dni: undefined,
-            street: undefined,
-            streetNumber: undefined,
-            addressExtra: undefined,
-            job: undefined,
-            image: undefined,
-            groups: [
-                {
-                    name: undefined,
-                    avatar: undefined
-                }
-            ]
-        },
-        statusOptions: [
-            {
-                value:'active',
-                name:'De alta'
-            },
-            {
-                value:'inactive',
-                name:'De baja'
-            }
-        ],
-        validationMessage: undefined,
-        showCancelModal: false
-    }
+	constructor(props){
+			super(props)
+			this.handleSubmit = this.handleSubmit.bind(this)
+			this.showAlerts = this.showAlerts.bind(this)
+	}
+	
+	state = {
+			user: {
+					id: undefined,
+					createdOn: undefined,
+					name: undefined,
+					lastname: undefined,
+					email: undefined,
+					status: undefined,
+					username: undefined,
+					dni: undefined,
+					street: undefined,
+					streetNumber: undefined,
+					addressExtra: undefined,
+					job: undefined,
+					image: undefined,
+					groups: [
+							{
+									name: undefined,
+									avatar: undefined
+							}
+					]
+			},
+			statusOptions: [
+					{
+							value:'active',
+							name:'De alta'
+					},
+					{
+							value:'inactive',
+							name:'De baja'
+					}
+			],
+			validationMessage: undefined,
+			showCancelModal: false
+	}
 
-    componentDidMount() {
-        const { userId } = this.props
-        //Query para traer toda la info del usuario
-        let user = {
-            id: 999,
-            createdOn: '1/06/2021',
-            name: 'Juan',
-            lastname: 'García',
-            email: 'personal94@correo.com',
-            status: 'active',
-            username: 'juan.garcia',
-            dni: '00000000',
-            street: 'Av. Salta',
-            streetNumber: '800',
-            addressExtra: '4C',
-            job: 'Software Engineer I',
-            image: undefined,
-            groups: [
-                {
-                    name: 'Pumas',
-                    avatar: undefined
-                },
-                {
-                    name: 'Águilas',
-                    avatar: undefined
-                }
-            ]
-        }
-        this.setState({ user: user })
-    }
+	componentDidMount() {
+		const { userId } = this.props
+		getUserInfoById(userId).then((result)=>{
+			let { success, user } = result
+			if(success)
+				this.setState({ user: user })
+		})
+	}
 
-    handleSubmit(values) {
-        const { closeEdit, reloadSearch } = this.props
-        //Validar correo único
-        this.setState({ validationMessage: {title:'El correo electrónico ya está en uso',description:'Debe ingresar otra dirección de correo electrónico'} })
-        //Validar nombre de usuario único
-        this.setState({ validationMessage: {title:'El nombre de usuario ya existe',description:'Debe ingresar otro nombre de usuario'} })        
-        //Query para hacer el insert del usuario
-        //Enviar el mail de verificacion al usuario nuevo
-        //message.success('Se ha enviado un mail de verificación al correo electrónico ingresado.')
-        closeEdit()
-        reloadSearch()
-    }
+	handleSubmit(values) {
+	 const { closeEdit, reloadSearch } = this.props
+		updateUser(values).then((result)=>{
+			console.log(result)
+			if(!result.success)
+			{
+					if(!result.hasOwnProperty('validate'))
+						this.setState({ 
+							validationMessage: {
+								title:'Se produjo un error',
+								description:'Inténtelo de nuevo'
+								} 
+						})
+					else
+					{
+						switch(result.validate)
+						{
+							case 'EXISTING EMAIL':
+								this.setState({ 
+									validationMessage: {
+										title:'El correo electrónico ya está en uso',
+										description:'Debe ingresar otra dirección de correo electrónico'
+										} 
+									})
+								break
+							case 'EXISTING NAME':
+								this.setState({ 
+									validationMessage: {
+										title:'El nombre de usuario ya existe',
+										description:'Debe ingresar otro nombre de usuario'
+										} 
+									})
+								break
+							default:
+								break
+						}						
+					}				
+			}
+			else
+			{
+				this.setState({ 
+					success: true,
+					showMessageModal: true, 
+					message: {
+						title:'Usuario modificado',
+						description:'Se han guardado los datos con éxito',
+						type:'success'
+					}
+				})
+				closeEdit()
+				reloadSearch()			
+			}
+		})
+	}
 
-    showAlerts() {
-        const { validationMessage } = this.state
-        if(validationMessage !== undefined)
-        {
-            return(
-                <Alert
-                message={validationMessage.title}
-                description={validationMessage.description}
-                type="error"
-                showIcon
-                />
-            )
-        }
-    }
-
-    cancelEdit() {
-
-    }
+	showAlerts() {
+		const { validationMessage } = this.state
+		if(validationMessage !== undefined)
+		{
+			return(
+					<Alert
+					message={validationMessage.title}
+					description={validationMessage.description}
+					type="error"
+					showIcon
+					/>
+			)
+		}
+	}
 
     render() {
         const { visibleEdit, closeEdit } = this.props

@@ -23,17 +23,18 @@ class AdminUserOptions extends React.Component {
                 <Divider orientation="left">
                     <Text type="secondary">Administrar usuarios y grupos</Text>
                 </Divider>
-								<Row gutter={16} style={{ marginBlockStart:"5%" }}>
+								<Row gutter={16} style={{ marginBlockStart:"1%" }}>
 									<Col span={12}>
 										<Link to={{ pathname:"/user/admin"}}>
 											<Card
 												hoverable
 												style={{ textAlign: "center" }}
+												className="admin-card"
 												title="Gestión de usuarios"
 											>
 													<Space direction="vertical">
-														<UserOutlined															
-															style={{ fontSize:"400%", color:"#FF785A"}}
+														<UserOutlined
+															className="admin-icon"
 														/>
 													</Space>
 											</Card>
@@ -44,12 +45,13 @@ class AdminUserOptions extends React.Component {
 											<Card
 												hoverable
 												style={{ textAlign: "center" }}
+												className="admin-card"
 												title="Gestión de grupos"
 											>
 												<Space direction="vertical">
 													<Space direction="vertical">
-														<TeamOutlined															
-															style={{ fontSize:"400%", color:"#FF785A"}}
+														<TeamOutlined
+															className="admin-icon"
 														/>
 													</Space>
 												</Space>

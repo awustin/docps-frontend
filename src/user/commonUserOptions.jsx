@@ -31,11 +31,12 @@ class CommonUserOptions extends React.Component {
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}
+							className="common-user-card"
 							title="Gestión de proyectos"
 						>
 								<Space direction="vertical">
-									<FolderOutlined															
-										style={{ fontSize:"400%", color:"#228CDB"}}
+									<FolderOutlined
+										className="common-user-icon"
 									/>
 								</Space>
 						</Card>
@@ -46,12 +47,13 @@ class CommonUserOptions extends React.Component {
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}
+							className="common-user-card"
 							title="Gestión de planes de prueba"
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
 									<ExperimentOutlined															
-										style={{ fontSize:"400%", color:"#228CDB"}}
+										className="common-user-icon"
 									/>
 								</Space>
 							</Space>
@@ -63,12 +65,13 @@ class CommonUserOptions extends React.Component {
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}
+							className="common-user-card"
 							title="Reportes"
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
-									<BarChartOutlined															
-										style={{ fontSize:"400%", color:"#228CDB"}}
+									<BarChartOutlined
+										className="common-user-icon"
 									/>
 								</Space>
 							</Space>
@@ -80,12 +83,13 @@ class CommonUserOptions extends React.Component {
 						<Card
 							hoverable
 							style={{ textAlign: "center" }}
+							className="common-user-card"
 							title="Mis datos"
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
 									<EyeOutlined															
-										style={{ fontSize:"400%", color:"#228CDB"}}
+										className="common-user-icon"
 									/>
 								</Space>
 							</Space>

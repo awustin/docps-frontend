@@ -1,6 +1,9 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import {
+	deleteUserById,
+} from '../../services/usersService';
+import {
     Modal,
     Row,
     Col
@@ -17,9 +20,14 @@ class UserDelete extends React.Component {
 
     handleSubmit(values) {
         const { userId, closeDelete, reloadSearch } = this.props
-        //Query para eliminar el usuario
-        closeDelete()
-        reloadSearch()
+        deleteUserById(userId).then( (result) => {
+					const { success } = result
+					if(success)
+					{	
+						closeDelete()
+						reloadSearch()
+					}
+				 })
     }
 
     render() {
