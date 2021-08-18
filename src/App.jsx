@@ -21,62 +21,59 @@ class App extends Component {
   }
 
   state = {
-    loggedIn: true,
-    usr: {
-			id: 223,
+    loggedIn: false,
+    loggedUser: {
+			id: undefined,
 			currentGroup: {
-				id: 344,
-				name: 'Pulpos'
+				id: undefined,
+				name: undefined
 			},
-      isAdmin: true,
-			memberOf: [
-				{id:344, name:'Pulpos'},
-				{id:999, name:'Águilas'}, 
-				{id:101, name:'Leones'}
-			]
+     isAdmin: undefined,
+			memberOf: []
     },
     error: undefined,
   };
 
   userLogIn(params) {
-	  //Query para loggear. Trae el id de usuario, si es admin y el id del grupo al q está loggeado. Ademas una lista con los grupos de los q es miembro
-    UserLogIn(params)
-      .then((response) => {
-        const { usr, error } = this.state;
-        let authUser;
-
-        if (response.data !== undefined) {
-          authUser = response.data.data.usuario;
-          if (usr !== authUser
-            && authUser !== undefined
-            && error === undefined
-          ) {
-            this.setState({ loggedIn: true, usr: {id:authUser,isAdmin:true}, error: undefined })
-          }
-        } else {
-          this.setState({ error: (response.message !== 'Network Error') ? response.message : 'NETWORK_ERROR' });
-        }
-      });
+		UserLogIn(params).then(({ data }) => {
+			try
+			{
+				if (data.success && data.hasOwnProperty('user')) {				
+					const { loggedUser, error } = this.state
+					const { user } = data
+					if (loggedUser.id !== user.id && user.id && !error) {
+						this.setState({ loggedIn: true, loggedUser: user, error: undefined })
+					}
+				}
+				else {
+					this.setState({ error: 'INVALID_USERNAME' });
+				}
+			}
+			catch
+			{
+					this.setState({ error: 'NETWORK_ERROR' });			
+			}
+		});
   }
 
   userLogOut() {
-    this.setState({ usr: undefined, error: undefined, loggedIn: false });
+    this.setState({ loggedUser: undefined, error: undefined, loggedIn: false });
   }
 	
 	changeGroup(value) {
-		let { usr } = this.state
-		getGroupById(value)
-			.then( (result) => {
-				let { success, id, name } = result
-				if(success)
-				{
-					this.setState({ usr:{...this.state.usr, currentGroup:{ id: id, name: name } } })					
-				}
-			})
+		let { loggedUser } = this.state
+		console.log(value)
+		getGroupById(value).then( (result) => {
+			let { success, id, name } = result
+			if(success)
+			{
+				this.setState({ loggedUser:{...this.state.loggedUser, currentGroup:{ id: id, name: name } } })					
+			}
+		})
 	}
 
   render() {
-    const { loggedIn, usr, error } = this.state;
+    const { loggedIn, loggedUser, error } = this.state;
     return (
       <Router>
         {
@@ -84,22 +81,22 @@ class App extends Component {
           <div>
           <Switch>
             <Route path="/user" render={() => (
-              <UserMain user={usr} /> )}
+              <UserMain user={loggedUser} /> )}
             />
             <Route path="/groups" render={() => (
-              <GroupsMain user={usr} /> )}
+              <GroupsMain user={loggedUser} /> )}
             />
             <Route path="/projects" render={() => (
-              <ProjectsMain user={usr} /> )}
+              <ProjectsMain user={loggedUser} /> )}
             />
             <Route path="/testplans" render={() => (
-              <TestplansMain user={usr} /> )}
+              <TestplansMain user={loggedUser} /> )}
             />
             <Route path="/workspace" render={() => (
-              <WorkspaceMain user={usr} /> )}
+              <WorkspaceMain user={loggedUser} /> )}
             />
             <Route path="/reports" render={() => (
-              <ReportsMain user={usr} funcs={{changeGroup:this.changeGroup}}/> )}
+              <ReportsMain user={loggedUser} funcs={{changeGroup:this.changeGroup}}/> )}
             />
             <Route path="/login" render={() => (
               <Redirect to="/user"/>)}
