@@ -16,6 +16,7 @@ import {
 		BarChartOutlined,
 		EyeOutlined
 } from '@ant-design/icons';
+import { ProjectsInk, TestplansInk, ReportsInk } from '../CustomIcons.js';
 
 const { Text } = Typography
 
@@ -35,9 +36,10 @@ class CommonUserOptions extends React.Component {
 							title="Gestión de proyectos"
 						>
 								<Space direction="vertical">
-									<FolderOutlined
+								{/*<FolderOutlined
 										className="common-user-icon"
-									/>
+								/>*/}
+									<ProjectsInk/>
 								</Space>
 						</Card>
 					</Link>
@@ -52,9 +54,10 @@ class CommonUserOptions extends React.Component {
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
-									<ExperimentOutlined															
+								{/*<ExperimentOutlined															
 										className="common-user-icon"
-									/>
+									/>*/}
+									<TestplansInk/>
 								</Space>
 							</Space>
 						</Card>
@@ -70,9 +73,10 @@ class CommonUserOptions extends React.Component {
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
-									<BarChartOutlined
+								{/*<BarChartOutlined
 										className="common-user-icon"
-									/>
+								/>*/}
+								<ReportsInk/>
 								</Space>
 							</Space>
 						</Card>

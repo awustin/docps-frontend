@@ -102,7 +102,8 @@
 }
 
 .common-user-card .ant-card-body:hover {
-	background: rgb(34,140,219);
+	background : rgb(36, 47, 145) !important;
+	/*background: rgb(34,140,219);*/
 }
 
 .common-user-card .ant-card-body:hover .common-user-icon {
@@ -125,3 +126,5 @@
 	background: rgb(34,193,195) !important;
 	background: linear-gradient(27deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%) !important;
 }
+
+/* INK CUSTOM ICONS */
