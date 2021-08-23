@@ -241,6 +241,13 @@ class UserEdit extends React.Component {
                             >
                                 <Input placeholder="Escriba información adicional del domicilio"/>
                             </Form.Item>
+																<Form.Item 
+																		label="Puesto"
+																		name="job"
+                               initialValue={user.job}
+																>
+																		<Input/>
+																</Form.Item>
                         </Form>
                         {this.showAlerts()}
                     </Modal>

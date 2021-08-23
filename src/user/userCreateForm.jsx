@@ -102,14 +102,15 @@ class UserCreateForm extends React.Component {
 		
 		resetForm() {		
 			document.getElementById("createUserForm_name").value = ''
-			document.getElementById("createUserForm_last-name").value = ''
+			document.getElementById("createUserForm_lastName").value = ''
 			document.getElementById("createUserForm_email").value = ''
 			document.getElementById("createUserForm_username").value = ''
 			document.getElementById("createUserForm_password").value = ''
-			document.getElementById("createUserForm_personal-id").value = ''
+			document.getElementById("createUserForm_dni").value = ''
 			document.getElementById("createUserForm_street").value = ''
-			document.getElementById("createUserForm_street-number").value = ''
-			document.getElementById("createUserForm_address-extra").value = ''
+			document.getElementById("createUserForm_streetNum").value = ''
+			document.getElementById("createUserForm_addressExtra").value = ''
+			document.getElementById("createUserForm_job").value = ''
 			document.getElementById("createUserForm").reset()
 		}
 
@@ -144,7 +145,7 @@ class UserCreateForm extends React.Component {
 									</Form.Item>
 									<Form.Item 
 											label="Apellido"
-											name="last-name"
+											name="lastName"
 											rules={[{ required: true, message: 'El apellido es requerido.' }]}
 									>
 											<Input/>
@@ -172,7 +173,7 @@ class UserCreateForm extends React.Component {
 									</Form.Item>
 									<Form.Item 
 											label="D.N.I."
-											name="personal-id"
+											name="dni"
 									>
 											<Input placeholder="Ingrese el DNI sin puntos"/>
 									</Form.Item>
@@ -184,15 +185,21 @@ class UserCreateForm extends React.Component {
 									</Form.Item>
 									<Form.Item 
 											label="Número"
-											name="street-number"
+											name="streetNum"
 									>
 											<Input/>
 									</Form.Item>
 									<Form.Item 
 											label="Información del domicilio"
-											name="address-extra"
+											name="addressExtra"
 									>
 											<Input placeholder="Escriba información adicional del domicilio"/>
+									</Form.Item>
+									<Form.Item 
+											label="Puesto"
+											name="job"
+									>
+											<Input/>
 									</Form.Item>
 									<Form.Item {...tailLayout}>
 											<Button type="primary" htmlType="submit">Crear</Button>
