@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { validateUsername } from '../utils/validate';
+import { validateUsername } from '../utils/format';
 import { Form, Input, Button } from 'antd';
 
 const layout = {

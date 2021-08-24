@@ -1,9 +1,8 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
-import {
-	searchUsers
-} from '../services/usersService';
+import { datePickerRangeConvert } from '../utils/format';
+import { searchUsers } from '../services/usersService';
 import {
     Divider,
     Form,
@@ -57,6 +56,7 @@ class UserSearchPane extends React.Component {
     }
 
     handleSubmit(values) {
+				values.createdOn = (values.createdOn) ? datePickerRangeConvert(values.createdOn) : undefined
 				searchUsers(values).then((result)=>{
 					let { success, users } = result
 					if(success)
