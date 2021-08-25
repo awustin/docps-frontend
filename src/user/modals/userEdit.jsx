@@ -16,6 +16,7 @@ import {
 import {
     ExclamationCircleOutlined,
 } from '@ant-design/icons';
+import MessageModal from '../../common/messageModal';
 
 const { Option } = Select
 
@@ -24,6 +25,7 @@ class UserEdit extends React.Component {
 			super(props)
 			this.handleSubmit = this.handleSubmit.bind(this)
 			this.showAlerts = this.showAlerts.bind(this)
+			this.closeMessageModal = this.closeMessageModal.bind(this)
 	}
 	
 	state = {
@@ -59,7 +61,14 @@ class UserEdit extends React.Component {
 					}
 			],
 			validationMessage: undefined,
-			showCancelModal: false
+			showCancelModal: false,
+			showMessageModal: false,
+			success: false,
+			message: {
+				title:undefined,
+				description:undefined,
+				type: undefined
+			}
 	}
 
 	componentDidMount() {
@@ -72,9 +81,9 @@ class UserEdit extends React.Component {
 	}
 
 	handleSubmit(values) {
-	 const { closeEdit, reloadSearch } = this.props
+	 const { userId, closeEdit, reloadSearch } = this.props
+		values.id = userId
 		updateUser(values).then((result)=>{
-			console.log(result)
 			if(!result.success)
 			{
 					if(!result.hasOwnProperty('validate'))
@@ -90,19 +99,23 @@ class UserEdit extends React.Component {
 						{
 							case 'EXISTING EMAIL':
 								this.setState({ 
-									validationMessage: {
+									showMessageModal: true, 
+									message: {
 										title:'El correo electrónico ya está en uso',
-										description:'Debe ingresar otra dirección de correo electrónico'
-										} 
-									})
+										description:'Debe ingresar otra dirección de correo electrónico',
+										type:'validate'
+									}
+								})
 								break
 							case 'EXISTING NAME':
 								this.setState({ 
-									validationMessage: {
-										title:'El nombre de usuario ya existe',
-										description:'Debe ingresar otro nombre de usuario'
-										} 
-									})
+									showMessageModal: true, 
+									message: {
+										title:'El nombre de usuario ya está en uso',
+										description:'Debe ingresar otro nombre de usuario',
+										type:'validate'
+									}
+								})
 								break
 							default:
 								break
@@ -119,11 +132,20 @@ class UserEdit extends React.Component {
 						description:'Se han guardado los datos con éxito',
 						type:'success'
 					}
-				})
-				closeEdit()
-				reloadSearch()			
+				})		
 			}
 		})
+	}	
+		
+	closeMessageModal() {
+		const { success } = this.state
+		const { closeEdit, reloadSearch } = this.props
+		if(success)
+		{
+			closeEdit()
+			reloadSearch()	
+		}
+		this.setState({ showMessageModal: false, success: false })				
 	}
 
 	showAlerts() {
@@ -143,7 +165,7 @@ class UserEdit extends React.Component {
 
     render() {
         const { visibleEdit, closeEdit } = this.props
-        const { user, showCancelModal, statusOptions } = this.state
+        const { user, showCancelModal, statusOptions, showMessageModal, message } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -251,6 +273,13 @@ class UserEdit extends React.Component {
                         </Form>
                         {this.showAlerts()}
                     </Modal>
+												<MessageModal								
+													type={message.type}
+													title={message.title}
+													description={message.description}
+													visible={showMessageModal}
+													onClose={this.closeMessageModal}
+												/>
                     <Modal
                         visible={showCancelModal}
                         closable={false}
