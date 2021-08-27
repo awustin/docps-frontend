@@ -56,7 +56,7 @@ export function updateUser(values) {
 }
 
 export function deleteUserById(id) {
-  return request.post(`${baseUrl()}/deleteUserById`, id)
+  return request.post(`${baseUrl()}/deleteUserById`, {id: id})
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;

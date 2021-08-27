@@ -34,7 +34,7 @@ class UserBadge extends React.Component {
 
     componentDidMount() {
         const { user } = this.props
-        getCurrentUserInfoById(user.id).then( (result) => {
+        getCurrentUserInfoById({ id: user.id }).then( (result) => {
 					const { success, user } = result
 					if(success)
 						this.setState({ userInfo: user })
