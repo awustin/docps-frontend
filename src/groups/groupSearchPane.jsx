@@ -1,6 +1,7 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
+import { searchGroups } from '../services/groupsService';
 import {
     Divider,
     Form,
@@ -54,44 +55,26 @@ class GroupSearchPane extends React.Component {
     }
 
     handleSubmit(values) {
-        //Query para buscar grupos
-        let results = []
-        let statuses = ['active','inactive']
-        for (let index = 0; index < 21; index++) {
-            results.push(
-                {
-                    key: "item"+index*2,
-                    id: index*10,
-                    createdOn: (index+1) +'/02/2021',
-                    name: "Grupo numero "+index,
-                    status: statuses[Math.floor(Math.random() * statuses.length)],
-                    avatar: "image"
-                }
-            )
-        }
-        this.setState({ results: results, lastValues: values })
+				searchGroups(values).then((result)=>{
+					let { success, groups } = result
+					if(success)
+					{
+						this.setState({ results: groups, lastValues: values })						
+					}
+				})
     }
 
     reloadSearch() {
         const { lastValues } = this.state
         if( lastValues !== undefined )
         {
-            //Query para hacer la busqueda de grupos con lastValues
-            let results = []
-            let statuses = ['active','inactive']
-            for (let index = 0; index < 21; index++) {
-                results.push(
-                    {
-                        key: "item"+index*2,
-                        id: index*10,
-                        createdOn: (index+1) +'/02/2021',
-                        name: "Grupo modificado numero "+index,
-                        status: statuses[Math.floor(Math.random() * statuses.length)],
-                        avatar: "image"
-                    }
-                )
-            }
-            this.setState({ results: results })
+						searchGroups(lastValues).then((result)=>{
+							let { success, groups } = result
+							if(success)
+							{
+								this.setState({ results: groups })						
+							}
+						})
         }
     }
     
@@ -139,7 +122,12 @@ class GroupSearchPane extends React.Component {
                             style={{ background: "#fff" }}
                         >
                             <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
+                               avatar={ (item.avatar) ? (
+																			<Avatar src={item.avatar} />
+																			) : (
+																			<Avatar className={item.defaultAvatar} />
+																			)
+																		}
                                 title={item.name}
                                 description={
                                     <>

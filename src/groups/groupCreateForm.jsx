@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { createGroup } from '../services/groupsService';
 import { 
     Row,
     Col,
@@ -59,41 +60,55 @@ class GroupCreateForm extends React.Component {
     }
 
     handleSubmit(values) {
-				if(!this.validAdmins(values))
-				{
-					this.setState({ 
-						showMessageModal: true, 
-						message: {
-							title:'Entrada inválida',
-							description:'Todos los administradores deben ser miembros del grupo.',
-							type:'validate'
-						}
-					})					
-				}
-				else
-				{
-					//Validar nombre único
-					/*
-					this.setState({ 
-						showMessageModal: true, 
-						message: {
-							title:'El nombre de grupo ya está en uso',
-							description:'Debe ingresar otro nombre de grupo',
-							type:'validate'
-						}
-					})
-					*/      
-					//Query para hacer el insert del grupo
-					this.setState({ 
-						success: true,
-						showMessageModal: true, 
-						message: {
-							title:'Grupo creado',
-							description:'El grupo fue creado con éxito',
-							type:'success'
-						}
-					})
-				}
+			console.log(values)
+			if(!this.validAdmins(values))
+			{
+				this.setState({ 
+					showMessageModal: true, 
+					message: {
+						title:'Entrada inválida',
+						description:'Todos los administradores deben ser miembros del grupo.',
+						type:'validate'
+					}
+				})					
+			}
+			else
+			{
+				createGroup(values).then((result)=>{
+					if(!result.success) {
+						if(!result.hasOwnProperty('validate'))
+							this.setState({ 
+								showMessageModal: true, 
+								message: {
+									title:'Se produjo un error',
+									description:'Inténtelo de nuevo',
+									type:'validate'
+								}
+							})
+						else {
+							this.setState({ 
+								showMessageModal: true, 
+								message: {
+									title:'El nombre de grupo ya está en uso',
+									description:'Debe ingresar otro nombre de grupo',
+									type:'validate'
+								}
+							})						
+						}					
+					}
+					else {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'Grupo creado',
+								description:'El grupo fue creado con éxito',
+								type:'success'
+							}
+						})					
+					}						
+				})
+			}
     }
 		
 		validAdmins(values) {

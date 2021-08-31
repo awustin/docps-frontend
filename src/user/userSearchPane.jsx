@@ -124,7 +124,11 @@ class UserSearchPane extends React.Component {
                             style={{ background: "#fff" }}
                         >
                             <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
+                                avatar={ (item.avatar) ? (
+																					<Avatar src={item.avatar}/>
+																				) : (
+																					<Avatar className={"userdefavatar"+Math.floor(Math.random()*5)}/>
+																				)}
                                 title={item.name + ' ' + item.lastname}
                                 description={
                                     <>

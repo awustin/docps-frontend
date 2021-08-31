@@ -1,7 +1,8 @@
 import { hot } from 'react-hot-loader';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import {UserLogIn, getGroupById} from './services/usersService';
+import { UserLogIn } from './services/usersService';
+import { getGroupById } from './services/groupsService';
 import LoginPage from './login/loginPage';
 import UserMain from './user/userMain';
 import GroupsMain from './groups/groupsMain';

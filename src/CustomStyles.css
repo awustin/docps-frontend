@@ -5,6 +5,8 @@
 --green-blue-crayola: #228cdbff;
 --outrageous-orange: #ff785aff;
 
+/* LISTS AND MODALS */
+
 .ant-popover.ant-popover-placement-bottom {
     width: 20%;
  }
@@ -127,4 +129,45 @@
 	background: linear-gradient(27deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%) !important;
 }
 
-/* INK CUSTOM ICONS */
+/* DEFAULT AVATAR STYLES */
+.userdefavatar0 {
+	background: rgb(22,203,140) !important;
+	background: linear-gradient(47deg, rgba(22,203,140,1) 0%, rgba(73,239,241,1) 100%) !important;
+}
+.userdefavatar1 {
+	background: rgb(34,140,219) !important;
+	background: linear-gradient(47deg, rgba(34,140,219,1) 0%, rgba(34,192,219,1) 100%) !important;
+}
+.userdefavatar2 {
+	background: rgb(241,185,151) !important;
+	background: linear-gradient(47deg, rgba(241,185,151,1) 0%, rgba(255,212,126,1) 100%) !important;
+}
+.userdefavatar3 {
+	background: rgb(182,152,244) !important; 
+	background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 100%) !important;
+}
+.userdefavatar4 {
+	background: rgb(255,160,181) !important;
+	background: linear-gradient(47deg, rgba(255,160,181,1) 0%, rgba(252,97,85,1) 100%) !important;
+}
+
+.defpurple {
+	background: rgb(182,152,244) !important; 
+background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 100%) !important;
+}
+.defgreen {
+	background: rgb(22,203,140) !important;
+	background: linear-gradient(47deg, rgba(22,203,140,1) 0%, rgba(73,239,241,1) 100%) !important;
+}
+.defblue {
+	background: rgb(34,140,219) !important;
+	background: linear-gradient(47deg, rgba(34,140,219,1) 0%, rgba(34,192,219,1) 100%) !important;
+}
+.defyellow {
+	background: rgb(241,185,151) !important;
+	background: linear-gradient(47deg, rgba(241,185,151,1) 0%, rgba(255,212,126,1) 100%) !important;
+}
+.defred {
+	background: rgb(255,160,181) !important;
+	background: linear-gradient(47deg, rgba(255,160,181,1) 0%, rgba(252,97,85,1) 100%) !important;
+}
