@@ -1,6 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import { createGroup } from '../services/groupsService';
+import { createGroup, getUsersForGroups } from '../services/groupsService';
 import { 
     Row,
     Col,
@@ -44,23 +44,14 @@ class GroupCreateForm extends React.Component {
     };
 
     componentDidMount() {
-        //Query para traer todos los usuarios
-        //traer un array con TODOS los usuarios elegibles
-        let users = []
-        for (let index = 0; index < 20; index++) {
-            users.push(
-                {
-                    key:'user'+index*10,
-                    id:index*10,
-                    completeName: 'Persona ' + index + ' Apellido'
-                }
-            )
-        }
-        this.setState({ userList: users })
+			getUsersForGroups().then((result)=>{
+				if(result.success) {
+					this.setState({ userList: result.users })						
+				}
+			})
     }
 
     handleSubmit(values) {
-			console.log(values)
 			if(!this.validAdmins(values))
 			{
 				this.setState({ 
@@ -112,7 +103,6 @@ class GroupCreateForm extends React.Component {
     }
 		
 		validAdmins(values) {
-			//Validar q todos los admins sean members
 			if(!values.adminMembers)
 				return true
 			else

@@ -51,7 +51,7 @@ class GroupSearchPane extends React.Component {
         error: undefined,
         visibleEdit: false,
         visibleDelete: false,
-        editUserId: undefined
+        editGroupId: undefined
     }
 
     handleSubmit(values) {
@@ -112,10 +112,10 @@ class GroupSearchPane extends React.Component {
 																{this.statusTag(item.status,item.key)}
 																</>,
                                 <Tooltip title="Modificar grupo" color="#108ee9">
-                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
+                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editGroupId: item.id })}}/>
                                 </Tooltip>,
                                 <Tooltip title="Eliminar grupo" color="#108ee9">
-                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
+                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editGroupId: item.id })}}/>
                                 </Tooltip>
                             ]}
 														className={'list-item-'+item.status}
@@ -144,7 +144,7 @@ class GroupSearchPane extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleEdit, visibleDelete, editUserId } = this.state
+        const { statusOptions, visibleEdit, visibleDelete, editGroupId } = this.state
         const { Option } = Select
         const layout = {
             labelCol: { span: 18 },
@@ -198,7 +198,7 @@ class GroupSearchPane extends React.Component {
 						</Row>
             { (visibleEdit) ? (
                 <GroupEdit
-									userId={editUserId}
+									groupId={editGroupId}
 									visibleEdit={visibleEdit}
 									closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
 									reloadSearch={this.reloadSearch}
@@ -208,7 +208,7 @@ class GroupSearchPane extends React.Component {
             )}
             { (visibleDelete) ? (
 								<GroupDelete
-									userId={editUserId}
+									groupId={editGroupId}
 									visibleDelete={visibleDelete}
 									closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
 									reloadSearch={this.reloadSearch}

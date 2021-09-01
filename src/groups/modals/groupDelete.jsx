@@ -37,7 +37,7 @@ class GroupDelete extends React.Component {
 	}
 
 	handleSubmit(values) {
-		const { userId, closeDelete, reloadSearch } = this.props
+		const { groupId, closeDelete, reloadSearch } = this.props
 		//Query para verificar que no tenga proyectos (SI-> denegar (blocking warning))
 		let valid = false
 		if(valid)
