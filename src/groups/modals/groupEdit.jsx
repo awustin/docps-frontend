@@ -1,6 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import { getGroupAndMembersById, getUsersForGroups } from '../../services/groupsService';
+import { getGroupAndMembersById, getUsersForGroups, updateGroup } from '../../services/groupsService';
 import {
     Modal,
     Form,
@@ -18,16 +18,18 @@ import {
     ExclamationCircleOutlined,
     AntDesignOutlined,
 } from '@ant-design/icons';
+import MessageModal from '../../common/messageModal';
 
 const { Option } = Select
 
 class GroupEdit extends React.Component {
     constructor(props){
-        super(props)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.showAlerts = this.showAlerts.bind(this)
-        this.getUserCompleteName = this.getUserCompleteName.bind(this)
-        this.getUserisAdmin = this.getUserisAdmin.bind(this)
+			super(props)
+			this.handleSubmit = this.handleSubmit.bind(this)
+			this.validAdmins = this.validAdmins.bind(this)
+			this.getUserCompleteName = this.getUserCompleteName.bind(this)
+			this.getUserisAdmin = this.getUserisAdmin.bind(this)
+			this.closeMessageModal = this.closeMessageModal.bind(this)
     }
 		
     state = {
@@ -37,22 +39,29 @@ class GroupEdit extends React.Component {
 					name: undefined,
 					status: undefined,
 					avatar: undefined,
-					groupMembers: []
+					groupMembers: [],
+					adminMembers: []
 			},
 			userList: [],
 			targetUsers: [],
 			statusOptions: [
 					{
 							value:'active',
-							name:'De alta'
+							name:'Activo'
 					},
 					{
 							value:'inactive',
-							name:'De baja'
+							name:'Inactivo'
 					}
 			],
-			validationMessage: undefined,
 			showCancelModal: false,
+			showMessageModal: false,
+			message: {
+				title:undefined,
+				description:undefined,
+				type: undefined
+			},
+			success: false,
 			loading: true
     }
 
@@ -61,16 +70,15 @@ class GroupEdit extends React.Component {
 			Promise.all([
 				getUsersForGroups(),
 				getGroupAndMembersById(groupId)
-			])
-			.then(([res1,res2]) => {
-				if(res1.success && res2.success)
-					this.setState({ 
-						userList: res1.users, 
-						targetUsers: res2.group.groupMembers.map(e=>e.key), 
-						group: res2.group,
-						loading: false 
-					})
-			})
+			]).then(([res1,res2]) => {
+					if(res1.success && res2.success)
+						this.setState({ 
+							userList: res1.users, 
+							targetUsers: res2.group.groupMembers.map(e=>e.key), 
+							group: res2.group,
+							loading: false 
+						})
+				})
     }
 
     getUserCompleteName(key) {
@@ -80,41 +88,90 @@ class GroupEdit extends React.Component {
     }
 
     getUserisAdmin(key) {
-        const { group } = this.state
-		let user = group.groupMembers.filter((u)=>{return u.key===key})[0]
-		return (user) ? user.isAdmin : false
+			const { group } = this.state
+			let user = group.groupMembers.filter((u)=>{return u.key===key})[0]
+			return (user) ? user.isAdmin : false
     }
 
     handleSubmit(values) {
-        console.log(values)
-        const { closeEdit, reloadSearch } = this.props
-        //Validar nombre de usuario único
-        this.setState({ validationMessage: {title:'El nombre de grupo ya existe',description:'Debe ingresar otro nombre de grupo'} })        
-        //Query para hacer el insert del usuario
-        //Enviar el mail de verificacion al usuario nuevo
-        //message.success('Se ha enviado un mail de verificación al correo electrónico ingresado.')
-        closeEdit()
-        reloadSearch()
+			const { closeEdit, reloadSearch } = this.props
+			const { group } = this.state
+			values.id = group.id
+			console.log(values)
+			if(!this.validAdmins(values))
+			{
+				this.setState({ 
+					showMessageModal: true, 
+					message: {
+						title:'Entrada inválida',
+						description:'Todos los administradores deben ser miembros del grupo.',
+						type:'validate'
+					}
+				})					
+			}
+			else
+			{
+				updateGroup(values).then((result)=>{
+					if(!result.success) {
+						if(!result.hasOwnProperty('validate'))
+							this.setState({ 
+								showMessageModal: true, 
+								message: {
+									title:'Se produjo un error',
+									description:'Inténtelo de nuevo',
+									type:'validate'
+								}
+							})
+						else {
+							this.setState({ 
+								showMessageModal: true, 
+								message: {
+									title:'El nombre de grupo ya está en uso',
+									description:'Debe ingresar otro nombre de grupo',
+									type:'validate'
+								}
+							})						
+						}					
+					}
+					else {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'Grupo modificado',
+								description:'El grupo fue modificado con éxito',
+								type:'success'
+							}
+						})					
+					}						
+				})
+			}
     }
+		
+		validAdmins(values) {
+			if(!values.adminMembers)
+				return true
+			else
+				return values.adminMembers.every(
+					(admin) => {
+						return values.members.includes(admin)
+					}
+				)		
+		}
 
-    showAlerts() {
-        const { validationMessage } = this.state
-        if(validationMessage !== undefined)
-        {
-            return(
-                <Alert
-                message={validationMessage.title}
-                description={validationMessage.description}
-                type="error"
-                showIcon
-                />
-            )
-        }
-    }
-
-    render() {
+		closeMessageModal() {
+			const { closeEdit, reloadSearch } = this.props
+			const { success, showMessageModal } = this.state
+			if(success) {
+				reloadSearch()
+				closeEdit()
+			}
+			this.setState({ showMessageModal: false })
+		}
+		
+		render() {
 			const { visibleEdit, closeEdit } = this.props
-			const { group, userList, targetUsers, showCancelModal, statusOptions, loading } = this.state
+			const { group, userList, targetUsers, showCancelModal, showMessageModal, statusOptions, loading, message } = this.state
 			const layout = {
 					labelCol: { span: 3 },
 					wrapperCol: { span: 18 },
@@ -127,7 +184,7 @@ class GroupEdit extends React.Component {
 						title="Modificar grupo"
 						visible={visibleEdit}
 						closable={false}
-						width={900}
+						width={1100}
 						okText="Confirmar"
 						okButtonProps={{form:'editForm', key: 'submit', htmlType: 'submit'}}
 						cancelText="Cancelar"
@@ -178,7 +235,9 @@ class GroupEdit extends React.Component {
 								</Form.Item>
 								<Form.Item 
 										label="Miembros"
+										name="members"
 										rules={[{ required: true, message: 'Ingrese al menos un miembro' }]}
+										initialValue={group.groupMembers.map( e => e.key)}
 								>
 										<Transfer
 												dataSource={userList}
@@ -197,32 +256,22 @@ class GroupEdit extends React.Component {
 										>
 										</Transfer>
 								</Form.Item>
-								{(targetUsers === undefined) ? (<></>) : (<Divider>Administradores de grupo</Divider>)}
-								<Form.List {...layout}
-										name="groupMembers"
+								<Form.Item
+									label="Administradores"
+									name="adminMembers"
+									initialValue={group.adminMembers}
 								>
-								{()=> (
-										<>
-												{
-														(targetUsers === undefined) ? [] : targetUsers.map((item)=>(
-						<Form.Item
-							style={{marginLeft:"10%"}}
-																				name={[item,'isAdmin']}
-																				valuePropName="checked"
-																				initialValue={this.getUserisAdmin(item)}
-																				key={item}
-																		>
-																				<Checkbox>{this.getUserCompleteName(item)}</Checkbox>
-																		</Form.Item>												
-																		)
-																)
-												}
-										</>
-										)
-								}
-								</Form.List>  
+									<Select
+										mode="multiple"
+										showArrow
+										options={
+											(targetUsers === undefined) ? [] 
+											: 
+											targetUsers.map((item)=>({value: item, label:this.getUserCompleteName(item), key:item}))
+										}
+									/>
+								</Form.Item> 
 						</Form>
-						{this.showAlerts()}
 				</Modal>
 				<Modal
 						visible={showCancelModal}
@@ -245,6 +294,13 @@ class GroupEdit extends React.Component {
 								</Col>
 						</Row>
 				</Modal>
+				<MessageModal								
+					type={message.type}
+					title={message.title}
+					description={message.description}
+					visible={showMessageModal}
+					onClose={this.closeMessageModal}
+				/>
 				</>
 			);
     }

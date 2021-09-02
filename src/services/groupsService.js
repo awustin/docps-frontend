@@ -45,3 +45,30 @@ export function getUsersForGroups(values) {
       return error;
     });
 }
+
+export function updateGroup(values) {
+  return request.post(`${baseUrl()}/updateGroup`, values)
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+export function activeMembersforGroupById(value) {
+  return request.post(`${baseUrl()}/activeMembersforGroupById`, {id: value})
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+export function deleteGroup(value) {
+  return request.post(`${baseUrl()}/deleteGroup`, {id: value})
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
