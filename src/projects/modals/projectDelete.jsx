@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { deleteProject } from '../../services/projectsService';
 import {
     Modal,
     Row,
@@ -30,19 +31,18 @@ class ProjectDelete extends React.Component {
 	}
 
 	handleSubmit(values) {
-		const { userId, closeDelete, reloadSearch } = this.props
+		const { userId, closeDelete, reloadSearch, projectId } = this.props
 		//Query para verificar que no tenga planes de prueba (SI-> denegar (blocking warning))
-		let valid = false
-		if(valid)
-		{		
-			//Query para eliminar el proyecto
-			closeDelete()
-			reloadSearch()
-		}
-		else
-		{
-			this.setState({ validDeletion: false })
-		}
+		deleteProject(projectId).then((result)=>{
+			const { success } = result
+			if(success) {
+				closeDelete()
+				reloadSearch()				
+			}
+			else {
+				this.setState({ validDeletion: false })				
+			}
+		})
 	}
 
     render() {

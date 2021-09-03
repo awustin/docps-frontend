@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { createTestplanForProject } from '../../services/projectsService';
 import {
     Modal,
     Form,
@@ -44,36 +45,25 @@ class ProjectTestplanCreate extends React.Component {
     }
 		
 		addItemTag() {
-        const { tagItems, newTag } = this.state;
-        this.setState({
-            tagItems: [...tagItems, newTag],
-            newTag: '',
-        });
+			const { tagItems, newTag } = this.state;
+			this.setState({
+					tagItems: [...tagItems, newTag],
+					newTag: '',
+			});
     }
 
     handleSubmit(values) {
-        const { close } = this.props        
-        let params = {
-            groupId: values.groupId,
-            projectId: values.projectId,
-            name: values.name,
-            description: values.description,
-            tags: values.tags            
-        }
-				//Validar nombre único
-				this.setState({ 
-				success: false,
-				showMessageModal: true, 
-				message: {
-					title:'Ese nombre ya existe',
-					description:'Debe ingresar otro nombre para el plan de pruebas',
-					type:'validate'
-					}
-				})
-				let valid = true
-				if(valid)
-				{
-				 // Query para instertar plan
+			const { close } = this.props        
+			let params = {
+					groupId: values.groupId,
+					projectId: values.projectId,
+					name: values.name,
+					description: values.description,
+					tags: values.tags            
+			}
+			createTestplanForProject(params).then((result)=>{
+				const { success } = result
+				if(success) {
 					this.setState({ 
 						success: true,
 						showMessageModal: true, 
@@ -82,8 +72,22 @@ class ProjectTestplanCreate extends React.Component {
 							description:'Se creó el plan de pruebas con éxito',
 							type:'success'
 							}
-					})
+					})					
 				}
+				else {
+					if(result.hasOwnProperty('validate')) {
+						this.setState({ 
+						success: false,
+						showMessageModal: true, 
+						message: {
+							title:'Ese nombre ya existe',
+							description:'Debe ingresar otro nombre para el plan de pruebas',
+							type:'validate'
+							}
+						})						
+					}
+				}
+			})
     }
 		
 		closeMessageModal() {

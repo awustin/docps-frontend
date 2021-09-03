@@ -1,6 +1,7 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
+import { searchProjects, getGroupsDropdown } from '../services/projectsService';
 import {
     Divider,
     Form,
@@ -42,8 +43,15 @@ class ProjectSearchPane extends React.Component {
 			editProjectId: undefined
     }
 
-    handleSubmit(values) {
-        //Query para buscar proyectos
+	handleSubmit(values) {
+		console.log(values)
+		//Query para buscar proyectos
+		searchProjects(values).then((result)=>{
+			let { success, projects } = result
+			if(success) {
+        this.setState({ results: projects, lastValues: values })				
+			}
+		})
         let results = []
         let groups = ['Pumas','Leones','Aguilas','Tiburones']
 				for (let g = 0; g < groups.length; g++) {
@@ -63,11 +71,17 @@ class ProjectSearchPane extends React.Component {
         this.setState({ results: results, lastValues: values })
     }
 
-    reloadSearch() {
-			const { lastValues } = this.state
-			if( lastValues !== undefined )
-			{
-        //Query para hacer la busqueda de proyectos con lastValues
+	reloadSearch() {
+		const { lastValues } = this.state
+		if( lastValues !== undefined )
+		{
+			//Query para hacer la busqueda de proyectos con lastValues
+		searchProjects(lastValues).then((result)=>{
+			let { success, projects } = result
+			if(success) {
+        this.setState({ results: projects })				
+			}
+		})
         let results = []
         let groups = ['Pumas','Leones','Aguilas','Tiburones']
 				for (let g = 0; g < groups.length; g++) {
@@ -88,32 +102,40 @@ class ProjectSearchPane extends React.Component {
 			}
     }
 		
-		selectGroupsHandle() {
-			//Query para traer los grupos elegibles
+	selectGroupsHandle() {
+		const { user } = this.props
+		let ready = false;
+		getGroupsDropdown(user.id).then((result)=>{
+			let { success, groups } = result
+			if(success) {
+				this.setState({ groupsOptions: groups })
+			}
+		})
+		/*
 		this.setState({ groupOptions: [
 			{key:0,name:'Pumas'},
 			{key:1,name:'Águilas'},
 			{key:2,name:'Pulpos'},
 			{key:3,name:'Leones'}
-		] })
+		] })*/
 		}
 
-		groupResultsByGroup() {
-      const { results } = this.state
-			let groupedResults = {}
-			results.forEach( function(r) {
-				if( !Object.keys(groupedResults).includes(r.group) ) {
-					Object.defineProperty(groupedResults,r.group,{
-						enumerable: true,
-						configurable: true,
-						writable: true,
-						value: []
-					})
-				}
-				groupedResults[r.group].push(r)
-			})
-			return groupedResults
-		}
+	groupResultsByGroup() {
+		const { results } = this.state
+		let groupedResults = {}
+		results.forEach( function(r) {
+			if( !Object.keys(groupedResults).includes(r.group) ) {
+				Object.defineProperty(groupedResults,r.group,{
+					enumerable: true,
+					configurable: true,
+					writable: true,
+					value: []
+				})
+			}
+			groupedResults[r.group].push(r)
+		})
+		return groupedResults
+	}
    
    showResults() {
 			const { results, groups } = this.state
