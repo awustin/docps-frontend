@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
-import { getGroupByUserId, createProject } from '../services/projectsService';
+import { getGroupsDropdown, createProject } from '../services/projectsService';
 import {
     Typography,
     Divider,
@@ -36,41 +36,42 @@ class ProjectCreateForm extends React.Component {
 	}
 
 	componentDidMount() {
-			//Query para traer todos los grupos del usuario
 		const { user }  = this.props
-		getGroupByUserId(user.id).then((result)=>{
+		getGroupsDropdown(user.id).then((result)=>{
 			let { success, groups } = result
 			if(success) {
         this.setState({ groupList: groups })				
 			}
 		})
-			let groups = []
-			for (let index = 0; index < 3; index++) {
-					groups.push(
-							{
-									key:'group'+index*10,
-									id:index*10,
-									name: 'Grupo ' + (index + 1)
-							}
-					)
-			}
-			this.setState({ groupList: groups })
 	}
 	
 	handleSubmit(values) {
-		//Query para hacer el insert del grupo
+		console.log(values)
 		createProject(values).then((result)=>{
 			let { success } = result
-			if(success) {
-				this.setState({ 
-					success: true,
-					showMessageModal: true, 
-					message: {
-						title:'Un proyecto con ese nombre ya existe',
-						description:'Debe ingresar otro nombre.',
-						type:'validate'
-						}
-				})			
+			if(!success) {
+				if(result.hasOwnProperty('validate')) {
+					this.setState({ 
+						success: true,
+						showMessageModal: true, 
+						message: {
+							title:'Un proyecto con ese nombre ya existe',
+							description:'Debe ingresar otro nombre.',
+							type:'validate'
+							}
+					})					
+				}
+				else {
+					this.setState({ 
+						success: true,
+						showMessageModal: true, 
+						message: {
+							title:'Hubo un error',
+							description:'No se pudo crear el proyecto.',
+							type:'validate'
+							}
+					})						
+				}
 			}
 			else {
 				this.setState({ 
@@ -78,20 +79,11 @@ class ProjectCreateForm extends React.Component {
 					showMessageModal: true, 
 					message: {
 						title:'Proyecto creado',
-						description:'Se creó el proyecto con éxito',
+						description:'Se creó el proyecto con éxito.',
 						type:'success'
 						}
 				})				
 			}
-		})
-		this.setState({ 
-			success: true,
-			showMessageModal: true, 
-			message: {
-				title:'Proyecto creado',
-				description:'Se creó el proyecto con éxito',
-				type:'success'
-				}
 		})
 	}
 

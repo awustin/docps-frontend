@@ -32,7 +32,6 @@ class ProjectDelete extends React.Component {
 
 	handleSubmit(values) {
 		const { userId, closeDelete, reloadSearch, projectId } = this.props
-		//Query para verificar que no tenga planes de prueba (SI-> denegar (blocking warning))
 		deleteProject(projectId).then((result)=>{
 			const { success } = result
 			if(success) {

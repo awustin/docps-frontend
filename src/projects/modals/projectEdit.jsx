@@ -71,57 +71,25 @@ class ProjectEdit extends React.Component {
 			if(result.success) {
 				this.setState({ project: result.project, field:{name:result.project.name}, loading: false })
 			}
-		})
-		//Query para traer toda la info del proyecto + lista de planes de prueba
-		let project = {
-				id: 999,
-				createdOn: '1/06/2021',
-				name: 'DOCPS-0001: Tests de integración',
-				group: 'Pumas'
-		}
-		this.setState({ project: project, field:{name:project.name} })
-		//Query para traer la lista de planes de prueba
-		let list = []
-		let statuses = ['Not executed','In progress','Passed','Failed']
-		for (let index = 0; index < 10; index++) {
-				list.push({
-						title: 'DOCPS-15' + index,
-						key: index + 1,
-						id: index + 1,
-						dateModified: '15/04/2021',
-						status: statuses[Math.floor(Math.random() * statuses.length)]
-				})                        
-		}
-		project.testplanList=list
-		setTimeout(()=>this.setState({ project: project, loading:false }), 1000)			
+		})		
 	}
 	
 	reloadTestplanSearch() {
 		const { projectId } = this.props
 		this.setState({ loading:true })
-		//Query para traer la lista de planes de prueba
 		getProjectById(projectId).then((result)=>{
 			if(result.success) {
-				this.setState({ project: result.project, loading: false })
+				this.setState({ project: result.project, field:{name:result.project.name}, loading: false })
 			}
 		})
-		let list = []
-		let statuses = ['Not executed','In progress','Passed','Failed']
-		for (let index = 0; index < 10; index++) {
-				list.push({
-						title: 'DOCPS-15 MODIF' + index,
-						key: index + 1,
-						id: index + 1,
-						dateModified: '15/04/2021',
-						status: statuses[Math.floor(Math.random() * statuses.length)]
-				})                        
-		}
-		setTimeout(()=>this.setState({ project: { ...this.state.project, testplanList: list}, loading:false }), 1000)	
 	}
 
 	handleSubmit() {
+		const { projectId } = this.props
 		const { field } = this.state
-		if(!field) {
+		field.id = projectId
+		console.log(field.name)
+		if(field.name === '' || field.name === undefined) {
 			this.setState({
 				showMessageModal: true, 
 				message: {
@@ -139,8 +107,8 @@ class ProjectEdit extends React.Component {
 						success: true,
 						showMessageModal: true, 
 						message: {
-							title:'Proyecto creado',
-							description:'El proyecto se creó con éxito.',
+							title:'Proyecto modificado',
+							description:'El proyecto se modificó con éxito.',
 							type:'success'
 						}
 					})					
@@ -219,7 +187,7 @@ class ProjectEdit extends React.Component {
 								>
 										<List.Item.Meta
 												title={item.title}
-												description={'Última modificación: ' + item.dateModified}
+												description={'Fecha creación: ' + item.createdOn}
 												/>
 								</List.Item>
 						)}
