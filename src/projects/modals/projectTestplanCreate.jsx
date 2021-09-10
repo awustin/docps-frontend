@@ -1,6 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import { createTestplanForProject } from '../../services/projectsService';
+import { createTestplanForProject } from '../../services/testplansService';
 import {
     Modal,
     Form,
@@ -53,10 +53,9 @@ class ProjectTestplanCreate extends React.Component {
     }
 
     handleSubmit(values) {
-			const { close } = this.props        
+			const { close, projectId } = this.props        
 			let params = {
-					groupId: values.groupId,
-					projectId: values.projectId,
+					idproject: projectId,
 					name: values.name,
 					description: values.description,
 					tags: values.tags            

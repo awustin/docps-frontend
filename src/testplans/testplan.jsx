@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTestplanById, updateTestplan, getTagsForTestplan } from '../services/testplansService';
 import {
     Typography,
     Divider,
@@ -74,6 +75,19 @@ class Testplan extends React.Component {
         if(Object.keys(this.props).includes("match"))
         {
 						let testplanId = this.props.match.params.testplanId
+						getTestplanById(testplanId).then((result)=>{
+							if(result.success) {
+								const { testplan } = result
+								let editables = {
+									name: testplan.name,	
+									description: testplan.description,
+									status: testplan.status,
+									tags: testplan.tags,
+									options: testplan.tags
+								}
+								this.setState({ testplan: testplan, field: editables })								
+							}
+						})
 						//Query para buscar plan de pruebas y sus casos
 						let statuses = ['Not executed','In progress','Passed','Failed']
 						let testplan = {
@@ -131,6 +145,44 @@ class Testplan extends React.Component {
 			else
 			{
 				//Query para guardar los cambios
+			field.id = testplan.id
+			updateTestplan(field).then((result)=>{
+				if(result.success) {
+					this.setState({ 
+						success: true,
+						showMessageModal: true, 
+						message: {
+							title:'Plan de pruebas modificado',
+							description:'Se modificó el plan de pruebas con éxito.',
+							type:'success'
+							}
+					})					
+				}
+				else {
+					if(result.hasOwnProperty('validate')) {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'El nombre ya existe',
+								description:'Debe ingresar otro nombre para el plan de pruebas.',
+								type:'validate'
+								}
+						})						
+					}
+					else {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'Hubo un error',
+								description:'No se pudo modificar el plan de pruebas',
+								type:'validate'
+								}
+						})						
+					}
+				}
+			})
 				this.setState({ 
 					success: true,
 					showMessageModal: true, 
@@ -177,6 +229,11 @@ class Testplan extends React.Component {
 		searchTags(value) {
 			const { field } = this.state 
 			//Query para disparar la búsqueda de etiquetas
+			getTagsForTestplan().then((result)=>{
+				if(result.success) {
+					this.setState({ field: {...this.state.field, options: result.tags } })					
+				}
+			})
 			let results = ['un','deux','troi','quatre','cinq']			
 			this.setState({ field: {...this.state.field, options: results } })
 		}

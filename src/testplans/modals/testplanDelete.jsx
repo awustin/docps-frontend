@@ -1,5 +1,6 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { deleteTestplan } from '../../services/testplansService';
 import {
     Modal,
     Row,
@@ -30,14 +31,22 @@ class TestplanDelete extends React.Component {
 	}
 
 	handleSubmit(values) {
-		const { userId, closeDelete, reloadSearch } = this.props
-		//Query para verificar que no tenga casos de prueba (SI-> denegar (blocking warning))
+		const { testplanId, closeDelete, reloadSearch } = this.props
+			//Query para eliminar el plan de prueba
+		deleteTestplan(testplanId).then((result)=>{
+			if(result.success) {
+				closeDelete()
+				reloadSearch()				
+			}
+			else {				
+				this.setState({ validDeletion: false })
+			}
+		})
 		let valid = true
 		if(valid)
 		{		
-			//Query para eliminar el plan de prueba
-			closeDelete()
-			reloadSearch()
+				closeDelete()
+				reloadSearch()				
 		}
 		else
 		{

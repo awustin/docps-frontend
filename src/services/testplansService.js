@@ -1,24 +1,6 @@
 import { baseUrl } from '../utils/local';
 import request from './requestService';
 
-export function getGroupByUserId(value) {
-  return request.post(`${baseUrl()}/getGroupByUserId`, { id: value })
-    .then((response) => response.data)
-    .catch((error) => {
-      if (error.response !== undefined) return error.response.data;
-      return error;
-    });
-}
-
-export function createProject(values) {
-  return request.post(`${baseUrl()}/createProject`, values)
-    .then((response) => response.data)
-    .catch((error) => {
-      if (error.response !== undefined) return error.response.data;
-      return error;
-    });
-}
-
 export function createTestplanForProject(values) {
   return request.post(`${baseUrl()}/createTestplanForProject`, values)
     .then((response) => response.data)
@@ -28,8 +10,8 @@ export function createTestplanForProject(values) {
     });
 }
 
-export function updateProject(values) {
-  return request.post(`${baseUrl()}/updateProject`, values)
+export function searchTestplans(values) {
+  return request.post(`${baseUrl()}/searchTestplans`, values)
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -37,8 +19,8 @@ export function updateProject(values) {
     });
 }
 
-export function searchProjects(values) {
-  return request.post(`${baseUrl()}/searchProjects`, values)
+export function getTagsForTestplan() {
+  return request.post(`${baseUrl()}/getTagsForTestplan`, {})
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -46,8 +28,8 @@ export function searchProjects(values) {
     });
 }
 
-export function getGroupsDropdown(value) {
-  return request.post(`${baseUrl()}/getGroupsDropdown`, {id: value})
+export function createTestplan(values) {
+  return request.post(`${baseUrl()}/createTestplan`, values)
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -55,8 +37,8 @@ export function getGroupsDropdown(value) {
     });
 }
 
-export function getProjectsDropdown(value) {
-  return request.post(`${baseUrl()}/getProjectsDropdown`, {id: value})
+export function getTestplanById(value) {
+  return request.post(`${baseUrl()}/getTestplanById`, { id: value })
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -64,8 +46,8 @@ export function getProjectsDropdown(value) {
     });
 }
 
-export function getProjectById(value) {
-  return request.post(`${baseUrl()}/getProjectById`, { id: value })
+export function updateTestplan(values) {
+  return request.post(`${baseUrl()}/updateTestplan`, values)
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -73,8 +55,8 @@ export function getProjectById(value) {
     });
 }
 
-export function deleteProject(value) {
-  return request.post(`${baseUrl()}/deleteProject`, { id: value })
+export function deleteTestplan(value) {
+  return request.post(`${baseUrl()}/deleteTestplan`, { id: value })
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;

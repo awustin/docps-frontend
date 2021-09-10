@@ -2,6 +2,9 @@ import { withRouter } from "react-router";
 import React from 'react';
 import '../CustomStyles.css';
 import { Link } from 'react-router-dom';
+import { searchTestplans, getTagsForTestplan } from '../services/testplansService';
+import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
+import { datePickerRangeConvert } from '../utils/format';
 import {
     Divider,
     Form,
@@ -49,66 +52,42 @@ class TestplanSearchPane extends React.Component {
 	}
 	
 	componentDidMount() {
-	//Query para traer los grupos a los q puede agregar planes
-		this.setState({ groupOptions: [
-			{key:0,name:'Pumas'},
-			{key:1,name:'Águilas'},
-			{key:2,name:'Pulpos'},
-			{key:3,name:'Leones'}
-			] 
-		})	
+		const { user } = this.props
+		getGroupsDropdown(user.id).then((result)=>{
+			if(result.success) {
+				this.setState({ groupOptions: result.groups })				
+			}				
+		})
 	}
 
 	handleSubmit(values) {
-		//Query para buscar planes
-		let results = []
-		let statuses = ['Not executed','In progress','Passed','Failed']
-		for (let index = 0; index < 21; index++) {
-			results.push(
-				{
-					id: index*11+5,
-					key: "testplan"+index*2,
-					testplanId: index,
-					testplanName: "DOCPS-" + index*11,
-					description: "Este es un plan de pruebas",
-					tags: ["test","etiqueta"],
-					createdOn: '10/02/2021',
-					status: statuses[Math.floor(Math.random() * statuses.length)],
-					projectName: 'PROY99'
-				}
-			)            
-		}			
-		this.setState({ results: results, lastValues: values })
+		values.createdOn = (values.createdOn) ? datePickerRangeConvert(values.createdOn) : undefined
+		searchTestplans(values).then((result)=>{
+			if(result.success) {
+				this.setState({ results: result.testplans, lastValues: values })				
+			}
+		})
 	}
 
 	reloadSearch() {
 		const { lastValues } = this.state
 		if( lastValues !== undefined )
 		{
-			//Query para hacer la busqueda de planes con lastValues
-			let results = []
-			let statuses = ['Not executed','In progress','Passed','Failed']
-			for (let index = 0; index < 21; index++) {
-				results.push(
-					{
-						id: index*3+7,
-						key: "testplan"+index*2,
-						testplanId: index,
-						testplanName: "MODIF-" + index*11,
-						description: "Este es un plan de pruebas",
-						tags: ["test","etiqueta"],
-						createdOn: '10/02/2021',
-						status: statuses[Math.floor(Math.random() * statuses.length)],
-						projectName: 'PROY99'
-					}
-				)            
-			}			
-			this.setState({ results: results })
+			searchTestplans(lastValues).then((result)=>{
+				if(result.success) {
+					this.setState({ results: result.testplans })				
+				}
+			})
 			}
 	}
 	
 	getProjectOptions(groupId) {
 	//Query para traer los proyectos elegibles del grupo elegido
+		getProjectsDropdown(groupId).then((result)=>{
+			if(result.success) {
+				this.setState({ projectOptions: result.projects })				
+			}				
+		})
 		let list = []
 		for (let index = 0; index < 5; index++) {
 			list.push(
@@ -123,6 +102,11 @@ class TestplanSearchPane extends React.Component {
 	
 	getTagOptions() {
 		//Query para traer etiquetas
+		getTagsForTestplan().then((result)=>{
+			if(result.success) {
+				this.setState({ tagOptions: result.tags })				
+			}				
+		})
 		let list = []
 		for (let index = 0; index < 5; index++) {
 			list.push({

@@ -1,4 +1,6 @@
 import React from 'react';
+import { createTestplan } from '../services/testplansService';
+import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
 import {
     Typography,
     Divider,
@@ -42,63 +44,103 @@ class TestplanCreateForm extends React.Component {
 			success: false
     }
 		
-    componentDidMount() { 
-			//Query para traer los grupos a los q puede agregar planes
-				this.setState({ groupOptions: [
-					{key:0,name:'Pumas'},
-					{key:1,name:'Águilas'},
-					{key:2,name:'Pulpos'},
-					{key:3,name:'Leones'}
-					] 
-				})	
+	componentDidMount() { 
+		const { user } = this.props
+		getGroupsDropdown(user.id).then((result)=>{
+			if(result.success) {
+				this.setState({ groupOptions: result.groups })				
+			}				
+		})
+	}
+
+	getProjectOptions(groupId) {
+		//Query para traer los proyectos elegibles del grupo elegido
+		getProjectsDropdown(groupId).then((result)=>{
+			if(result.success) {
+				this.setState({ projectOptions: result.projects })				
+			}				
+		})
+		let list = []
+		for (let index = 0; index < 5; index++) {
+			list.push(
+				{
+					id: index,
+					name: "G"+groupId+"PROY-" + index,                   
+				}
+			)
 		}
-
-		getProjectOptions(groupId) {
-			//Query para traer los proyectos elegibles del grupo elegido
-				let list = []
-				for (let index = 0; index < 5; index++) {
-					list.push(
-						{
-							id: index,
-							name: "G"+groupId+"PROY-" + index,                   
-						}
-				)
-				}
-				this.setState({ projectOptions: list })
-				}
+		this.setState({ projectOptions: list })
+	}
 				
-		onNewTagChange(e) {
-						this.setState({ newTag: e.target.value })
-    }
+	onNewTagChange(e) {
+					this.setState({ newTag: e.target.value })
+	}
 
-    addItemTag() {
-        const { tagItems, newTag } = this.state;
-        this.setState({
-            tagItems: [...tagItems, newTag],
-            newTag: '',
-        });
-    }
+	addItemTag() {
+			const { tagItems, newTag } = this.state;
+			this.setState({
+					tagItems: [...tagItems, newTag],
+					newTag: '',
+			});
+	}
 
-    handleSubmit(values) {
-        const { project } = this.props
-        let params = {
-            groupId: values.groupId,
-            projectId: values.projectId,
-            name: values.name,
-            description: values.description,
-            tags: values.tags            
-        }
-        // Query para instertar plan
-				this.setState({ 
-					success: true,
-					showMessageModal: true, 
-					message: {
-						title:'Plan de pruebas creado',
-						description:'Se creó el plan de pruebas con éxito',
-						type:'success'
-						}
-				})
-    }
+	handleSubmit(values) {
+			const { project } = this.props
+			let params = {
+					groupId: values.groupId,
+					projectId: values.projectId,
+					name: values.name,
+					description: values.description,
+					tags: values.tags            
+			}
+			createTestplan(params).then((result)=>{
+				if(result.success) {
+					this.setState({ 
+						success: true,
+						showMessageModal: true, 
+						message: {
+							title:'Plan de pruebas creado',
+							description:'Se creó el plan de pruebas con éxito.',
+							type:'success'
+							}
+					})					
+				}
+				else {
+					if(result.hasOwnProperty('validate')) {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'El nombre ya existe',
+								description:'Debe ingresar otro nombre para el plan de pruebas.',
+								type:'validate'
+								}
+						})						
+					}
+					else {
+						this.setState({ 
+							success: true,
+							showMessageModal: true, 
+							message: {
+								title:'Hubo un error',
+								description:'No se pudo crear el plan de pruebas',
+								type:'validate'
+								}
+						})						
+					}
+				}
+			})
+			// Query para instertar plan
+			this.setState({ 
+				success: true,
+				showMessageModal: true, 
+				message: {
+					title:'Plan de pruebas creado',
+					description:'Se creó el plan de pruebas con éxito',
+					type:'success'
+					}
+			})
+	}
 	
 		closeMessageModal() {
 			const { success } = this.state
