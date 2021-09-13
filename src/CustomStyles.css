@@ -10,30 +10,6 @@
 .ant-popover.ant-popover-placement-bottom {
     width: 20%;
  }
-	
-.list-item-active {
-	border-left-style: solid;
-	border-left-color: #fff;
-	border-left-width: 8px;
-}
-	
-.list-item-active:hover {
-	border-left-style: solid;
-	border-left-color: #4de879;
-	border-left-width: 8px;
-}
-
-.list-item-inactive {
-	border-left-style: solid;
-	border-left-color: #fff;
-	border-left-width: 8px;
-}
-	
-.list-item-inactive:hover {
-	border-left-style: solid;
-	border-left-color: #f55742;
-	border-left-width: 8px;
-}
 
 .modal-editable-title {
 	margin-top: 0px !important;
@@ -81,6 +57,21 @@
 	background: #ebbd17 !important;
 	border: 1px solid #fff !important;
 	border-radius: 10px !important;
+}
+
+.list-item-main-content {
+	display: block;
+	font-size: 0.8vw;
+	color: #000 !important;
+	font-weight: 400 !important;	
+}
+
+.list-item-secondary-content {
+	display: block;
+	font-size: 0.7vw;
+	color: #228cdbff !important;
+	font-weight: 400 !important;	
+	
 }
 
 .divider-list-title {

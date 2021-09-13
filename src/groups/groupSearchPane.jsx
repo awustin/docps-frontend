@@ -15,6 +15,8 @@ import {
     Tooltip,
     Row,
     Col,
+		Space,
+		Typography
 } from 'antd';
 import {
     EditOutlined,
@@ -22,6 +24,8 @@ import {
 } from '@ant-design/icons';
 import GroupEdit from './modals/groupEdit';
 import GroupDelete from './modals/groupDelete';
+
+const { Text } = Typography;
 
 class GroupSearchPane extends React.Component {
     constructor(props) {
@@ -112,30 +116,36 @@ class GroupSearchPane extends React.Component {
 																{this.statusTag(item.status,item.key)}
 																</>,
                                 <Tooltip title="Modificar grupo" color="#108ee9">
-                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editGroupId: item.id })}}/>
+                                    <EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{this.setState({ visibleEdit: true, editGroupId: item.id })}}/>
                                 </Tooltip>,
                                 <Tooltip title="Eliminar grupo" color="#108ee9">
-                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editGroupId: item.id })}}/>
+                                    <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{this.setState({ visibleDelete: true, editGroupId: item.id })}}/>
                                 </Tooltip>
                             ]}
-														className={'list-item-'+item.status}
+														className={'list-item'}
                             style={{ background: "#fff" }}
                         >
-                            <List.Item.Meta
-                               avatar={ (item.avatar) ? (
-																			<Avatar src={item.avatar} />
-																			) : (
-																			<Avatar className={item.defaultAvatar} />
-																			)
-																		}
-                                title={item.name}
-                                description={
-                                    <>
-                                        <i>Creado en: </i>{item.createdOn}
-                                    </>
-                                }
-                                />
-                        </List.Item>
+													<List.Item.Meta
+														 avatar={ (item.avatar) ? (
+																		<Avatar src={item.avatar} />
+																		) : (
+																		<Avatar className={item.defaultAvatar} />
+																		)
+																	}
+													/>
+														<Space direction="vertical" size={0.5} style={{ width:'100%' }}>
+															<Row>
+															<div className={'list-item description'}> 
+																		<Text className={'date hideable'} key={item.key+'created'} type="secondary"><i> Fecha de creación: {item.createdOn}</i></Text>
+																	</div>	
+																	</Row>
+															<Row gutter={16}>
+																<Col>
+																	<Text className={'list-item-main-content'}>{item.name}</Text>
+																</Col>
+															</Row>
+														</Space>
+													</List.Item>
                     )}
                 />
             </div>

@@ -16,6 +16,8 @@ import {
     Tooltip,
     Row,
     Col,
+		Space,
+		Typography,
 } from 'antd';
 import {
     EditOutlined,
@@ -23,6 +25,8 @@ import {
 } from '@ant-design/icons';
 import UserEdit from './modals/userEdit';
 import UserDelete from './modals/userDelete';
+
+const { Text }  = Typography
 
 class UserSearchPane extends React.Component {
     constructor(props) {
@@ -114,28 +118,37 @@ class UserSearchPane extends React.Component {
 																{this.statusTag(item.status,item.key)}
 																</>,
                                 <Tooltip title="Modificar usuario" color="#108ee9">
-                                    <EditOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
+                                    <EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{this.setState({ visibleEdit: true, editUserId: item.id })}}/>
                                 </Tooltip>,
                                 <Tooltip title="Eliminar usuario" color="#108ee9">
-                                    <DeleteOutlined style={{ fontSize: '150%', color: "#000"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
+                                    <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff"}} onClick={()=>{this.setState({ visibleDelete: true, editUserId: item.id })}}/>
                                 </Tooltip>
                             ]}
-														className={'list-item-'+item.status}
+														className={'list-item'}
                             style={{ background: "#fff" }}
                         >
-                            <List.Item.Meta
-                                avatar={ (item.avatar) ? (
-																					<Avatar src={item.avatar}/>
-																				) : (
-																					<Avatar className={"userdefavatar"+Math.floor(Math.random()*5)}/>
-																				)}
-                                title={item.name + ' ' + item.lastname}
-                                description={
-                                    <>
-                                        {item.email} | <i>Creado en: </i>{item.createdOn}
-                                    </>
-                                }
-                                />
+														<List.Item.Meta
+															avatar={ (item.avatar) ? (
+																				<Avatar src={item.avatar}/>
+																			) : (
+																				<Avatar className={"userdefavatar"+Math.floor(Math.random()*5)}/>
+																			)}
+														/>
+													<Space direction="vertical" size={5} style={{ width:'100%' }}>
+														<Row>
+														<div className={'list-item description'}> 
+																	<Text className={'date hideable'} key={item.key+'created'} type="secondary"><i> Fecha de creación: {item.createdOn}</i></Text>
+																</div>	
+																</Row>
+														<Row gutter={16}>
+															<Col>
+																<Text className={'list-item-main-content'}>{item.name + ' ' + item.lastname}</Text>
+															</Col>
+															<Col>
+																<Text className={'list-item-secondary-content'}>{item.email}</Text>
+															</Col>
+														</Row>
+													</Space>
                         </List.Item>
                     )}
                 />
