@@ -32,7 +32,6 @@ class TestplanDelete extends React.Component {
 
 	handleSubmit(values) {
 		const { testplanId, closeDelete, reloadSearch } = this.props
-			//Query para eliminar el plan de prueba
 		deleteTestplan(testplanId).then((result)=>{
 			if(result.success) {
 				closeDelete()
@@ -42,16 +41,6 @@ class TestplanDelete extends React.Component {
 				this.setState({ validDeletion: false })
 			}
 		})
-		let valid = true
-		if(valid)
-		{		
-				closeDelete()
-				reloadSearch()				
-		}
-		else
-		{
-			this.setState({ validDeletion: false })
-		}
 	}
 
     render() {

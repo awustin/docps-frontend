@@ -49,14 +49,38 @@
 	background-color: #cce4ff !important;
 }
 
-.list-item .description {
-	font-size: 0.8vw;
-	color: #228cdbff !important;
-	font-weight: 200 !important;
+.list-item {
+	border-radius: 10px !important;	
+	border: 1px solid #fff !important;
+	margin-block: 2px !important; 
 }
 
 .list-item:hover {
-	background-color: #cce4ff !important;
+	border: 1px solid #228cdbff !important;
+	border-radius: 10px !important;
+}
+
+.list-item.description {
+	display: block;
+	font-size: 0.7vw;
+	color: #228cdbff !important;
+	font-weight: 400 !important;
+}
+
+.list-item.description:hover {
+	border: 1px solid #fff !important;
+}
+
+.list-item .tags {
+	margin-left: 10px !important;
+	display: table-cell;
+	height: 1.7vh;
+	color: #fff !important;
+	font-size: 0.5vw;
+	font-weight: 500 !important;
+	background: #ebbd17 !important;
+	border: 1px solid #fff !important;
+	border-radius: 10px !important;
 }
 
 .divider-list-title {

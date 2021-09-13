@@ -1,5 +1,5 @@
 import React from 'react';
-import { createTestplan } from '../services/testplansService';
+import { createTestplan, getTagsForTestplan } from '../services/testplansService';
 import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
 import {
     Typography,
@@ -28,12 +28,13 @@ class TestplanCreateForm extends React.Component {
 			this.handleSubmit = this.handleSubmit.bind(this)
 			this.closeMessageModal = this.closeMessageModal.bind(this)
 			this.resetForm = this.resetForm.bind(this)
+			this.getTagOptions = this.getTagOptions.bind(this)
     }
 
     state = {
 			groupOptions: [],
 			projectOptions: [],
-			tagItems: ['pumas','regresiones','usuario'],
+			tagItems: [],
 			newTag: '',
 			showMessageModal: false,
 			message: {
@@ -54,22 +55,11 @@ class TestplanCreateForm extends React.Component {
 	}
 
 	getProjectOptions(groupId) {
-		//Query para traer los proyectos elegibles del grupo elegido
 		getProjectsDropdown(groupId).then((result)=>{
 			if(result.success) {
 				this.setState({ projectOptions: result.projects })				
 			}				
 		})
-		let list = []
-		for (let index = 0; index < 5; index++) {
-			list.push(
-				{
-					id: index,
-					name: "G"+groupId+"PROY-" + index,                   
-				}
-			)
-		}
-		this.setState({ projectOptions: list })
 	}
 				
 	onNewTagChange(e) {
@@ -83,8 +73,17 @@ class TestplanCreateForm extends React.Component {
 					newTag: '',
 			});
 	}
+	
+	getTagOptions() {
+		getTagsForTestplan().then((result)=>{
+			if(result.success) {
+				this.setState({ tagItems: result.tags })				
+			}				
+		})
+	}	
 
 	handleSubmit(values) {
+			console.log(values)
 			const { project } = this.props
 			let params = {
 					groupId: values.groupId,
@@ -218,7 +217,8 @@ class TestplanCreateForm extends React.Component {
 											name="tags"
 									>
 											<Select 
-													mode="tags"
+													mode="tags"  
+													onDropdownVisibleChange={this.getTagOptions}
 													dropdownRender={menu => (
 															<div>
 																	{menu}
@@ -235,7 +235,7 @@ class TestplanCreateForm extends React.Component {
 															</div>
 													)}                            
 											>
-													{tagItems.map(item => <Option key={item}>{item}</Option>)}
+													{tagItems.map(item => <Option key={item.tag}>{item.tag}</Option>)}
 											</Select>
 									</Form.Item>
 									<Form.Item {...tailLayout}>

@@ -36,7 +36,6 @@ class Testplan extends React.Component {
 			super(props)
 			this.handleSubmit = this.handleSubmit.bind(this)
 			this.statusTag = this.statusTag.bind(this)
-			this.searchTags = this.searchTags.bind(this)
 			this.showTestCases = this.showTestCases.bind(this)
     }
     state = {
@@ -59,8 +58,7 @@ class Testplan extends React.Component {
 				name: undefined,
 				description: undefined,
 				status: undefined,
-				tags: [],
-				options: [],
+				tags: []
 			},
 			dirty: false,			
 			showMessageModal: false,
@@ -69,6 +67,7 @@ class Testplan extends React.Component {
 				description:undefined,
 				type: undefined
 			},
+			loading: true
     }
 
     componentWillMount() {
@@ -79,52 +78,14 @@ class Testplan extends React.Component {
 							if(result.success) {
 								const { testplan } = result
 								let editables = {
-									name: testplan.name,	
+									name: testplan.testplanName,	
 									description: testplan.description,
 									status: testplan.status,
-									tags: testplan.tags,
-									options: testplan.tags
+									tags: testplan.tags
 								}
-								this.setState({ testplan: testplan, field: editables })								
+								this.setState({ testplan: testplan, field: editables, loading: false })								
 							}
 						})
-						//Query para buscar plan de pruebas y sus casos
-						let statuses = ['Not executed','In progress','Passed','Failed']
-						let testplan = {
-								id: testplanId,
-								key: 'item'+testplanId,
-								testplanId: testplanId,
-								testplanName: 'PLAN-888: Pruebas',
-								description: 'Plan de pruebas para una funcionalidad',
-								tags: ['TEST','INTEGRACION'],
-								createdOn: '21/03/2021',
-								status: 'Passed',
-								projectId: 9874,
-								projectName: 'PRO-124',
-								groupId: 1,
-								groupName: 'Pumas',
-								cases: []
-						}
-						for (let index = 0; index < 5; index++) {
-								let item = {
-										id: testplanId+'.'+index*2,
-										key: 'case'+index*2,
-										caseId: index,
-										caseName: 'CASO-'+index,
-										status: statuses[Math.floor(Math.random() * statuses.length)],
-										modifiedOn: '1/02/2021'
-								}
-								testplan.cases.push(item)            
-						}
-						//
-						let editables = {
-							name: testplan.testplanName,	
-							description: testplan.description,
-							status: testplan.status,
-							tags: testplan.tags,
-							options: testplan.tags
-						}
-						this.setState({ testplan: testplan, field: editables })
         }
     }
 
@@ -144,9 +105,13 @@ class Testplan extends React.Component {
 			}
 			else
 			{
-				//Query para guardar los cambios
-			field.id = testplan.id
-			updateTestplan(field).then((result)=>{
+			let values = {
+				id: testplan.testplanId,
+				name: field.name,
+				description: field.description,
+				tags: field.tags
+			}
+			updateTestplan(values).then((result)=>{
 				if(result.success) {
 					this.setState({ 
 						success: true,
@@ -191,8 +156,7 @@ class Testplan extends React.Component {
 						description:'El plan de pruebas fue modificado con éxito',
 						type:'success'
 					}
-				})
-				//Query para buscar plan de pruebas y sus casos				
+				})			
 			}
     }
 
@@ -226,20 +190,9 @@ class Testplan extends React.Component {
         }
     }
     		
-		searchTags(value) {
-			const { field } = this.state 
-			//Query para disparar la búsqueda de etiquetas
-			getTagsForTestplan().then((result)=>{
-				if(result.success) {
-					this.setState({ field: {...this.state.field, options: result.tags } })					
-				}
-			})
-			let results = ['un','deux','troi','quatre','cinq']			
-			this.setState({ field: {...this.state.field, options: results } })
-		}
-		
 		showTestCases() {
-			const { testplan } = this.state
+			const { testplan, loading } = this.state
+			if(loading) return (<></>)
 			return (
 					<List
 						size="small"
@@ -279,7 +232,8 @@ class Testplan extends React.Component {
 
 	render() {
 		const { user } = this.props
-		const { testplan, field, dirty, message, showMessageModal } = this.state
+		const { testplan, field, dirty, message, showMessageModal, loading } = this.state
+		if(loading) return (<></>)
 		return(
 			<>
 				<Breadcrumb>
@@ -347,13 +301,10 @@ class Testplan extends React.Component {
 								<Text className="modal-title-label">Etiquetas</Text>
 								<Select
 									mode="tags"
-									defaultValue={field.tags}
-									onSearch={this.searchTags}
+									defaultValue={testplan.tags}
 									onChange={(e)=>this.setState({ field: {...this.state.field, tags: e}, dirty: true })}
 									dropdownMatchSelectWidth={false}
-								>
-									{field.options.map(item => <Option key={item}>{item}</Option>)}
-								</Select>
+								/>
 							</Space>	
 						</Col>						
 					</Row>

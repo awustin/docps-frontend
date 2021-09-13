@@ -18,7 +18,8 @@ import {
     Row,
     Col,
     DatePicker,
-		Typography
+		Typography,
+		Space
 } from 'antd';
 import {
     EditOutlined,
@@ -82,38 +83,19 @@ class TestplanSearchPane extends React.Component {
 	}
 	
 	getProjectOptions(groupId) {
-	//Query para traer los proyectos elegibles del grupo elegido
 		getProjectsDropdown(groupId).then((result)=>{
 			if(result.success) {
 				this.setState({ projectOptions: result.projects })				
 			}				
 		})
-		let list = []
-		for (let index = 0; index < 5; index++) {
-			list.push(
-				{
-					id: index,
-					name: "G"+groupId+"PROY-" + index,                   
-				}
-		)
-		}
-		this.setState({ projectOptions: list })
 	}
 	
 	getTagOptions() {
-		//Query para traer etiquetas
 		getTagsForTestplan().then((result)=>{
 			if(result.success) {
 				this.setState({ tagOptions: result.tags })				
 			}				
 		})
-		let list = []
-		for (let index = 0; index < 5; index++) {
-			list.push({
-				tag: "TAG" + index
-			})
-		}
-		this.setState({ tagOptions: list  })
 	}	
 
 	showResults() {
@@ -153,8 +135,6 @@ class TestplanSearchPane extends React.Component {
 							key={item.key}
 							span={4}
 							actions={[
-									<Text key={item.key+'created'} type="secondary">{item.createdOn}</Text>,
-                item.tags.map( tag => <Tag className={'hideable'} key={item.key+tag}>{tag}</Tag> ),
                 statusTag(item.status,item.key),									
 									<Tooltip title="Ver plan de pruebas" color="#108ee9">
 										<Link to={{ pathname: "/testplans/id="+item.id }} style={{color:"#228cdbff"}}>
@@ -173,16 +153,27 @@ class TestplanSearchPane extends React.Component {
 							className={'list-item testplan'}
 							style={{ background: "#fff" }}
 						>
+						<Space direction="vertical" size={5} style={{ width: "100%" }}>
 							<List.Item.Meta
-									description=<div className={'list-item description'}>
-										{'Proyecto: ' + item.projectName}
-									</div>
-								/>
+								description=<div className={'list-item description'}>
+									{'Proyecto: ' + item.projectName + ' '}
+									<Text className={'date hideable'} key={item.key+'created'} type="secondary"><i>{item.createdOn}</i></Text>
+								</div>								
+							/>
+							<Row gutter={16}>
+								<Col>
 									{item.testplanName}
+								</Col>
+								<Col>
+									{item.tags.map( tag => <Tag className={'tags hideable'} key={item.key+tag}>{tag}</Tag> )}
+								</Col>
+							</Row>
+						</Space>
 						</List.Item>
 				)}
 				/>
 		}
+		
 
 		return (
 			<>

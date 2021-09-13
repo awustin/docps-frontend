@@ -33,7 +33,7 @@ class TestplanManagement extends React.Component {
 			<Row>
 				<Col flex="1 0 25%">
 				<Tooltip title="Atrás">
-					<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
+					<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.push('/home')}}/>
 				</Tooltip>
 				</Col>
 			</Row>
