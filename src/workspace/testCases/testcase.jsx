@@ -26,17 +26,18 @@ class Testcase extends React.Component {
         super(props)
         this.handleEditClick = this.handleEditClick.bind(this)
         this.isEditModalVisible = this.isEditModalVisible.bind(this)
-        this.priorityTag = this.priorityTag.bind(this)
         this.showMessages = this.showMessages.bind(this)
         this.handleSaveStepsClick = this.handleSaveStepsClick.bind(this)
     }
 
     state = {
         showEditModal: false,
+				loading: true
     }
     
     componentDidMount() {
-        const { testcase,setTestplan,fetchTestcase,action } = this.props
+        const { testcase, setTestplan, fetchTestcase, action } = this.props
+				
         switch(action)
         {
             case("create"):
@@ -73,27 +74,6 @@ class Testcase extends React.Component {
         this.setState({ showEditModal: value })
     }
 
-    priorityTag() {
-        const { testcase } = this.props
-        let priority = testcase.priority
-        let tagColor 
-        switch(priority)
-        {
-            case "Low":
-                tagColor = '#6cdef5'
-                break
-            case "Medium":
-                tagColor = '#f5b642'
-                break
-            case "High":
-                tagColor = '#f56942'
-                break
-            default:
-                break
-        }
-        return <Tag color={tagColor}>{d.priorities[priority]}</Tag>
-    }
-
     showMessages() {
         const { messages } = this.props
         let alertList = []
@@ -112,9 +92,10 @@ class Testcase extends React.Component {
     }
 
     render() {
-        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations } = this.props
+        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations, loading } = this.props
         const { showEditModal } = this.state
         const { Title,Text } = Typography
+				if(loading) return (<></>)
         return(
             <>
             { (action === 'create') ?
@@ -154,7 +135,11 @@ class Testcase extends React.Component {
                                 <Descriptions.Item label="Nombre"><Text strong>{testcase.testcaseName}</Text></Descriptions.Item>
                                 <Descriptions.Item label="Descripción">{testcase.description}</Descriptions.Item>
                                 <Descriptions.Item label="Precondiciones">{testcase.preconditions}</Descriptions.Item>
-                                <Descriptions.Item label="Prioridad">{this.priorityTag()}</Descriptions.Item>
+                                <Descriptions.Item label="Prioridad">
+																			<Tag color={(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["color"] : ''}>
+																				{(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["label"] : ''}
+																			</Tag>
+																		</Descriptions.Item>
                             </Descriptions>
                         </Card>
                         <TestcaseForm 

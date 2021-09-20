@@ -10,12 +10,13 @@ import {
 import { withRouter } from "react-router";
 import * as d from '../../AppConsts.json';
 
+const { Option } = Select;
+
 class TestcaseForm extends React.Component {
     constructor(props){
         super(props)
         this.handleOk = this.handleOk.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
-        this.prioritiesOptions = this.prioritiesOptions.bind(this)
     }
     state = {
         confirmLoading: false,
@@ -46,38 +47,8 @@ class TestcaseForm extends React.Component {
         const { isEditModalVisible,upsertTestcase } = this.props
         this.setConfirmLoading(true)
         isEditModalVisible(false)
-        //upsert testcase
         upsertTestcase(values)
         this.setConfirmLoading(false)
-    }
-
-    prioritiesOptions() {
-        const { Option } = Select
-        const { priorities } = this.state
-        let options = []
-        let tagColor 
-        Object.keys(priorities).map( item => {
-            switch(item)
-            {
-                case "Low":
-                    tagColor = '#6cdef5'
-                    break
-                case "Medium":
-                    tagColor = '#f5b642'
-                    break
-                case "High":
-                    tagColor = '#f56942'
-                    break
-                default:
-                    break
-            }
-            options.push(
-                <Option key={item} value={item}>
-                    <Tag color={tagColor}>{priorities[item]}</Tag>
-                </Option>
-            )
-        })
-        return options
     }
 
     render() {
@@ -139,10 +110,16 @@ class TestcaseForm extends React.Component {
                     <Form.Item
                         label="Prioridad"
                         name="priority"
-                        initialValue={values.priority}
+                        initialValue={(d.priorities[values.priority]) ? d.priorities[values.priority].id : undefined}
                     >
                         <Select>
-                            {this.prioritiesOptions()}
+															{ Object.keys(d.priorities).map( (e) => {
+																	return (
+																	<Option key={d.priorities[e].id} value={d.priorities[e].id}>
+																			<Tag color={d.priorities[e].color}>{d.priorities[e].label}</Tag>
+																	</Option>)
+																})
+															}
                         </Select>
                     </Form.Item>
                 </Form>

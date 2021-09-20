@@ -7,8 +7,20 @@
     },
     "priorities":
     {
-        "Low": "Baja",
-        "Medium": "Media",
-        "High": "Alta"
+        "low" : {
+					"label": "Baja",
+					"id": 1,
+					"color": "#6cdef5"
+				},
+        "medium": {
+					"label": "Media",
+					"id": 2,
+					"color": "#f5b642"
+				},
+        "high": {
+					"label": "Alta",
+					"id": 3,
+					"color": "#f56942"
+				}
     }
 }

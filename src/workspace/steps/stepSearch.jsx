@@ -9,6 +9,7 @@ import {
     PlusCircleOutlined
 } from '@ant-design/icons';
 import { withRouter } from "react-router";
+import { getTestcasesDropdown, getStepsDropdown, getTestplansDropdown } from '../../services/workspaceService';
 
 function random() {
     return Math.random().toString(36).substring(2, 6)
@@ -27,117 +28,126 @@ class StepSearch extends React.Component {
         value: undefined,
         testplanValue: undefined,
         testcaseValue: undefined,
-        treeData: this.getTestplanList(),
+        treeData: undefined,
         step: undefined
     }
+		
+	componentDidMount() {
+		console.log(this.props)
+		this.getTestplanList()
+	}
 
-    onLoadData(treeNode) {
-        return new Promise( resolve => {
-            const { id,pId } = treeNode.props;
-            setTimeout(() => {
-                if(!pId)
-                {
-                    //Fetch testcases
-                    let testcases = this.getTestcaseList(id)
-                    this.setState({
-                        treeData: this.state.treeData.concat(testcases),
-                        testplanValue: { testplanId: id }            
-                    });
-                }
-                else
-                {
-                    //Fetch steps
-                    let steps = this.getStepList(id)
-                    this.setState({
-                        treeData: this.state.treeData.concat(steps),
-                        testcaseValue: { testcaseId: id }
-                    });
-                }
-              resolve();
-            }, 300);
-        });
-    }
+	onLoadData(treeNode) {
+		return new Promise( resolve => {
+			const { id,pId } = treeNode.props;
+			if(!pId) {
+				this.getTestcaseList(id)
+			}
+			else {
+				this.getStepList(id)
+			}
+			resolve();
+		});
+	}
 
-    getStepList(testcaseId) {
-        //Query to fetch steps of testcase treeNode
-        let list = []
-        for (let index = 0; index < 3; index++) {
-            let ran = random()
-            list.push({
-                id: 'step'+ran,
-                pId: testcaseId,
-                value: 'step'+ran,
-                title: 'step'+ran,
-                selectable: true,
-                isLeaf: true,
-                action: 'Paso '+'step'+ran,
-                data: 'Datos para utilizar',
-                result: 'Se insertó un paso'
-            })            
-        }
-        return list;
-    }
+	getStepList(testcaseId) {
+			//Query to fetch steps of testcase treeNode
+			getStepsDropdown(testcaseId).then( (result) => {
+				if(result.success) {
+					this.setState({
+							treeData: this.state.treeData.concat(result.steps),
+							testcaseValue: { testcaseId: testcaseId }
+					});
+				}
+			})
+			let list = []
+			for (let index = 0; index < 3; index++) {
+					let ran = random()
+					list.push({
+							id: 'step'+ran,
+							pId: testcaseId,
+							value: 'step'+ran,
+							title: 'step'+ran,
+							selectable: true,
+							isLeaf: true,
+							action: 'Paso '+'step'+ran,
+							data: 'Datos para utilizar',
+							result: 'Se insertó un paso'
+					})            
+			}
+	}
 
-    getTestcaseList(testplanId) {
-        //Query to fetch testcases of testplan treeNode
-        let list = []
-        for (let index = 0; index < 3; index++) {            
-            let ran = random()
-            list.push({
-                id: 'case'+ran,
-                pId: testplanId,
-                value: 'case'+ran,
-                title: 'case'+ran,
-                selectable: false
-            })            
-        }
-        return list;
-    }    
+	getTestcaseList(testplanId) {
+			//Query to fetch testcases of testplan treeNode
+			getTestcasesDropdown(testplanId).then( (result) => {
+				if(result.success) {
+					this.setState({
+							treeData: this.state.treeData.concat(result.testcases),
+							testplanValue: { testplanId: testplanId }            
+					});
+				}
+			})
+			let list = []
+			for (let index = 0; index < 3; index++) {            
+					let ran = random()
+					list.push({
+							id: 'case'+ran,
+							pId: testplanId,
+							value: 'case'+ran,
+							title: 'case'+ran,
+							selectable: false
+					})            
+			}
+	}    
 
-    getTestplanList() {
-        //Query para la lista de los planes de prueba del mismo Grupo
-        //id = ID de la tabla de la BD
-        let list = []
-        for (let index = 0; index < 10; index++) {
-            list.push(
-                {
-                    id: index+1,
-                    pId: 0,
-                    value: index+1,
-                    title: "Testplan-" + index,
-                    selectable: false
-                }
-            )
-        }
-        return list
-    }
+	getTestplanList() {
+			//Query para la lista de los planes de prueba del mismo Grupo
+			//id = ID de la tabla de la BD
+			getTestplansDropdown().then( (result) => {
+				if(result.success) {
+					this.setState({ treeData: result.testplans })
+				}
+			})
+			let list = []
+			for (let index = 0; index < 10; index++) {
+					list.push(
+							{
+									id: index+1,
+									pId: 0,
+									value: index+1,
+									title: "Testplan-" + index,
+									selectable: false
+							}
+					)
+			}
+	}
 
-    onChangeValue(value) {
-        const { treeData } = this.state
-        let step = undefined
-        for (let index = treeData.length-1; index >= 0; index--) {
-            const item = treeData[index]
-            if( item['id'] === value )
-            {
-                step = {
-                    action: item['action'],
-                    data: item['data'],
-                    result: item['result']
-                }
-                break
-            }   
-        }
-        this.setState({ value:value, step:step })
-    }
+	onChangeValue(value) {
+			const { treeData } = this.state
+			let step = undefined
+			for (let index = treeData.length-1; index >= 0; index--) {
+					const item = treeData[index]
+					if( item['id'] === value )
+					{
+							step = {
+									action: item['action'],
+									data: item['data'],
+									result: item['result']
+							}
+							break
+					}   
+			}
+			this.setState({ value:value, step:step })
+	}
 
-    onInsertStepClick() {
-        const { addStep } = this.props
-        const { step } = this.state 
-        //Query to fetch variables for step?
-        addStep(step)
-    }
+	onInsertStepClick() {
+			const { addStep } = this.props
+			const { step } = this.state 
+			//Query to fetch variables for step?
+			addStep(step)
+	}
 
-    render() {
+	render() {
         const { treeData, value }  = this.state
         return(
             <>

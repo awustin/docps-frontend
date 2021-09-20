@@ -4,6 +4,7 @@ import { Route,Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
 import AppLayout from '../AppLayout';
 import Testcase from './testCases/testcase';
+import { getTestcaseById, createTestcase, updateTestcase, saveSteps } from '../services/workspaceService';
 
 class WorkspaceMain extends React.Component {
     constructor(props){
@@ -20,237 +21,222 @@ class WorkspaceMain extends React.Component {
         this.saveSteps = this.saveSteps.bind(this)
     }
 
-    state = {
-        testcase: {
-            //properties
-            id: undefined,
-            testcaseName: undefined,
-            description: undefined,
-            preconditions: undefined,
-            priority: undefined,
-            modifiedOn: undefined,
-            isExported: undefined,
-            testplanId: undefined,
-            testplanName: undefined,
-            projectId: undefined,
-            projectName: undefined,
-            groupId: undefined,
-            groupName: undefined,
-            steps: []
-        },
-        messages: [],
-        modifiedSteps: false,
-    }
-    setTestplan(id, name) {
-        const { testcase } = this.state
-        testcase["testplanId"] = id
-        testcase["testplanName"] = name
-        this.setState({ testcase: testcase })
-    }
+	state = {
+			testcase: {
+					//properties
+					id: undefined,
+					testcaseName: undefined,
+					description: undefined,
+					preconditions: undefined,
+					priority: undefined,
+					modifiedOn: undefined,
+					isExported: undefined,
+					testplanId: undefined,
+					testplanName: undefined,
+					projectId: undefined,
+					projectName: undefined,
+					groupId: undefined,
+					groupName: undefined,
+					steps: []
+			},
+			messages: [],
+			modifiedSteps: false,
+				loading: true
+	}
+		
+	setTestplan(id, name) {
+		const { testcase } = this.state
+		testcase["testplanId"] = id
+		testcase["testplanName"] = name
+		this.setState({ testcase: testcase, loading: false })
+	}
 
-    fetchTestcase(ids) {
-        //Query
-        //Si hay error mensaje y volver atrás
-        let testcase = {
-            id: ids.id,
-            testcaseName: 'CASO-001',
-            description: 'Este es un caso de prueba ya creado.',
-            preconditions: 'Login',
-            priority: 'Low',
-            modifiedOn: '1/1/2021',
-            isExported: false,
-            testplanId: ids.testplanId,
-            testplanName: ids.testplanName,
-            projectId: 99,
-            projectName: 'COMPANY-APP',
-            groupId: 88,
-            groupName: 'Pumas',
-            steps: [
-                {
-                    action: 'Hacer algo',
-                    result: 'Debe pasar esto',
-                    data: 'Usar credenciales',
-                    order: 0,
-                    actionVariable: {
-                        name: undefined,
-                        values: undefined
-                    },
-                    resultVariable: {
-                        name: undefined,
-                        values: undefined
-                    },
-                    dataVariable: {
-                        name: undefined,
-                        values: undefined
-                    }
-                }
-            ]
-        }
-        this.setState({ testcase: testcase })
-    }
+	fetchTestcase(ids) {
+		getTestcaseById(ids.id).then( (result) => {
+			if(result.success) {
+				this.setState({ testcase: result.testcase, loading: false })						
+			}
+		})
+	}
 
-    upsertTestcase(values) {
-        const { testcase } = this.state
-        let newTestcase = testcase
-        if( testcase.id === undefined )
-        {
-            //Insert(values)
-            newTestcase.id = 999
-            newTestcase.testcaseName = values.testcaseName
-            newTestcase.description = values.description
-            newTestcase.preconditions = values.preconditions
-            newTestcase.priority = values.priority
-            //si falla , mensaje y volver atrás
-            //Con el insert, obtener id insertado
-            //Hacer fetchTestcase para cargar el testcase desde la BD
-            this.fetchTestcase({id: 777, testplanId: testcase.testplanId, testplanName: testcase.testplanName})
-            //Cargar mensaje de creado con exito
-            this.addMessage('Caso de prueba creado con éxito','success')
-            //redirigir a la vista de edición
-            this.props.history.push("/workspace/id=" + testcase.id + "&p=" + testcase.testplanId + "&n=" + testcase.testplanName)
-        }
-        else
-        {
-            //Update
-            //si falla mensaje
-            newTestcase.testcaseName = values.testcaseName
-            newTestcase.description = values.description
-            newTestcase.preconditions = values.preconditions
-            newTestcase.priority = values.priority
-            this.setState({ testcase: newTestcase })
-        }
-    }
+	upsertTestcase(values) {
+		const { testcase } = this.state
+		let newTestcase = testcase
+		if( testcase.id === undefined ) {
+			values.id = testcase.testplanId
+			createTestcase(values).then( (result) => {
+				if(result.success) {
+					const { id } = result
+					newTestcase.id = id
+					this.fetchTestcase({id: id, testplanId: testcase.testplanId, testplanName: testcase.testplanName})
+					this.addMessage('Caso de prueba creado con éxito','success')
+					this.props.history.push("/workspace/id=" + testcase.id + "&p=" + testcase.testplanId + "&n=" + testcase.testplanName)																		
+				}
+				else {
+					//msje de error
+					this.props.history.goBack()
+				}
+			})
+		}
+		else {
+			values.id = testcase.id
+			updateTestcase(values).then( (result) => {
+				if(result.success) {
+					const { testcase } = result
+					newTestcase.testcaseName = testcase.testcaseName
+					newTestcase.description = testcase.description
+					newTestcase.preconditions = testcase.preconditions
+					newTestcase.priority = testcase.priority
+					this.setState({ testcase: newTestcase })
+				}
+				else {
+			//si falla mensaje	
+					console.log(result.validate)
+				}
+			})
+		}
+	}
 
-    addMessage(text,type) {
-        const { messages } = this.state
-        let newMessages = messages
-        newMessages.push({ text: text, type: type})
-        this.setState({ messages: newMessages })
-    }
+	addMessage(text,type) {
+			const { messages } = this.state
+			let newMessages = messages
+			newMessages.push({ text: text, type: type})
+			this.setState({ messages: newMessages })
+	}
 
-    addStep(values) {
-        let { testcase } = this.state
-        let list = testcase.steps
-        let newstep = {
-            action: values.action,
-            result: values.result,
-            data: values.data,
-            order: list.length,
-            actionVariable: {
-                name: undefined,
-                values: undefined
-            },
-            resultVariable: {
-                name: undefined,
-                values: undefined
-            },
-            dataVariable: {
-                name: undefined,
-                values: undefined
-            }
-        }
-        if(list === undefined) {
-            list = [newstep]
-        }        
-        else {
-            list.push(newstep)
-        }
-        testcase.steps = list  
-        this.setState({ testcase: testcase, modifiedSteps: true })
-    }
+	addStep(values) {
+			let { testcase } = this.state
+			let list = testcase.steps
+			let newstep = {
+					action: values.action,
+					result: values.result,
+					data: values.data,
+					order: list.length,
+					actionVariable: {
+							name: undefined,
+							values: undefined
+					},
+					resultVariable: {
+							name: undefined,
+							values: undefined
+					},
+					dataVariable: {
+							name: undefined,
+							values: undefined
+					}
+			}
+			if(list === undefined) {
+					list = [newstep]
+			}        
+			else {
+					list.push(newstep)
+			}
+			testcase.steps = list  
+			this.setState({ testcase: testcase, modifiedSteps: true })
+	}
 
-    editStep(field, index, value) {
-        const { testcase } = this.state
-        let steps = testcase.steps
-        steps[index][field] = value
-        this.setState( prevState => ({
-            testcase: {
-                ...prevState.testcase,
-                steps: steps
-            }, 
-            modifiedSteps: true 
-        }))
-    }
+	editStep(field, index, value) {
+			const { testcase } = this.state
+			let steps = testcase.steps
+			steps[index][field] = value
+			this.setState( prevState => ({
+					testcase: {
+							...prevState.testcase,
+							steps: steps
+					}, 
+					modifiedSteps: true 
+			}))
+	}
 
-    deleteStep(index) {
-        let { steps } = this.state.testcase
-        
-        steps.splice(index,1)
-        for (let index = 0; index < steps.length; index++) {
-            steps[index].order = index
-        }
-        this.setState( prevState => ({
-            testcase: {
-                ...prevState.testcase,
-                steps: steps
-            }, 
-            modifiedSteps: true 
-        }))
-    }
+	deleteStep(index) {
+			let { steps } = this.state.testcase
+			
+			steps.splice(index,1)
+			for (let index = 0; index < steps.length; index++) {
+					steps[index].order = index
+			}
+			this.setState( prevState => ({
+					testcase: {
+							...prevState.testcase,
+							steps: steps
+					}, 
+					modifiedSteps: true 
+			}))
+	}
 
-    editVariable(index, field, data) {
-        let { steps } = this.state.testcase
-        let varType
-        switch(field)
-        {
-            case 'action':
-                varType = 'actionVariable'
-                break
-            case 'result':
-                varType = 'resultVariable'
-                break
-            case 'data':
-                varType = 'dataVariable'
-                break
-            default:
-                break
-        }
-        steps[index][varType]['name'] = data.name
-        steps[index][varType]['values'] = data.values
-        this.setState( prevState => ({
-            testcase: {
-                ...prevState.testcase,
-                steps: steps
-            }, 
-            modifiedSteps: true 
-        }))
-    }
+	editVariable(index, field, data) {
+			let { steps } = this.state.testcase
+			let varType
+			switch(field)
+			{
+					case 'action':
+							varType = 'actionVariable'
+							break
+					case 'result':
+							varType = 'resultVariable'
+							break
+					case 'data':
+							varType = 'dataVariable'
+							break
+					default:
+							break
+			}
+			steps[index][varType]['name'] = data.name
+			steps[index][varType]['values'] = data.values
+			this.setState( prevState => ({
+					testcase: {
+							...prevState.testcase,
+							steps: steps
+					}, 
+					modifiedSteps: true 
+			}))
+	}
 
-    deleteVariable(index, field) {
-        let { steps } = this.state.testcase
-        let varType
-        switch(field)
-        {
-            case 'action':
-                varType = 'actionVariable'
-                break
-            case 'result':
-                varType = 'resultVariable'
-                break
-            case 'data':
-                varType = 'dataVariable'
-                break
-            default:
-                break
-        }
-        steps[index][varType]['name'] = undefined
-        steps[index][varType]['values'] = undefined
-        this.setState( prevState => ({
-            testcase: {
-                ...prevState.testcase,
-                steps: steps
-            }, 
-            modifiedSteps: true 
-        }))
-    }
+	deleteVariable(index, field) {
+			let { steps } = this.state.testcase
+			let varType
+			switch(field)
+			{
+					case 'action':
+							varType = 'actionVariable'
+							break
+					case 'result':
+							varType = 'resultVariable'
+							break
+					case 'data':
+							varType = 'dataVariable'
+							break
+					default:
+							break
+			}
+			steps[index][varType]['name'] = undefined
+			steps[index][varType]['values'] = undefined
+			this.setState( prevState => ({
+					testcase: {
+							...prevState.testcase,
+							steps: steps
+					}, 
+					modifiedSteps: true 
+			}))
+	}
 
-    saveSteps() {
-        this.addMessage('Pasos guardados','success')
-        this.setState({ modifiedSteps: false })
+	saveSteps() {
+			const { testcase } = this.state
+			let values = {
+				id: testcase.id,
+				steps: testcase.steps
+			}
+			console.log(values)
+			saveSteps(values).then( (result) => {
+				if(result.success) {
+					this.addMessage('Pasos guardados','success')
+					this.setState({ modifiedSteps: false })					
+				}
+			})
     }
 
     render() {
-        const { testcase, messages, modifiedSteps } = this.state
+        const { testcase, messages, modifiedSteps, loading } = this.state
 				const { user } = this.props
         return(
             <AppLayout user={user}>
@@ -267,6 +253,7 @@ class WorkspaceMain extends React.Component {
                             variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
+																loading={loading}
                         />
                         )}
                     />
@@ -282,6 +269,7 @@ class WorkspaceMain extends React.Component {
                             variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
+																loading={loading}												
                         />
                         )}
                     />
