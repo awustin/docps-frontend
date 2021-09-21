@@ -33,8 +33,8 @@ class StepSearch extends React.Component {
     }
 		
 	componentDidMount() {
-		console.log(this.props)
-		this.getTestplanList()
+		const { testcase } = this.props
+		this.getTestplanList(testcase.id)
 	}
 
 	onLoadData(treeNode) {
@@ -51,7 +51,6 @@ class StepSearch extends React.Component {
 	}
 
 	getStepList(testcaseId) {
-			//Query to fetch steps of testcase treeNode
 			getStepsDropdown(testcaseId).then( (result) => {
 				if(result.success) {
 					this.setState({
@@ -78,7 +77,6 @@ class StepSearch extends React.Component {
 	}
 
 	getTestcaseList(testplanId) {
-			//Query to fetch testcases of testplan treeNode
 			getTestcasesDropdown(testplanId).then( (result) => {
 				if(result.success) {
 					this.setState({
@@ -87,39 +85,14 @@ class StepSearch extends React.Component {
 					});
 				}
 			})
-			let list = []
-			for (let index = 0; index < 3; index++) {            
-					let ran = random()
-					list.push({
-							id: 'case'+ran,
-							pId: testplanId,
-							value: 'case'+ran,
-							title: 'case'+ran,
-							selectable: false
-					})            
-			}
 	}    
 
-	getTestplanList() {
-			//Query para la lista de los planes de prueba del mismo Grupo
-			//id = ID de la tabla de la BD
-			getTestplansDropdown().then( (result) => {
+	getTestplanList(id) {
+			getTestplansDropdown(id).then( (result) => {
 				if(result.success) {
 					this.setState({ treeData: result.testplans })
 				}
 			})
-			let list = []
-			for (let index = 0; index < 10; index++) {
-					list.push(
-							{
-									id: index+1,
-									pId: 0,
-									value: index+1,
-									title: "Testplan-" + index,
-									selectable: false
-							}
-					)
-			}
 	}
 
 	onChangeValue(value) {

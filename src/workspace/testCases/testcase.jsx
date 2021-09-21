@@ -165,7 +165,8 @@ class Testcase extends React.Component {
                             </Col>
                         </Row>
                         <Divider style={{marginLeft: "30px"}}/>
-                        <TestcaseSteps 
+                        <TestcaseSteps
+																testcase={testcase}
                             steps={testcase.steps}
                             addStep={addStep}
                             editStep={editStep}

@@ -55,9 +55,17 @@ export function getTestcasesDropdown(value) {
     });
 }
 
-
 export function getStepsDropdown(value) {
   return request.post(`${baseUrl()}/getStepsDropdown`, {id: value})
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+export function deleteTestcase(value) {
+  return request.post(`${baseUrl()}/deleteTestcase`, {id: value})
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;

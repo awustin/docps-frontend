@@ -1,4 +1,5 @@
 import React from 'react';
+import { getExecutionsForTestcase, createExecution, updateExecutionById, deleteExecutionById } from '../services/executionsService';
 import {
     Tooltip,
 } from 'antd';
@@ -9,100 +10,129 @@ import {
 import ExecutionList from './modals/executionList';
 
 class ViewExecutions extends React.Component {
-    constructor(props){
-        super(props)
-        this.handleClick = this.handleClick.bind(this)
-        this.isModalVisible = this.isModalVisible.bind(this)
-        this.addExecution = this.addExecution.bind(this)
-        this.updateExecution = this.updateExecution.bind(this)
-        this.deleteExecution = this.deleteExecution.bind(this)
-    }
-    state = {
-        showModal: false,
-        executions: []
-    }
+	constructor(props){
+			super(props)
+			this.handleClick = this.handleClick.bind(this)
+			this.isModalVisible = this.isModalVisible.bind(this)
+			this.addExecution = this.addExecution.bind(this)
+			this.updateExecution = this.updateExecution.bind(this)
+			this.deleteExecution = this.deleteExecution.bind(this)
+	}
+	state = {
+			showModal: false,
+			executions: []
+	}
 
-    handleClick() {
-        const { id } = this.props
-        let statuses = ['Not executed','In progress','Passed','Failed']
-        let list = []
-        //Query execution list with testcase id. Then show modal
-        for (let index = 0; index < 2; index++) {
-            list.push({
-                id: index,
-                key: index*2,
-                status: statuses[Math.floor(Math.random() * statuses.length)],
-                commentary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-                createdOn: '1/1/2021'
-            })   
-        }
-        this.setState({ executions: list, showModal: true })
-    }
+	handleClick() {
+			const { id } = this.props
+			let statuses = ['Not executed','In progress','Passed','Failed']
+			let list = []
+			//Query execution list with testcase id. Then show modal
+			getExecutionsForTestcase(id).then( (result) => {
+				if(result.success) {
+					this.setState({ executions: result.executions, showModal: true })						
+				}
+			})
+			for (let index = 0; index < 2; index++) {
+					list.push({
+							id: index,
+							key: index*2,
+							status: statuses[Math.floor(Math.random() * statuses.length)],
+							commentary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+							createdOn: '1/1/2021'
+					})   
+			}
+	}
     
-    isModalVisible(value) {
-        this.setState({ showModal: value })
-    }
+	isModalVisible(value) {
+		this.setState({ showModal: value })
+	}
 
-    addExecution() {
-        //Query to insert execution
-        //Query to fetch executions
-        //refresh state
-        let { executions } = this.state
-        var today = new Date();
-        let newExecution = {
-            id: 99,
-            key: 99*2,
-            status: 'Not executed',
-            commentary: '',
-            createdOn: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
-        }
-        executions.push(newExecution)
-        this.setState({ executions: executions })
-    }
+	addExecution() {
+		const { id } = this.props
+		//Query to insert execution
+		createExecution(id).then( (result) => {
+			if(result.success) {
+				//Query to fetch executions						
+				getExecutionsForTestcase(id).then( (result) => {
+					if(result.success) {
+						this.setState({ executions: executions })
+					}
+				})			
+			}
+		})
+		let { executions } = this.state
+		var today = new Date();
+		let newExecution = {
+			id: 99,
+			key: 99*2,
+			status: 'Not executed',
+			commentary: '',
+			createdOn: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
+		}
+		executions.push(newExecution)
+	}
 
-    updateExecution(values) {
-        //Query to update execution by Id
-        //Query to fetch executions
-        //refresh state
-        let { executions } = this.state
-        executions.forEach( (e) => {
-            if(e.id === values.id)
-            {
-                e.status = values.status
-                e.commentary = values.commentary
-            }
-        })
-        this.setState({ executions: executions })
-    }
+	updateExecution(values) {
+		const { id } = this.props
+		//Query to update execution
+		updateExecutionById(values).then( (result) => {
+			if(result.success) {
+				//Query to fetch executions						
+				getExecutionsForTestcase(id).then( (result) => {
+					if(result.success) {
+						this.setState({ executions: executions })		
+					}
+				})			
+			}
+		})
+		let { executions } = this.state
+		executions.forEach( (e) => {
+			if(e.id === values.id)
+			{
+				e.status = values.status
+				e.commentary = values.commentary
+			}
+		})
+	}
 
-    deleteExecution(id) {
-        //Query to delete by Id
-        //Query to fetch exectuions
-        //refresh state
-        const { executions } = this.state
-        this.setState({ executions: executions.filter( (e) => {
-            return e.id !== id
-        }) })
-    }
+	deleteExecution(id) {
+		//Query to delete execution
+		deleteExecutionById().then( (result) => {
+			if(result.success) {
+				//Query to fetch executions						
+				getExecutionsForTestcase().then( (result) => {
+					if(result.success) {
+						this.setState({ executions: executions })			
+					}
+				})			
+			}
+		})
+		const { executions } = this.state
+		this.setState({ executions: executions.filter( (e) => {
+				return e.id !== id
+			}) 
+		})
+	}
 
-    render() {
-        const { showModal, executions } = this.state
-        return(
-            <>
-                <Tooltip title="Mostrar ejecuciones" color="#108ee9">
-                    <ThunderboltOutlined style={{ fontSize: '150%', color: "#108ee9"}} onClick={this.handleClick} />
-                </Tooltip>
-                <ExecutionList
-                    list={executions}
-                    addExecution={this.addExecution}
-                    updateExecution={this.updateExecution}
-                    deleteExecution={this.deleteExecution}
-                    visible={showModal} 
-                    isModalVisible={this.isModalVisible} 
-                />
-            </>
-        )
-    }
+	render() {
+		const { showModal, executions } = this.state
+		return(
+				<>
+						<Tooltip title="Mostrar ejecuciones" color="#108ee9">
+								<ThunderboltOutlined style={{ fontSize: '150%', color: "#108ee9"}} onClick={this.handleClick} />
+						</Tooltip>
+						<ExecutionList
+								list={executions}
+								addExecution={this.addExecution}
+								updateExecution={this.updateExecution}
+								deleteExecution={this.deleteExecution}
+								visible={showModal} 
+								isModalVisible={this.isModalVisible} 
+						/>
+				</>
+		)
+	}
 }
 
 export default withRouter(ViewExecutions);

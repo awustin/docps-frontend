@@ -269,7 +269,7 @@ class WorkspaceMain extends React.Component {
                             variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
                             messages={messages}
                             modifiedSteps={modifiedSteps}
-																loading={loading}												
+																loading={loading}														
                         />
                         )}
                     />

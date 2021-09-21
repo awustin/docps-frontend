@@ -53,7 +53,7 @@ class TestcaseSteps extends React.Component {
     }
 
     render() {
-        const { addStep } = this.props
+        const { addStep, testcase } = this.props
         const { Title } = Typography
         return(
             <>
@@ -105,7 +105,8 @@ class TestcaseSteps extends React.Component {
                         </Col>
                     </Row>
                     <StepSearch
-                        addStep = {addStep}
+												testcase={testcase}
+												addStep={addStep}
                     />
                 <Divider/>
                 <Space direction="vertical" style={{width: "100%"}}>

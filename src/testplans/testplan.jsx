@@ -27,6 +27,7 @@ import {
 import { Link } from 'react-router-dom';
 import ViewExecutions from '../executions/viewExecutions';
 import MessageModal from '../common/messageModal';
+import TestcaseDelete from './modals/testcaseDelete';
 
 const { Title,Text } = Typography;
 const { Option } = Select;
@@ -37,6 +38,7 @@ class Testplan extends React.Component {
 			this.handleSubmit = this.handleSubmit.bind(this)
 			this.statusTag = this.statusTag.bind(this)
 			this.showTestCases = this.showTestCases.bind(this)
+			this.reloadSearch = this.reloadSearch.bind(this)
     }
     state = {
 			testplan: {
@@ -67,6 +69,8 @@ class Testplan extends React.Component {
 				description:undefined,
 				type: undefined
 			},
+			visibleDelete: false,
+			deleteTestcaseId: undefined,
 			loading: true
     }
 
@@ -192,6 +196,11 @@ class Testplan extends React.Component {
     		
 		showTestCases() {
 			const { testplan, loading } = this.state
+			
+			const deleteHandle = (function(id) {
+				this.setState({ visibleDelete: true, deleteTestcaseId: id })
+			}).bind(this)
+			
 			if(loading) return (<></>)
 			return (
 					<List
@@ -213,7 +222,9 @@ class Testplan extends React.Component {
 										</Tooltip>
 									</Link>,
 									<ViewExecutions id={item.id}/>,
-									<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} />
+									<Tooltip title="Eliminar caso de prueba" color="#108ee9">
+										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
+									</Tooltip>,
 								]}
 								className={'list-item testcase'}
 								style={{background: "#fff"}}
@@ -229,10 +240,26 @@ class Testplan extends React.Component {
 					/>			
 			)
 		}
+		
+		reloadSearch() {
+			const { testplan } = this.state
+			getTestplanById(testplan.testplanId).then((result)=>{
+				if(result.success) {
+					const { testplan } = result
+					let editables = {
+						name: testplan.testplanName,	
+						description: testplan.description,
+						status: testplan.status,
+						tags: testplan.tags
+					}
+					this.setState({ testplan: testplan, field: editables, loading: false })								
+				}
+			})			
+		}
 
 	render() {
 		const { user } = this.props
-		const { testplan, field, dirty, message, showMessageModal, loading } = this.state
+		const { testplan, field, dirty, message, showMessageModal, visibleDelete, deleteTestcaseId, loading } = this.state
 		if(loading) return (<></>)
 		return(
 			<>
@@ -326,6 +353,16 @@ class Testplan extends React.Component {
 					</Row>
 					{this.showTestCases()}
 				</div>
+				{ (visibleDelete) ? (
+					<TestcaseDelete
+						testcaseId={deleteTestcaseId}
+						visibleDelete={visibleDelete}
+						closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+						reloadSearch={this.reloadSearch}				
+					/>
+				) : (
+				<></>
+				)}
 				<MessageModal								
 					type={message.type}
 					title={message.title}
