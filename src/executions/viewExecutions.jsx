@@ -25,23 +25,11 @@ class ViewExecutions extends React.Component {
 
 	handleClick() {
 			const { id } = this.props
-			let statuses = ['Not executed','In progress','Passed','Failed']
-			let list = []
-			//Query execution list with testcase id. Then show modal
 			getExecutionsForTestcase(id).then( (result) => {
 				if(result.success) {
 					this.setState({ executions: result.executions, showModal: true })						
 				}
 			})
-			for (let index = 0; index < 2; index++) {
-					list.push({
-							id: index,
-							key: index*2,
-							status: statuses[Math.floor(Math.random() * statuses.length)],
-							commentary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-							createdOn: '1/1/2021'
-					})   
-			}
 	}
     
 	isModalVisible(value) {
@@ -49,74 +37,48 @@ class ViewExecutions extends React.Component {
 	}
 
 	addExecution() {
-		const { id } = this.props
-		//Query to insert execution
-		createExecution(id).then( (result) => {
-			if(result.success) {
-				//Query to fetch executions						
+		const { id, user } = this.props
+		let values = {id: id, user: user.id}
+		createExecution(values).then( (result) => {
+			if(result.success) {				
 				getExecutionsForTestcase(id).then( (result) => {
 					if(result.success) {
-						this.setState({ executions: executions })
+						this.setState({ executions: result.executions })
 					}
 				})			
 			}
 		})
-		let { executions } = this.state
-		var today = new Date();
-		let newExecution = {
-			id: 99,
-			key: 99*2,
-			status: 'Not executed',
-			commentary: '',
-			createdOn: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
-		}
-		executions.push(newExecution)
 	}
 
 	updateExecution(values) {
 		const { id } = this.props
-		//Query to update execution
 		updateExecutionById(values).then( (result) => {
 			if(result.success) {
-				//Query to fetch executions						
 				getExecutionsForTestcase(id).then( (result) => {
 					if(result.success) {
-						this.setState({ executions: executions })		
+						this.setState({ executions: result.executions })		
 					}
 				})			
-			}
-		})
-		let { executions } = this.state
-		executions.forEach( (e) => {
-			if(e.id === values.id)
-			{
-				e.status = values.status
-				e.commentary = values.commentary
 			}
 		})
 	}
 
-	deleteExecution(id) {
-		//Query to delete execution
-		deleteExecutionById().then( (result) => {
-			if(result.success) {
-				//Query to fetch executions						
-				getExecutionsForTestcase().then( (result) => {
+	deleteExecution(executionId) {
+		const { id } = this.props
+		deleteExecutionById(executionId).then( (result) => {
+			if(result.success) {				
+				getExecutionsForTestcase(id).then( (result) => {
 					if(result.success) {
-						this.setState({ executions: executions })			
+						this.setState({ executions: result.executions })			
 					}
 				})			
 			}
-		})
-		const { executions } = this.state
-		this.setState({ executions: executions.filter( (e) => {
-				return e.id !== id
-			}) 
 		})
 	}
 
 	render() {
 		const { showModal, executions } = this.state
+		const { reloadTestplan } = this.props
 		return(
 				<>
 						<Tooltip title="Mostrar ejecuciones" color="#108ee9">
@@ -129,6 +91,7 @@ class ViewExecutions extends React.Component {
 								deleteExecution={this.deleteExecution}
 								visible={showModal} 
 								isModalVisible={this.isModalVisible} 
+								reloadTestplan={reloadTestplan}
 						/>
 				</>
 		)

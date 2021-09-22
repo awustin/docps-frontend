@@ -169,7 +169,7 @@ class Testplan extends React.Component {
         {
             case 'Not executed':
                 return (
-                    <Tooltip title="No tiene ejecuciones en progreso" color="#108ee9">
+                    <Tooltip title="No tiene ejecuciones" color="#108ee9">
                         <Tag color="#999997">No ejecutado</Tag>
                     </Tooltip>
                 )
@@ -181,13 +181,13 @@ class Testplan extends React.Component {
                 )
             case 'Passed':
                 return (
-                    <Tooltip title="Todas las ejecuciones pasaron" color="#108ee9">
+                    <Tooltip title="La última ejecución pasó" color="#108ee9">
                         <Tag color="#09de8c">Pasó</Tag>
                     </Tooltip>
                 )
             case 'Failed':
                 return (
-                    <Tooltip title="Todas las ejecuciones fallaron" color="#108ee9">
+                    <Tooltip title="Hay ejecuciones que fallaron" color="#108ee9">
                         <Tag color="#f50">Falló</Tag>
                     </Tooltip>
                 )
@@ -196,6 +196,7 @@ class Testplan extends React.Component {
     		
 		showTestCases() {
 			const { testplan, loading } = this.state
+			const { user } = this.props
 			
 			const deleteHandle = (function(id) {
 				this.setState({ visibleDelete: true, deleteTestcaseId: id })
@@ -221,7 +222,11 @@ class Testplan extends React.Component {
 											<EditOutlined style={{ fontSize: '150%', color: "#228cdbff"}} />
 										</Tooltip>
 									</Link>,
-									<ViewExecutions id={item.id}/>,
+									<ViewExecutions 
+										id={item.id}
+										user={user}
+										reloadTestplan={this.reloadSearch}
+									/>,
 									<Tooltip title="Eliminar caso de prueba" color="#108ee9">
 										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
 									</Tooltip>,

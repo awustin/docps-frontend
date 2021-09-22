@@ -12,17 +12,18 @@ import {
 import { 
     EditOutlined,
 } from '@ant-design/icons';
+import * as d from '../../AppConsts.json';
+
+const { Option } = Select
 
 class ExecutionEdit extends React.Component {
     constructor(props){
         super(props)
         this.handleOk = this.handleOk.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
-        this.statusOptions = this.statusOptions.bind(this)
     }
     state = {
-        confirmLoading: false,
-        statusItems:['Not executed','In progress','Passed','Failed']
+        confirmLoading: false
     }
 
     setConfirmLoading(value) {
@@ -41,18 +42,6 @@ class ExecutionEdit extends React.Component {
         updateExecution(values)
         isModalVisible(false)
         this.setConfirmLoading(false)
-    }
-
-    statusOptions() {
-        const { Option } = Select
-        const { statusItems } = this.state
-        let options = []
-        Object.keys(statusItems).map( item => {
-            options.push(
-                <Option key={item} value={statusItems[item]}>{statusItems[item]}</Option>
-            )
-        })
-        return options
     }
 
     render() {
@@ -83,10 +72,10 @@ class ExecutionEdit extends React.Component {
                     <Form.Item
                         label="Estado"
                         name="status"
-                        initialValue={executionValues.status}
+                        initialValue={d.statuses[executionValues.status].value}
                     >
                         <Select>
-                            {this.statusOptions()}
+															{Object.keys(d.statuses).map( s => <Option key={d.statuses[s].value} value={d.statuses[s].value}>{d.statuses[s].label}</Option>)}
                         </Select>
                     </Form.Item>
                     <Form.Item

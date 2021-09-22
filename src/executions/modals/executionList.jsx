@@ -18,6 +18,7 @@ import {
     PlusCircleOutlined,
     DeleteOutlined,
 } from '@ant-design/icons';
+import * as d from '../../AppConsts.json';
 import EditExecutionButton from '../editExecutionButton'
 
 const { Meta } = Card
@@ -45,9 +46,9 @@ class ExecutionList extends React.Component {
     }
     
     handleOk() {
-        const { isModalVisible } = this.props
+        const { isModalVisible, reloadTestplan } = this.props
         this.setConfirmLoading(true);
-        //close
+				 reloadTestplan();
         isModalVisible(false);
         this.setConfirmLoading(false);
     }    
@@ -80,7 +81,7 @@ class ExecutionList extends React.Component {
                 >
                     <Row style={{display: "flex", alignItems: "center", marginBottom: 15}}>
                         <Col flex="1 0 25%" style={{ textAlign: "center" }}>
-                        {this.statusTag(item.status)}
+														{<Tag color={d.statuses[item.status].color}>{d.statuses[item.status].label}</Tag>}
                         </Col>
                         <Col flex="1 0 75%" style={{ textAlign: "justify" }}>
                         <div>{item.commentary}</div>
@@ -103,20 +104,6 @@ class ExecutionList extends React.Component {
                 <Divider/>
             </>
         )
-    }
-
-    statusTag(status) {
-        switch(status)
-        {
-            case 'Not executed':
-                return <Tag color="#999997">No ejecutado</Tag>
-            case 'In progress':
-                return <Tag color="#ebcf52">En progreso</Tag>
-            case 'Passed':
-                return <Tag color="#09de8c">Pasó</Tag>
-            case 'Failed':
-                return <Tag color="#f50">Falló</Tag>
-        }
     }
 
     render() {

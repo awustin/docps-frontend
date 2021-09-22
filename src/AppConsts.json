@@ -22,5 +22,28 @@
 					"id": 3,
 					"color": "#f56942"
 				}
+    },
+    "statuses":
+    {
+				"Not executed" : {
+						"label": "No ejecutado",
+						"value": 0,
+						"color": "#999997"
+					},
+        "In progress" : {
+					"label": "En progreso",
+					"value": 1,
+					"color": "#ebcf52"
+				},
+        "Passed": {
+					"label": "Pasó",
+					"value": 2,
+					"color": "#09de8c"
+				},
+        "Failed": {
+					"label": "Falló",
+					"value": 3,
+					"color": "#f50"
+				}
     }
 }

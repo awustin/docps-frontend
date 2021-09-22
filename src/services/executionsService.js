@@ -10,8 +10,8 @@ export function getExecutionsForTestcase(value) {
     });
 }
 
-export function createExecution(value) {
-  return request.post(`${baseUrl()}/insertExecution`, {id: value})
+export function createExecution(values) {
+  return request.post(`${baseUrl()}/insertExecution`, values)
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
@@ -28,8 +28,8 @@ export function updateExecutionById(values) {
     });
 }
 
-export function deleteExecutionById(values) {
-  return request.post(`${baseUrl()}/deleteExecutionById`, values)
+export function deleteExecutionById(value) {
+  return request.post(`${baseUrl()}/deleteExecutionById`, {id: value})
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;
