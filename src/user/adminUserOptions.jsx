@@ -13,6 +13,7 @@ import {
     UserOutlined,
     TeamOutlined,
 } from '@ant-design/icons';
+import { UsersIso, GroupsIso } from '../CustomIcons2.js';
 
 class AdminUserOptions extends React.Component {
     render() {
@@ -21,7 +22,7 @@ class AdminUserOptions extends React.Component {
         return(
             <>
                 <Divider orientation="left">
-                    <Text type="secondary">Administrar usuarios y grupos</Text>
+                    <Text type="secondary">Herramientas de administrador</Text>
                 </Divider>
 								<Row gutter={16} style={{ marginBlockStart:"1%" }}>
 									<Col span={12}>
@@ -33,9 +34,7 @@ class AdminUserOptions extends React.Component {
 												title="Gestión de usuarios"
 											>
 													<Space direction="vertical">
-														<UserOutlined
-															className="admin-icon"
-														/>
+														<UsersIso/>
 													</Space>
 											</Card>
 										</Link>
@@ -50,9 +49,7 @@ class AdminUserOptions extends React.Component {
 											>
 												<Space direction="vertical">
 													<Space direction="vertical">
-														<TeamOutlined
-															className="admin-icon"
-														/>
+														<GroupsIso/>
 													</Space>
 												</Space>
 											</Card>

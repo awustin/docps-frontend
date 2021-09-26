@@ -89,7 +89,6 @@ class AppLayout extends React.Component {
                 { this.props.children }
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>DOCPS 2021</Footer>
         </Layout>
         </Layout>
       </div>

@@ -16,7 +16,7 @@ import {
 		BarChartOutlined,
 		EyeOutlined
 } from '@ant-design/icons';
-import { ProjectsInk, TestplansInk, ReportsInk } from '../CustomIcons.js';
+import { ProjectsIso, TestplansIso, ReportsIso } from '../CustomIcons2.js';
 
 const { Text } = Typography
 
@@ -27,7 +27,7 @@ class CommonUserOptions extends React.Component {
 			<>
 			<Divider/>
 			<Row gutter={16} style={{ marginBlockStart:"5%" }}>
-				<Col span={6}>
+				<Col span={8}>
 					<Link to={{ pathname:"/projects/manage"}}>
 						<Card
 							hoverable
@@ -36,15 +36,12 @@ class CommonUserOptions extends React.Component {
 							title="Gestión de proyectos"
 						>
 								<Space direction="vertical">
-								{/*<FolderOutlined
-										className="common-user-icon"
-								/>*/}
-									<ProjectsInk/>
+									<ProjectsIso/>
 								</Space>
 						</Card>
 					</Link>
 				</Col>
-				<Col span={6}>
+				<Col span={8}>
 					<Link to={{ pathname:"/testplans/manage"}}>
 						<Card
 							hoverable
@@ -54,16 +51,13 @@ class CommonUserOptions extends React.Component {
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
-								{/*<ExperimentOutlined															
-										className="common-user-icon"
-									/>*/}
-									<TestplansInk/>
+									<TestplansIso/>
 								</Space>
 							</Space>
 						</Card>
 					</Link>
 				</Col>
-				<Col span={6}>
+				<Col span={8}>
 					<Link to={{ pathname:"/reports"}}>
 						<Card
 							hoverable
@@ -73,28 +67,7 @@ class CommonUserOptions extends React.Component {
 						>
 							<Space direction="vertical">
 								<Space direction="vertical">
-								{/*<BarChartOutlined
-										className="common-user-icon"
-								/>*/}
-								<ReportsInk/>
-								</Space>
-							</Space>
-						</Card>
-					</Link>
-				</Col>
-				<Col span={6}>
-					<Link to={{ pathname:"/user/myprofile"}}>
-						<Card
-							hoverable
-							style={{ textAlign: "center" }}
-							className="common-user-card"
-							title="Mis datos"
-						>
-							<Space direction="vertical">
-								<Space direction="vertical">
-									<EyeOutlined															
-										className="common-user-icon"
-									/>
+								<ReportsIso/>
 								</Space>
 							</Space>
 						</Card>

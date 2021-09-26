@@ -46,7 +46,7 @@ class UserBadge extends React.Component {
         const { Title, Text } = Typography
         return(
             <>         
-            <div className="user-badge" style={{margin: "50px"}}>
+            <div className="user-badge" >
                 <Row style={{ height:"100%" }}>
                     <Col flex="1 0 15%" style={{textAlign:"center",alignSelf:"center"}}>
                         <Avatar className="default-avatar-1"

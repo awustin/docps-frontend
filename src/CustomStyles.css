@@ -4,6 +4,8 @@
 --white: #ffffffff;
 --green-blue-crayola: #228cdbff;
 --outrageous-orange: #ff785aff;
+/* SITE LAYOUT */
+.site-layout {}
 
 /* LISTS AND MODALS */
 
@@ -95,6 +97,7 @@
 .admin-card .ant-card-body {
 	background: #fff;
 	transition: .3s ease-out;
+	padding: 15px;
 }
 
 .admin-icon {
@@ -103,8 +106,9 @@
 	transition: .3s ease-out;
 }
 
-.admin-card .ant-card-body:hover {
-	background: rgb(255,120,90);
+.admin-card .ant-card-body:hover {	
+	background: #3b56ad !important;
+	/*background: rgb(255,120,90);*/
 }
 
 .admin-card .ant-card-body:hover .admin-icon {
@@ -120,6 +124,7 @@
 .common-user-card .ant-card-body {
 	background: #fff;
 	transition: .3s ease-out;
+	padding: 15px;
 }
 
 .common-user-icon {
@@ -129,7 +134,8 @@
 }
 
 .common-user-card .ant-card-body:hover {
-	background : rgb(36, 47, 145) !important;
+	background: #3b56ad !important;
+	/*background : rgb(36, 47, 145) !important;*/
 	/*background: rgb(34,140,219);*/
 }
 
