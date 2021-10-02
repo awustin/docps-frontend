@@ -25,6 +25,7 @@ class App extends Component {
     loggedIn: false,
     loggedUser: {
 			id: undefined,
+			name: undefined,
 			currentGroup: {
 				id: undefined,
 				name: undefined

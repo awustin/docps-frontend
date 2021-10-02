@@ -4,8 +4,7 @@
 --white: #ffffffff;
 --green-blue-crayola: #228cdbff;
 --outrageous-orange: #ff785aff;
-/* SITE LAYOUT */
-.site-layout {}
+
 
 /* LISTS AND MODALS */
 
@@ -201,4 +200,15 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 .defred {
 	background: rgb(255,160,181) !important;
 	background: linear-gradient(47deg, rgba(255,160,181,1) 0%, rgba(252,97,85,1) 100%) !important;
+}
+
+/* REPORTS */
+.report-stats-column {
+	display: flex !important;
+	justify-content: space-evenly !important;
+  flex-direction: column !important;
+}
+
+.report-column {
+  text-align: center;
 }

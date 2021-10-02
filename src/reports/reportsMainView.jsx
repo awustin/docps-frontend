@@ -1,6 +1,7 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getCurrentGroupStats } from '../services/reportsService';
 import { 
     Row,
     Col,
@@ -25,6 +26,7 @@ import {
 		FileExcelOutlined,
 		LeftCircleOutlined		
 } from '@ant-design/icons';
+import { Report1Iso, Report2Iso } from '../CustomIcons2.js';
 
 class ReportsMainView extends React.Component {
 		constructor(props) {
@@ -34,6 +36,7 @@ class ReportsMainView extends React.Component {
 		state = {
 			memberCount: undefined,
 			avatar: undefined,
+			defavatar: undefined,
 			testplanCount: undefined,
 			casesCount: undefined,
 			loading: true
@@ -41,16 +44,37 @@ class ReportsMainView extends React.Component {
 		
 		componentDidMount() {
 			const { user } = this.props
-			//Query para traer info del currentGroup (memberCount, avatar, planes creados y casos generados)
-			setTimeout(() =>
-			this.setState({
-					memberCount: 10,
-					avatar: undefined,
-					testplanCount: 15,
-					casesCount: 101,
-					loading: false
-			}),
-			1000)
+			getCurrentGroupStats(user.currentGroup.id).then( (result) => {
+				if(result.success) {
+					const { stats } = result
+					this.setState({
+						memberCount: stats.memberCount,
+						avatar: stats.avatar,
+						defavatar: stats.defavatar,
+						testplanCount: stats.testplansCount,
+						casesCount: stats.testcasesCount,
+						loading: false						
+					})
+				}
+			})
+		}
+		
+		componentDidUpdate() {
+			const { user } = this.props
+			getCurrentGroupStats(user.currentGroup.id).then( (result) => {
+				if(result.success) {
+					const { stats } = result
+					this.setState({
+						memberCount: stats.memberCount,
+						avatar: stats.avatar,
+						defavatar: stats.defavatar,
+						testplanCount: stats.testplansCount || 0,
+						casesCount: stats.testcasesCount || 0,
+						loading: false						
+					})
+				}
+			})
+			
 		}
 		
 		handleSelectGroup(value) {
@@ -60,7 +84,7 @@ class ReportsMainView extends React.Component {
 		
     render() {
         const { user } = this.props
-				const { memberCount, avatar, testplanCount, casesCount, loading } = this.state
+				const { memberCount, avatar, defavatar, testplanCount, casesCount, loading } = this.state
         const { Title,Text } = Typography
         const { Option } = Select
         return(
@@ -84,10 +108,12 @@ class ReportsMainView extends React.Component {
                 <Row className="group-badge-container" style={{}}>
                     <Col flex="1 0 33%" style={{textAlign:"center",alignSelf:"center"}}>
 											<Skeleton loading={loading} avatar={{active:true, shape:"circle", size:"100"}}>
-                        <Avatar
-                            size={{ xs: 85, sm: 85, md: 85, lg: 120, xl: 140, xxl: 140 }}
-                            icon={<AntDesignOutlined />}
-                        />
+														{ (avatar) ? (
+															<Avatar src={avatar} size={{ xs: 85, sm: 85, md: 85, lg: 120, xl: 140, xxl: 140 }}/>
+															) : (
+															<Avatar className={defavatar} size={{ xs: 85, sm: 85, md: 85, lg: 120, xl: 140, xxl: 140 }}/>
+															)
+														}
 											</Skeleton>
                     </Col>
                     <Col flex="1 0 33%">
@@ -147,16 +173,15 @@ class ReportsMainView extends React.Component {
 											hoverable
 											style={{ textAlign: "center" }}
 										>
-											<Space direction="vertical">
-												<Avatar
-														size={{ xs: 85, sm: 85, md: 85, lg: 120, xl: 140, xxl: 140 }}
-														icon={<AntDesignOutlined />}
-												/>
-												<div style={{ textAlign: "left" }}>
-                        <Title level={5}>Reporte de casos de prueba</Title>
-                        <Text>Reporte de la cantidad de casos de prueba y planes creados.</Text>
-												</div>
-											</Space>
+											<Link to={'reports/testplansTestcasesCount'}>
+												<Space direction="vertical">
+													<Report1Iso />
+													<div style={{ textAlign: "left" }}>
+													<Title level={5}>Reporte de casos de prueba</Title>
+													<Text>Reporte de la cantidad de casos de prueba y planes creados.</Text>
+													</div>
+												</Space>
+											</Link>
 										</Card>
 									</Col>
 									<Col span={12}>
@@ -164,16 +189,15 @@ class ReportsMainView extends React.Component {
 											hoverable
 											style={{ textAlign: "center" }}
 										>
-											<Space direction="vertical">
-												<Avatar
-														size={{ xs: 85, sm: 85, md: 85, lg: 120, xl: 140, xxl: 140 }}
-														icon={<AntDesignOutlined />}
-												/>
-												<div style={{ textAlign: "left" }}>
-                        <Title level={5}>Reporte de ejecuciones</Title>
-                        <Text>Reporte del número ejecuciones de los casos de prueba realizadas</Text>
-												</div>
-											</Space>
+											<Link to={'reports/executionsReport'}>
+												<Space direction="vertical">
+														<Report2Iso />
+													<div style={{ textAlign: "left" }}>
+														<Title level={5}>Reporte de ejecuciones</Title>
+														<Text>Reporte del número ejecuciones de los casos de prueba realizadas</Text>
+													</div>
+												</Space>
+											</Link>
 										</Card>
 									</Col>
 								</Row>

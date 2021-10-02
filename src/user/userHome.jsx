@@ -22,11 +22,12 @@ class UserHome extends React.Component {
     render() {
         const { user } = this.props
         const { Title, Text } = Typography
+				console.log(user)
         return(
             <>
             <Breadcrumb>
-                <Breadcrumb.Item>Usuario</Breadcrumb.Item>                
-                <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
+                <Breadcrumb.Item>Usuario</Breadcrumb.Item>
+                <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
             </Breadcrumb>            
             <div className="user-view-container" style={{margin: "50px"}}>
 								<UserBadge
