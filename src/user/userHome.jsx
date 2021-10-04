@@ -22,7 +22,6 @@ class UserHome extends React.Component {
     render() {
         const { user } = this.props
         const { Title, Text } = Typography
-				console.log(user)
         return(
             <>
             <Breadcrumb>

@@ -11,29 +11,8 @@ class TestplansMain extends React.Component {
     constructor(props){
         super(props)
     }
-
-    state = {
-        project: {
-            projectId: undefined,
-            projectName: undefined
-        },
-        testplan: {
-            key: undefined,
-            testplanId: undefined,
-            testplanName: undefined,
-            description: undefined,
-            tags: [],
-            createdOn: undefined,
-            status: undefined,
-            projectId: undefined,
-            projectName: undefined,
-            groupId: undefined,
-            groupName: undefined
-        }
-    }
     
     render() {
-        const { project, testplan } = this.state
         const { user } = this.props
         return(
             <AppLayout user={user}>
@@ -49,8 +28,11 @@ class TestplansMain extends React.Component {
 														/>
 													)}
                     />
-                    <Route path="/testplans/export" render={() => (
-                        <TestplanExport testplan={testplan}/>)}
+                    <Route exact path="/testplans/export=:id" render={() => (
+                        <TestplanExport
+															user={user}
+														/>
+													)}
                     />
                     <Route path="/testplans" render={() => (
                         <div> Not found :( </div>)}

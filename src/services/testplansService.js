@@ -63,3 +63,40 @@ export function deleteTestplan(value) {
       return error;
     });
 }
+
+export function getTestcasesCount(value) {
+  return request.post(`${baseUrl()}/getTestcasesCount`, { id: value })
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+export function downloadTestplanFile(value) {
+  return request.get(`${baseUrl()}/downloadTestplanFile`, { 
+		params: {fileName: value},
+		responseType: 'blob',
+		headers: { 
+			'Accept' : ['application/octet-stream', 'application/*'],
+			'Access-Control-Allow-Origin' : 'http://localhost:3000',
+			'Access-Control-Allow-Headers' : ['X-Suggested-Name']
+		}
+	})
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+export function cancelFile(values) {
+  return request.post(`${baseUrl()}/cancelFile`, values)
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
+

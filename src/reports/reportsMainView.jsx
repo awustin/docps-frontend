@@ -34,6 +34,7 @@ class ReportsMainView extends React.Component {
 			this.handleSelectGroup = this.handleSelectGroup.bind(this)
 		}
 		state = {
+			id: undefined,
 			memberCount: undefined,
 			avatar: undefined,
 			defavatar: undefined,
@@ -48,23 +49,7 @@ class ReportsMainView extends React.Component {
 				if(result.success) {
 					const { stats } = result
 					this.setState({
-						memberCount: stats.memberCount,
-						avatar: stats.avatar,
-						defavatar: stats.defavatar,
-						testplanCount: stats.testplansCount,
-						casesCount: stats.testcasesCount,
-						loading: false						
-					})
-				}
-			})
-		}
-		
-		componentDidUpdate() {
-			const { user } = this.props
-			getCurrentGroupStats(user.currentGroup.id).then( (result) => {
-				if(result.success) {
-					const { stats } = result
-					this.setState({
+						id: user.currentGroup.id,
 						memberCount: stats.memberCount,
 						avatar: stats.avatar,
 						defavatar: stats.defavatar,
@@ -74,11 +59,31 @@ class ReportsMainView extends React.Component {
 					})
 				}
 			})
-			
+		}
+		
+		componentDidUpdate() {
+			const { user } = this.props
+			const { id } = this.state
+			if( user.currentGroup.id !== id ) {
+				getCurrentGroupStats(user.currentGroup.id).then( (result) => {
+					if(result.success) {
+						const { stats } = result
+						this.setState({
+							id: user.currentGroup.id,
+							memberCount: stats.memberCount,
+							avatar: stats.avatar,
+							defavatar: stats.defavatar,
+							testplanCount: stats.testplansCount || 0, 
+							casesCount: stats.testcasesCount || 0,
+							loading: false						
+						})
+					}
+				})				
+			}
 		}
 		
 		handleSelectGroup(value) {
-			const { funcs } = this.props
+			const { funcs, user } = this.props
 			funcs.changeGroup(parseInt(value))
 		}
 		

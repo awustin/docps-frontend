@@ -1,6 +1,7 @@
 import { hot } from 'react-hot-loader';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { initSocket } from './services/socket';
 import { UserLogIn } from './services/usersService';
 import { getGroupById } from './services/groupsService';
 import LoginPage from './login/loginPage';
@@ -64,12 +65,11 @@ class App extends Component {
 	
 	changeGroup(value) {
 		let { loggedUser } = this.state
-		console.log(value)
 		getGroupById(value).then( (result) => {
 			let { success, id, name } = result
 			if(success)
 			{
-				this.setState({ loggedUser:{...this.state.loggedUser, currentGroup:{ id: id, name: name } } })					
+				this.setState({ loggedUser:{...this.state.loggedUser, currentGroup:{ id: id, name: name } } })
 			}
 		})
 	}

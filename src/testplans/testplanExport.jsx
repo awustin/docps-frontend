@@ -1,21 +1,25 @@
 import { withRouter } from "react-router";
 import React from 'react';
+import { saveAs } from 'file-saver';
+import { getTestcasesCount, downloadTestplanFile, cancelFile } from '../services/testplansService';
+import { initSocket, emitExportTestplan, closeSocket } from '../services/socket';
 import {
-    Typography,
-    Divider,
-    Form,
-    Input,
-    Button,    
-    Select,
-    Breadcrumb,
-    List,
-    Tag,
-    Avatar,
-    Tooltip,
-    Row,
-    Col,
+	Typography,
+	Divider,
+	Form,
+	Input,
+	Button,    
+	Select,
+	Breadcrumb,
+	List,
+	Tag,
+	Avatar,
+	Tooltip,
+	Row,
+	Col,
 	Space,
-	Alert
+	Alert,
+	Progress 
 } from 'antd';
 import {
     EditOutlined,
@@ -28,44 +32,113 @@ import {
 } from '@ant-design/icons';
 
 const { Title, Text } = Typography
+var socket = initSocket();
 
 class TestplanExport extends React.Component {
-    constructor(props) {
-      super(props)
-	  this.onExportClick = this.onExportClick.bind(this)
-	  this.showExportPreview = this.showExportPreview.bind(this)
-	  this.showExportOptions = this.showExportOptions.bind(this)
-    }	
-    state = {
+	constructor(props) {
+		super(props)
+		this.onExportClick = this.onExportClick.bind(this)
+		this.showExportPreview = this.showExportPreview.bind(this)
+		this.showExportOptions = this.showExportOptions.bind(this)
+		this.downloadFile = this.downloadFile.bind(this)
+		this.cancelFile = this.cancelFile.bind(this)
+	}	
+	state = {
+		id: undefined,
+		name: undefined,
 		casesCount: undefined,
 		loading: false,
 		exportSuccess: undefined,
 		exportFailure: undefined,
-		numExported: undefined
-    }
+		numExported: undefined,
+		progress: 0,
+		fileName: undefined
+	}
 	
 	componentDidMount() {
-		const { testplan } = this.props
-		//Query para contar la cantidad de casos de pruebas a exportar.
-		let count = 150
-		this.setState({ casesCount: count, exportSuccess: undefined, exportFailure: undefined })
+		if(Object.keys(this.props).includes("match")) {
+				const { id } = this.props.match.params
+				getTestcasesCount(id).then( (result) => {
+					if(result.success) {
+						const { data } = result
+						this.setState({
+							id: id,
+							name: data.name,
+							casesCount: data.count,
+							exportSuccess: undefined,
+							exportFailure: undefined,					
+						})
+					}
+				})
+		}
+		socket.on('update-progress', (data) => {
+			if(data.progress >= 100) {
+				this.setState({ 
+					progress: data.progress,
+					loading: false,
+					exportSuccess: true,
+					exportFailure: false,
+					numExported: data.numExported,
+					fileName: data.fileName
+				})
+			}
+			if(data.progress === -1) {
+				this.setState({ progress: data.progress, loading: false, exportSuccess: false, exportFailure: true, numExported: -1 })
+			}
+			else {
+				this.setState({ progress: data.progress })					
+			}
+		})
+	}
+	
+	componentWillUnmount() {
+		socket.removeAllListeners();
 	}
 	
 	onExportClick() {
+		const { id } = this.state
 		//Llamar al BE para generar el archivo e iniciar la descarga . devuelve el numero exportado
+		emitExportTestplan(id)
 		this.setState({ loading: true })
-		setTimeout(()=>this.setState({loading: false, exportSuccess: true, exportFailure: false, numExported: 12}),2000)
-		//setTimeout(()=>this.setState({loading: false, exportSuccess: false, exportFailure: true, numExported: -1}),2000)
+	}
+	
+	downloadFile() {
+		const { fileName } = this.state
+		downloadTestplanFile(fileName).then( (response) => {
+			if(response.size > 0) {
+				saveAs(response, `plan-pruebas-${fileName}`);
+			}
+			else {
+				alert('Hubo un error');
+			}
+			this.props.history.goBack();
+		})
+	}
+	
+	cancelFile() {
+		const { id, fileName } = this.state
+		let values= { id: id, fileName: fileName }
+		cancelFile(values).then( (response) => {
+			
+		})
+		socket.removeAllListeners(); 
+		this.props.history.goBack();
 	}
 	
 	showExportPreview() {
-		const { casesCount, loading, exportSuccess, exportFailure } = this.state
+		const { name, casesCount, loading, exportSuccess, exportFailure, progress } = this.state
 		if(loading)
 		{
 			return(<>
-				<Text> </Text>
-				<LoadingOutlined rotate={true} style={{ fontSize:"600%" }}/>
-				<Text type="secondary">Generando...</Text>
+				<Text type="secondary">Generando archivo .xls...</Text>
+				<Progress
+					type="circle"
+					strokeColor={{
+						'0%': '#108ee9',
+						'100%': '#87d068',
+					}}
+					percent={progress}
+				/>
 			</>)			
 		}
 		if(exportSuccess)
@@ -82,7 +155,7 @@ class TestplanExport extends React.Component {
 		}
 		return (
 			<>
-				<Text>Este plan de pruebas tiene</Text>
+				<Text>El plan de pruebas `{name}` tiene</Text>
 				<Text style={{ fontSize:"500%" }}>{casesCount}</Text>
 				<Text>casos para exportar</Text>
 			</>			
@@ -94,7 +167,7 @@ class TestplanExport extends React.Component {
 		if(loading)
 		{
 			return(<>
-				<Text> </Text>
+			<Text> </Text>
 				<Space>
 					<Button type="primary" icon={<DownloadOutlined />} onClick={this.onExportClick} disabled={true}>Exportar</Button>
 					<Button disabled={true}>Cancelar</Button>
@@ -107,7 +180,10 @@ class TestplanExport extends React.Component {
 				<>				
 				<Text style={{ fontSize:"120%", color:"#52c41a" }}>¡Exportado con éxito!</Text>				
 				<Text style={{ fontSize:"105%" }}>Se exportaron <b>{numExported}</b> casos de prueba</Text>
-				<Button onClick={this.props.history.goBack}>Finalizar</Button>
+				<Space>
+					<Button type="primary" icon={<DownloadOutlined />} onClick={this.downloadFile}>Descargar</Button>
+					<Button onClick={this.cancelFile}>Cancelar</Button>
+				</Space>
 				</>
 			)
 		}
@@ -126,55 +202,53 @@ class TestplanExport extends React.Component {
 				<Text>¿Generar archivo de casos de pruebas?</Text>
 				<Space>
 					<Button type="primary" icon={<DownloadOutlined />} onClick={this.onExportClick}>Exportar</Button>
-					<Button  onClick={this.props.history.goBack}>Cancelar</Button>
+					<Button onClick={this.props.history.goBack}>Volver</Button>
 				</Space>
 			</>			
 		)
 	}
 
-    render() {
-        const { testplan } = this.props
-		const { casesCount, loading } = this.state
-        const layout = {
-            labelCol: { span: 7 },
-            wrapperCol: { span: 12 },
-        }
-        const tailLayout = {
-          wrapperCol: { offset: 7, span: 12 },
-        }
-        return(            
-            <>
-            <Breadcrumb>
-                <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>                
-                <Breadcrumb.Item>{testplan.testplanId.toString()}</Breadcrumb.Item>
-                <Breadcrumb.Item>Exportar</Breadcrumb.Item> 
-            </Breadcrumb>
-            <div className="export-preview-navigation" style={{margin: "50px"}}>
-                <Row>
-                    <Col>
-                        <Tooltip title="Atrás">
-                            <LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
-                        </Tooltip>
-                    </Col>
-                </Row>
-            </div>
-            <div className="export-preview-container" style={{margin: "50px"}}>
-                <Title level={3}>Exportar</Title>
-                <Divider dashed></Divider>
-				<Row style={{ alignItems: "center", flexFlow: "column", textAlign:"center"}}>
-					{ (casesCount) ?
-						<>
-						<Col flex="1 0 20%" style={{ fontSize:"120%" }}>
-							<Space direction="vertical">
-								{this.showExportPreview()}
-							</Space>
+	render() {
+		const { name, casesCount, loading, progress } = this.state
+		const layout = {
+			labelCol: { span: 7 },
+			wrapperCol: { span: 12 },
+		}
+		const tailLayout = {
+			wrapperCol: { offset: 7, span: 12 },
+		}
+		return(            
+			<>
+				<Breadcrumb>
+					<Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
+					<Breadcrumb.Item>Exportar</Breadcrumb.Item> 
+				</Breadcrumb>
+				<div className="export-preview-navigation" style={{margin: "50px"}}>
+					<Row>
+						<Col>
+							<Tooltip title="Atrás">
+									<LeftCircleOutlined style={{ fontSize:"200%" }} onClick={()=>{this.props.history.goBack()}}/>
+							</Tooltip>
 						</Col>
-						<Col flex="1 0 20%" style={{ fontSize:"105%" }}>
-							<Space direction="vertical" style={{ marginBlockStart: "20%" }}>
-								{this.showExportOptions()}
-							</Space>
-						</Col>
-						</>
+					</Row>
+				</div>
+				<div className="export-preview-container" style={{margin: "50px"}}>
+					<Title level={3}>Exportar</Title>
+					<Divider dashed></Divider>
+					<Row style={{ alignItems: "center", flexFlow: "column", textAlign:"center"}}>
+						{ (casesCount) ?
+							<>
+								<Col flex="1 0 20%" style={{ fontSize:"120%" }}>
+									<Space direction="vertical">
+										{this.showExportPreview()}
+									</Space>
+								</Col>
+								<Col flex="1 0 20%" style={{ fontSize:"105%" }}>
+									<Space direction="vertical" style={{ marginBlockStart: "20%" }}>
+										{this.showExportOptions()}
+									</Space>
+								</Col>
+							</>
 						:
 						<>
 							<Col flex="1 0 20%" style={{ fontSize:"120%" }}>
@@ -185,15 +259,15 @@ class TestplanExport extends React.Component {
 							<Col flex="1 0 20%" style={{ fontSize:"105%" }}>
 								<Space direction="vertical" style={{ marginBlockStart: "20%" }}>
 									<Text style={{ fontSize:"120%", color:"#edb54c" }}>No hay casos de prueba para exportar</Text>
-									<Button onClick={this.props.history.goBack}>Atrás</Button>
+									<Button onClick={()=>{this.props.history.goBack()}}>Atrás</Button>
 								</Space>
 							</Col>							
 						</>
-					}
-				</Row>
-            </div>
-            </>
-        );
+						}
+					</Row>
+				</div>
+			</>
+		);
     }
 }
 

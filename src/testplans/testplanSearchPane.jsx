@@ -145,8 +145,8 @@ class TestplanSearchPane extends React.Component {
 										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>{deleteHandle(item.id)}}/>
 									</Tooltip>,
 									<Tooltip title="Exportar" color="#108ee9">
-										<Link to={{ pathname: "/testplans/export" }} style={{color:"#000"}}>
-											<ExportOutlined style={{ fontSize: '150%'}} onClick={() => alert('Exportar')}/>
+										<Link to={{ pathname: `/testplans/export=${item.id}` }} style={{color:"#000"}}>
+											<ExportOutlined style={{ fontSize: '150%'}}/>
 										</Link>
 									</Tooltip>
 							]}
