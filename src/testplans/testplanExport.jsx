@@ -97,7 +97,6 @@ class TestplanExport extends React.Component {
 	
 	onExportClick() {
 		const { id } = this.state
-		//Llamar al BE para generar el archivo e iniciar la descarga . devuelve el numero exportado
 		emitExportTestplan(id)
 		this.setState({ loading: true })
 	}
@@ -105,11 +104,11 @@ class TestplanExport extends React.Component {
 	downloadFile() {
 		const { fileName } = this.state
 		downloadTestplanFile(fileName).then( (response) => {
-			if(response.size > 0) {
-				saveAs(response, `plan-pruebas-${fileName}`);
+			if(response.type === "text/html" || response.size === 0) {
+				alert('No se encontró el archivo');
 			}
 			else {
-				alert('Hubo un error');
+				saveAs(response, `${fileName}`);
 			}
 			this.props.history.goBack();
 		})
