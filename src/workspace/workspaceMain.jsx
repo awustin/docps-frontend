@@ -5,6 +5,7 @@ import { withRouter } from "react-router";
 import AppLayout from '../AppLayout';
 import Testcase from './testCases/testcase';
 import { getTestcaseById, createTestcase, updateTestcase, saveSteps } from '../services/workspaceService';
+import './WorkspaceStyles.css';
 
 class WorkspaceMain extends React.Component {
     constructor(props){

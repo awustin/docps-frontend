@@ -1,7 +1,15 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import { validateUsername } from '../utils/format';
-import { Form, Input, Button } from 'antd';
+import { 
+	Form, 
+	Input,
+	Button,
+	Card,
+	Typography
+} from 'antd';
+
+const { Title } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
@@ -35,40 +43,58 @@ class SignInForm extends React.Component {
   };
 
   render() {
-    const { errorMessage } = this.state 
-    return (
-      <div>
-        <Form
-          {...layout}
-          name="login"
-          onFinish={this.onFinish}
-        >
-          <Form.Item
-            label="Nombre de usuario"
-            name="username"
-            rules={[{ required: true, message: 'Usuario vacío' }]}
-          >
-            <Input/>
-          </Form.Item>
-          <Form.Item
-            label="Contraseña"
-            name="password"
-            rules={[{ required: true, message: 'Contraseña vacía' }]}
-          >
-            <Input.Password/>
-          </Form.Item>
-          <Form.Item {...tailLayout}>
-            <Button
-              type="primary" 
-              htmlType="submit"
-            >
-              Iniciar sesión
-            </Button>
-          </Form.Item>
-        </Form>
-        <div>{errorMessage}</div>
-      </div>
-    );
+		const { errorMessage } = this.state 
+		const layout = {
+				labelCol: { 
+					span: 16,
+					offset: 4
+				},
+				wrapperCol: {
+					span: 16,
+					offset: 4
+				},
+		}
+		const tailLayout = {
+			wrapperCol:{
+				span: 16,
+				offset: 4
+			}
+		}
+		return (
+			<div className="login-container">
+				<div className="login-pane">
+					<div className="login-header">
+						<Title className="fancy-title">DOCPS</Title>
+					</div>
+					<Form
+						{...layout}
+						name="login"
+						className="login-form"
+						layout="vertical"
+						onFinish={this.onFinish}
+					>
+						<Form.Item
+							label="Nombre de usuario"
+							name="username"
+							rules={[{ required: true, message: 'Usuario vacío' }]}
+						>
+							<Input/>
+						</Form.Item>
+						<Form.Item
+							label="Contraseña"
+							name="password"
+							rules={[{ required: true, message: 'Contraseña vacía' }]}
+						>
+							<Input.Password/>
+						</Form.Item>
+						<Form.Item {...tailLayout}>
+							<Button className= "login-button" type="primary" htmlType="submit">Iniciar sesión</Button>
+						</Form.Item>
+					</Form>
+					<div>{errorMessage}</div>
+				</div>
+			</div>
+		);
   }
 }
 

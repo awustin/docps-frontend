@@ -13,7 +13,9 @@ import WorkspaceMain from './workspace/workspaceMain';
 import ExecutionsMain from './executions/executionsMain';
 import ReportsMain from './reports/reportsMain';
 import 'antd/dist/antd.css';
-import './App.css';
+import './App.less';
+import './CustomStyles.css';
+import './AppLayout.css';
 
 class App extends Component {
   constructor(props) {

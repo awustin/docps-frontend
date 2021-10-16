@@ -57,57 +57,55 @@ class TestcaseSteps extends React.Component {
         const { Title } = Typography
         return(
             <>
-            <div className="testcase-steps-container" style={{marginLeft: "30px"}}>
+            <div>
+                    <Row style={{ flexDirection: "column"}}>													
+                        <Title level={4} className="modal-title-label">Agregar un paso existente</Title>									
+														<StepSearch
+																testcase={testcase}
+																addStep={addStep}
+														/>
+                    </Row>
                     <Row style={{ marginBlock: "1% 1%" }}>
                         <Col>
-                            <Title level={5}>Agregar un paso</Title>
+                            <Title level={4} className="modal-title-label">Crear un paso</Title>
                         </Col>
                     </Row>
-                    <Row
-                        style={{ justifyContent: "center" }}
-                    >
+                    <Row style={{ justifyContent: "center" }}>
                         <Form name="steps_form"
                             layout="inline"
                             onFinish={ (e) => {this.onNewStepClick(e)} }
-                            style={{ alignItems: "center"}}
+                            style={{ alignItems: "center", width:"100%"}}
                         >
+															<Col span={8}>
                             <Form.Item name="action"
                                 rules={[{ required: true, message: "Debe ingresar una acción"}]}
-                                style={{ flex:"1 0 20%" }}
                             >
                                 <Input.TextArea placeholder="Acción"/>
                             </Form.Item>
-                            <Form.Item name="data"
-                                style={{ flex:"1 0 20%" }}
-                            >
+															</Col>
+															<Col span={6}>
+                            <Form.Item name="data">
                                 <Input.TextArea placeholder="Datos"/>
                             </Form.Item>
-                            <Form.Item name="result"
-                                style={{ flex:"1 0 20%" }}
-                            >
+															</Col>
+															<Col span={6}>
+                            <Form.Item name="result">
                                 <Input.TextArea placeholder="Resultado esperado"/>
                             </Form.Item>
-                            <Form.Item 
-                                    style={{flex:"auto"}}
-                                >
-                                    <Button style={{ alignItems: "center", borderRadius: "1em" }} 
+															</Col>
+															<Col span={4}>
+                            <Form.Item>
+                                    <Button style={{ alignItems: "center", borderRadius: "1em", width: "100%" }} 
                                             type="primary"
                                             htmlType="submit"
                                             icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/>}    
-                                    >Agregar paso
+                                    >
+																					Crear paso
                                     </Button>
                                 </Form.Item>
+															</Col>
                         </Form>
                     </Row>
-                    <Row style={{ marginBlock: "5% 1%" }}>
-                        <Col>
-                            <Title level={5}>Buscar un paso</Title>
-                        </Col>
-                    </Row>
-                    <StepSearch
-												testcase={testcase}
-												addStep={addStep}
-                    />
                 <Divider/>
                 <Space direction="vertical" style={{width: "100%"}}>
                     <Row style={{ 

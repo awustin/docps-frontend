@@ -10,7 +10,8 @@ import {
     Card,
     Divider,
     Button,
-    Tooltip
+    Tooltip,
+		Space
 } from 'antd';
 import { withRouter } from "react-router";
 import { 
@@ -108,12 +109,11 @@ class Testcase extends React.Component {
                 <Breadcrumb>
                     <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
                     <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
-                    <Breadcrumb.Item>Modificar caso de prueba</Breadcrumb.Item>
                     <Breadcrumb.Item>{testcase.testcaseName}</Breadcrumb.Item>
                 </Breadcrumb>
                 )
             }
-            <div className="testcase-navigation" style={{margin: "50px"}}>
+            <div className="navigation">
                 <Row>
                     <Col>
                         <Tooltip title="Atrás">
@@ -122,49 +122,54 @@ class Testcase extends React.Component {
                     </Col>
                 </Row>
             </div>
-            <div className="testcase-container" style={{margin: "50px"}}>
+            <div className="container">
+									<div className="testcase-messages">
+											{this.showMessages()}
+									</div>
+                <Title level={3}>Caso de prueba</Title>
                 <Row style={{display: "flex", alignItems: "top"}}>
-                    <Col flex="1 0 25%">
-                        <Card
-                            style={{ borderRadius: "0.8em" }}
-                            actions={[ 
-                            <EditOutlined key="edit" onClick={this.handleEditClick}/> 
-                        ]}>
-                            <Title level={5}>Caso de prueba</Title>
-                            <Descriptions column={1} size="small" labelStyle={{width: "120px"}}>
-                                <Descriptions.Item label="Nombre"><Text strong>{testcase.testcaseName}</Text></Descriptions.Item>
-                                <Descriptions.Item label="Descripción">{testcase.description}</Descriptions.Item>
-                                <Descriptions.Item label="Precondiciones">{testcase.preconditions}</Descriptions.Item>
-                                <Descriptions.Item label="Prioridad">
-																			<Tag color={(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["color"] : ''}>
-																				{(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["label"] : ''}
-																			</Tag>
-																		</Descriptions.Item>
-                            </Descriptions>
-                        </Card>
-                        <TestcaseForm 
-                            visible={showEditModal}
-                            isEditModalVisible={this.isEditModalVisible}
-                            upsertTestcase={upsertTestcase}
-                            values={{
-                                id: testcase.id,
-                                name: testcase.testcaseName,
-                                description: testcase.description,
-                                preconditions: testcase.preconditions,
-                                priority: testcase.priority
-                                }}
-                        />
+                    <Col span={4}>
+												<Space direction="vertical">
+													<Text className="modal-title-label">Nombre</Text>
+													<Title level={4}>{testcase.testcaseName}</Title>
+													<Text className="modal-title-label">Descripción</Text>
+													<Text>{testcase.description}</Text>
+													<Text className="modal-title-label">Precondiciones</Text>
+													<Text>{testcase.preconditions}</Text>
+													<Text className="modal-title-label">Prioridad</Text>
+													<Tag color={(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["color"] : ''}>
+														{(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["label"] : ''}
+													</Tag>
+													<Button type="primary" onClick={this.handleEditClick} style={{marginTop: "25px"}}>Modificar</Button>													
+												</Space>
+												<TestcaseForm 
+														visible={showEditModal}
+														isEditModalVisible={this.isEditModalVisible}
+														upsertTestcase={upsertTestcase}
+														values={{
+																id: testcase.id,
+																name: testcase.testcaseName,
+																description: testcase.description,
+																preconditions: testcase.preconditions,
+																priority: testcase.priority
+																}}
+												/>
                     </Col>
-                    <Col flex="1 0 75%" style={{textAlign: "middle"}}>
+										
+											<Col span={1}>
+												<Divider  type="vertical" style={{ height:"100%" }} dashed></Divider>
+											</Col>
+											
+                    <Col span={18} style={{textAlign: "middle"}}>
                         <Row>
-                            <Col flex="1 0 75%">
-                                <Title level={4} style={{marginLeft: "30px"}}>Pasos</Title>
+                            <Col span={18}>
+                                <Title level={4}>Pasos</Title>
                             </Col>
-                            <Col flex="1 0 25%" style={{textAlign: "end"}}>
+                            <Col span={6} style={{textAlign: "end"}}>
                                 <Button type="primary" disabled={!modifiedSteps} onClick={this.handleSaveStepsClick}>Guardar cambios</Button>
                             </Col>
                         </Row>
-                        <Divider style={{marginLeft: "30px"}}/>
+                        <Divider style={{ marginBlock: "10px" }}/>
                         <TestcaseSteps
 																testcase={testcase}
                             steps={testcase.steps}
@@ -175,9 +180,6 @@ class Testcase extends React.Component {
                         />
                     </Col>                    
                 </Row>
-            </div>
-            <div className="testcase-messages" style={{margin: "50px"}}>
-                {this.showMessages()}
             </div>
             </>
         );

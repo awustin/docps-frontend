@@ -29,7 +29,7 @@ class ProjectManagement extends React.Component {
                 <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
                 <Breadcrumb.Item>Gestión de proyectos</Breadcrumb.Item>
             </Breadcrumb>						
-						<div className="navigation" style={{margin: "50px"}}>
+						<div className="navigation">
 							<Row>
 									<Col flex="1 0 25%">
 											<Tooltip title="Atrás">
@@ -38,7 +38,7 @@ class ProjectManagement extends React.Component {
 									</Col>
 							</Row>
 						</div>
-						<div className="management-container" style={{margin: "50px"}}>
+						<div className="container">
 							<Title level={2} style={{ marginBlockEnd:"0px" }}>Gestión de proyectos</Title>
 							<Divider/>
 							<Tabs defaultActiveKey="search">

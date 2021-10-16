@@ -126,8 +126,7 @@ class StepSearch extends React.Component {
             <>
             <div className="steps-search-container">
                 <Row style={{ justifyContent: "center", marginBlock: "1% 1%" }}>
-                    <Col span={2}></Col>
-                    <Col span={15}>
+                    <Col span={20}>
                         <TreeSelect
                             treeDataSimpleMode
                             style={{ width: "97%" }}
@@ -138,12 +137,12 @@ class StepSearch extends React.Component {
                             treeData={treeData}
                         />
                     </Col>
-                    <Col span={7}>
+                    <Col span={4}>
                         <Button style={{ alignItems: "center", borderRadius: "1em" }}
                                 icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/>}
                                 disabled={!value}
                                 onClick={this.onInsertStepClick}
-                        >Insertar paso
+                        >Agregar paso
                         </Button>
                     </Col>
                 </Row>

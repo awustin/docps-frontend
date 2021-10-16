@@ -36,7 +36,7 @@ class GroupManagement extends React.Component {
                 <Breadcrumb.Item>{user.id}</Breadcrumb.Item>
                 <Breadcrumb.Item>Gestión de grupos</Breadcrumb.Item>
             </Breadcrumb>						
-						<div className="group-admin-navigation" style={{margin: "50px"}}>
+						<div className="navigation">
 							<Row>
 									<Col flex="1 0 25%">
 											<Tooltip title="Atrás">
@@ -45,7 +45,7 @@ class GroupManagement extends React.Component {
 									</Col>
 							</Row>
 						</div>
-						<div className="group-admin-container" style={{margin: "50px"}}>
+						<div className="container">
 							<Title level={2} style={{ marginBlockEnd:"0px" }}>Gestión de grupos</Title>
 							<Divider/>
 							<Tabs defaultActiveKey="search">

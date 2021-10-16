@@ -49,7 +49,7 @@ class UserSearchPane extends React.Component {
             },
             {
                 value:'any',
-                name:'Cualquiera'
+                name:'Todos'
             }
         ],
         results: undefined,

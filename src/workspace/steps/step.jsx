@@ -75,21 +75,11 @@ class Step extends React.Component {
         const { Paragraph } = Typography
         return(
             <>
-            <Row key={key}
-                style={{ 
-                    borderRadius: "0.8em",
-                    display: "flex",
-                    paddingTop: "1%",
-                    paddingBottom: "1%",
-                    background: "#fafafa",
-                    borderRadius: "0.8em",
-                }}
-                align="middle"
-            >
-                <Col flex="1 0 5%"
-                    style={{textAlign:"center"}}
-                >
+            <Row key={key} className="step-row" align="middle">
+                <Col flex="1 0 5%" style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+											<div className="step-number-label">
                     {step.order+1}
+											</div>
                 </Col>
                 <Col flex="1 0 20%">
                     <Paragraph style={{ marginBottom: "0px" }} editable={{ onChange: this.onActionEdit }}>{step.action}</Paragraph>

@@ -98,7 +98,7 @@ class ReportsMainView extends React.Component {
                 <Breadcrumb.Item>Reportes</Breadcrumb.Item>                
                 <Breadcrumb.Item>{user.currentGroup.name}</Breadcrumb.Item>
             </Breadcrumb>						
-						<div className="navigation" style={{margin: "50px"}}>
+						<div className="navigation">
 							<Row>
 								<Col flex="1 0 25%">
 								<Tooltip title="Atrás">
@@ -107,7 +107,7 @@ class ReportsMainView extends React.Component {
 								</Col>
 							</Row>
 						</div>
-            <div className="reports-view-container" style={{margin: "50px"}}>
+            <div className="container">
                 <Title level={3}>Reportes</Title>
                 <Divider/>
                 <Row className="group-badge-container" style={{}}>

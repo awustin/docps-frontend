@@ -212,3 +212,70 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 .report-column {
   text-align: center;
 }
+
+/*LOGIN*/
+.login-container {
+	display: grid;
+	grid-template-columns: 25vw [main-left] 50vw [main-right] 25vw;
+	grid-template-rows: 10vh [main-top] 50vh [main-bottom] 40vh;
+	grid-template-areas:
+        ". . ."
+        ". login ."
+        ". . .";
+	place-items: center;
+	background: #043e74;
+}
+
+.login-pane {
+	grid-area: login;
+	border-radius: 10px;
+	width: 75%;
+	height: 100%;
+	display: grid;
+	grid-template-rows: 2fr 1fr 1fr;
+	grid-template-areas: 
+	"header"
+	"form"
+	"error";
+	background: white;
+  box-shadow: 0px 0px 9px 0px #b7b6b6;
+}
+
+.login-header {
+	grid-area: header;
+  position: relative;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.fancy-title {	
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: calc(1em + 7vh) !important;
+	text-align: center;
+	position: relative;
+	top: 15%;
+	text-shadow: 
+		-3px 0px 0px #6ec0ff, 
+		3px 0px 0px #c1c1c1;
+  color: #043e74 !important;
+}
+
+.login-form {
+	grid-area: form;
+}
+
+.login-button {
+	font-size: 1.2em !important;
+	font-weight: 700 !important;
+	background: white !important;
+	color: #066ecf !important;
+	border: 2px solid #066ecf !important;
+	border-radius: 15px !important;
+	height: 100% !important;
+	width: 100%;
+}
+
+.login-button:hover {
+	color: white !important;
+	background: #066ecf !important;
+}

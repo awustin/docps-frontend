@@ -48,7 +48,7 @@ class GroupSearchPane extends React.Component {
             },
             {
                 value:'any',
-                name:'Cualquiera'
+                name:'Todos'
             }
         ],
         results: undefined,

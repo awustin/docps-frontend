@@ -1,4 +1,4 @@
-import { hot } from 'react-hot-loader';
+import { withRouter } from "react-router";
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
@@ -68,12 +68,12 @@ class AppLayout extends React.Component {
     return (
       <div>
         <Layout style={{ minHeight: '100vh' }}>
-          <Sider width='25vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-            <Menu theme="dark" mode="inline" onClick={this.menuOnClick}>
+          <Sider width='15vw' collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+            <Menu onClick={this.menuOnClick}>
 							{
 								menuOptions
 								.filter( item => !item.onlyAdmin || user.isAdmin )
-								.map( e => (<Menu.Item key={e.key} icon={e.icon}><Link to={e.toPath}>{e.label}</Link></Menu.Item>) )
+								.map( e => (<Menu.Item key={e.key} icon={e.icon} onClick={()=>{this.props.history.push(e.toPath)}}>{e.label}</Menu.Item>) )
 							}
 							{								
 								otherOptions
@@ -84,7 +84,7 @@ class AppLayout extends React.Component {
           </Sider>
           <Layout className="site-layout">
             <Header className="site-layout-background" style={{ padding: 0 }} />
-            <Content style={{ margin: '0 16px' }}>
+            <Content>
               <div className="site-layout-container" style={{ padding: 24, minHeight: 360 }}>
                 { this.props.children }
               </div>
@@ -96,4 +96,4 @@ class AppLayout extends React.Component {
   }
 }
 
-export default hot(module)(AppLayout);
+export default withRouter(AppLayout);

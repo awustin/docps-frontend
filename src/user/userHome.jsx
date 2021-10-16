@@ -28,7 +28,7 @@ class UserHome extends React.Component {
                 <Breadcrumb.Item>Usuario</Breadcrumb.Item>
                 <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
             </Breadcrumb>            
-            <div className="user-view-container" style={{margin: "50px"}}>
+            <div className="container">
 								<UserBadge
 										user={user}
 								/>

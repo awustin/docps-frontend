@@ -44,41 +44,54 @@ class GroupDelete extends React.Component {
 	}
 
 	handleSubmit(values) {
+		const { hasActiveUsers } = this.state
 		const { groupId } = this.props
-		deleteGroup(groupId).then((result)=>{
-			if(!result.success) {
-				if(!result.hasOwnProperty('validate'))
-					this.setState({ 
-						showMessageModal: true, 
-						message: {
-							title:'Se produjo un error',
-							description:'Inténtelo de nuevo',
-							type:'validate'
-						}
-					})
+		if(hasActiveUsers) {
+			this.setState({ 
+							showMessageModal: true, 
+							message: {
+								title:'No se eliminó el grupo',
+								description:'Este grupo contiene usuarios asociados.',
+								type:'validate'
+							}
+						})
+		}
+		else {
+			deleteGroup(groupId).then((result)=>{
+				if(!result.success) {
+					if(!result.hasOwnProperty('validate'))
+						this.setState({ 
+							showMessageModal: true, 
+							message: {
+								title:'Se produjo un error',
+								description:'Inténtelo de nuevo',
+								type:'validate'
+							}
+						})
+					else {
+						this.setState({ 
+							showMessageModal: true, 
+							message: {
+								title:'No se eliminó el grupo',
+								description:'Este grupo contiene proyectos, por lo que no se puede eliminar',
+								type:'validate'
+							}
+						})						
+					}					
+				}
 				else {
 					this.setState({ 
+						success: true,
 						showMessageModal: true, 
 						message: {
-							title:'No se eliminó el grupo',
-							description:'Este grupo contiene proyectos, por lo que no se puede eliminar',
-							type:'validate'
+							title:'Grupo eliminado',
+							description:'El grupo fue eliminado con éxito',
+							type:'success'
 						}
-					})						
-				}					
-			}
-			else {
-				this.setState({ 
-					success: true,
-					showMessageModal: true, 
-					message: {
-						title:'Grupo eliminado',
-						description:'El grupo fue eliminado con éxito',
-						type:'success'
-					}
-				})					
-			}	
-		})
+					})					
+				}	
+			})
+		}
 	}
 
 	closeMessageModal() {
@@ -111,7 +124,7 @@ class GroupDelete extends React.Component {
 							<ExclamationCircleOutlined style={{color:"#ffc02e"}} />
 						</Col>
 						<Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
-							{(hasActiveUsers)?(message.hasActiveUsers):(message.def)}
+							{message.def}
 						</Col>
 					</Row>
 				</Modal>

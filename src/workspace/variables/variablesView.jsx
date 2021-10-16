@@ -19,16 +19,7 @@ class VariablesView extends React.Component {
         const { variablesOperations, step } = this.props
         return(
             <>
-                <Row 
-                style={{ 
-                    borderRadius: "0.8em",
-                    display: "flex",
-                    marginBlockStart: "1%",
-                    paddingTop: "1%",
-                    paddingBottom: "1%",
-                    background: "#fdfdfd",
-                    borderRadius: "0.8em",
-                }}>
+                <Row className="step-variable-row">
                     <Col flex="1 0 5%"></Col>
                     <Col flex="1 0 20%">
                         <Space>

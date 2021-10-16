@@ -222,7 +222,7 @@ class TestplanExport extends React.Component {
 					<Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
 					<Breadcrumb.Item>Exportar</Breadcrumb.Item> 
 				</Breadcrumb>
-				<div className="export-preview-navigation" style={{margin: "50px"}}>
+				<div className="navigation">
 					<Row>
 						<Col>
 							<Tooltip title="Atrás">
@@ -231,7 +231,7 @@ class TestplanExport extends React.Component {
 						</Col>
 					</Row>
 				</div>
-				<div className="export-preview-container" style={{margin: "50px"}}>
+				<div className="container">
 					<Title level={3}>Exportar</Title>
 					<Divider dashed></Divider>
 					<Row style={{ alignItems: "center", flexFlow: "column", textAlign:"center"}}>
