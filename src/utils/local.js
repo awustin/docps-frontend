@@ -5,9 +5,7 @@ function getWindowOrigin() {
 }
 
 export function baseUrl() {
-  const loc = window.location;
-  const isHostingLocally = loc.hostname === 'localhost';
-  return isHostingLocally ? 'http://localhost:4000' : getWindowOrigin();
+  return process.env.REACT_APP_API_BASE_URL;
 }
 
 export function getLocalUrl(path) {

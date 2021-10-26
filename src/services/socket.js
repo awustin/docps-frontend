@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 var socket;
 
 export function initSocket() {
-	socket = io("http://localhost:4000");
+	socket = io(process.env.REACT_APP_API_BASE_URL);
 	socket.on('connect', () => {
 		console.log(`Conectado: ${socket.id}`)
 	});
