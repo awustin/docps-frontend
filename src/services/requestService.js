@@ -8,9 +8,4 @@ export default class Request {
   static post(url, data = {}) {
     return axios.post(url, data);
   }
-
-  static formDataPost(url, data = {}) {
-    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-    return axios.post(url, data, config);
-  }
 }
