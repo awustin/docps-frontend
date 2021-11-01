@@ -4,7 +4,7 @@ import {
 import {
 	Button, Divider,
 	Form,
-	Input, Select, Typography
+	Input, Select
 } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
@@ -12,7 +12,6 @@ import MessageModal from '../common/messageModal';
 import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
 import { createTestplan, getTagsForTestplan } from '../services/testplansService';
 
-const { Title } = Typography
 const { Option } = Select
 
 class TestplanCreateForm extends React.Component {
@@ -79,8 +78,6 @@ class TestplanCreateForm extends React.Component {
 	}	
 
 	handleSubmit(values) {
-			console.log(values)
-			const { project } = this.props
 			let params = {
 					groupId: values.groupId,
 					projectId: values.projectId,
@@ -155,7 +152,6 @@ class TestplanCreateForm extends React.Component {
 
     render() {
         const { projectOptions, groupOptions, tagItems, newTag, showMessageModal, message } = this.state
-        const { project } = this.props
 				const layout = {
 					labelCol: { span:5 },
 					wrapperCol: {  span: 14 },

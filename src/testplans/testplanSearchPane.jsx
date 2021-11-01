@@ -87,7 +87,7 @@ class TestplanSearchPane extends React.Component {
 	}
 
 	showResults() {
-		const { results, groups } = this.state
+		const { results } = this.state
 
 		const deleteHandle = (function (id) {
 			this.setState({ visibleDelete: true, editTestplanId: id })

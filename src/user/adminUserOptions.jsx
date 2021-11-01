@@ -8,8 +8,7 @@ import { GroupsIso, UsersIso } from '../CustomIcons2.js';
 
 class AdminUserOptions extends React.Component {
     render() {
-        const { user } = this.props
-        const { Title, Text } = Typography
+        const { Text } = Typography
         return(
             <>
                 <Divider orientation="left">

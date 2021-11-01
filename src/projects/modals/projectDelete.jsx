@@ -28,7 +28,7 @@ class ProjectDelete extends React.Component {
 		validDeletion: true
 	}
 
-	handleSubmit(values) {
+	handleSubmit() {
 		const { closeDelete, reloadSearch, projectId } = this.props
 		deleteProject(projectId).then((result)=>{
 			const { success } = result

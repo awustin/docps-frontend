@@ -1,7 +1,7 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import {
-	deleteUserById,
+    deleteUserById,
 } from '../../services/usersService';
 import {
     Modal,
@@ -13,27 +13,26 @@ import {
 } from '@ant-design/icons';
 
 class UserDelete extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    handleSubmit(values) {
+    handleSubmit() {
         const { userId, closeDelete, reloadSearch } = this.props
-        deleteUserById(userId).then( (result) => {
-					const { success } = result
-					if(success)
-					{	
-						closeDelete()
-						reloadSearch()
-					}
-				})
+        deleteUserById(userId).then((result) => {
+            const { success } = result
+            if (success) {
+                closeDelete()
+                reloadSearch()
+            }
+        })
     }
 
     render() {
         const { closeDelete, visibleDelete } = this.props
-        
-        return(
+
+        return (
             <>
                 <Modal
                     visible={visibleDelete}
@@ -45,11 +44,11 @@ class UserDelete extends React.Component {
                     cancelText="Cancelar"
                 >
                     <Row>
-                        <Col flex="1 0 20%" style={{ textAlign:"center", fontSize:"160%", alignItems: "center" }}>
-                        <ExclamationCircleOutlined style={{color:"#ffc02e"}} />
+                        <Col flex="1 0 20%" style={{ textAlign: "center", fontSize: "160%", alignItems: "center" }}>
+                            <ExclamationCircleOutlined style={{ color: "#ffc02e" }} />
                         </Col>
                         <Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
-                        ¿Eliminar este usuario?
+                            ¿Eliminar este usuario?
                         </Col>
                     </Row>
                 </Modal>

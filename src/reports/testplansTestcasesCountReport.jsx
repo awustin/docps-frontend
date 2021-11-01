@@ -2,7 +2,7 @@ import {
 	DownloadOutlined, LeftCircleOutlined, LoadingOutlined
 } from '@ant-design/icons';
 import {
-	Breadcrumb, Button, Card, Col, DatePicker, Form, Row, Select, Spin, Statistic, Tooltip, Typography
+	Breadcrumb, Button, Card, Col, DatePicker, Form, Row, Select, Spin, Statistic, Tooltip
 } from 'antd';
 import { saveAs } from 'file-saver';
 import React from 'react';
@@ -13,7 +13,6 @@ import { getProjectsDropdown } from '../services/projectsService';
 import { getTestplansTestcasesCount } from '../services/reportsService';
 import { datePickerRangeConvert } from '../utils/format';
 
-const { Title,Text } = Typography
 const { Option } = Select
 const { RangePicker } = DatePicker
 

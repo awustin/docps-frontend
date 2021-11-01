@@ -41,7 +41,7 @@ class GroupDelete extends React.Component {
 		})
 	}
 
-	handleSubmit(values) {
+	handleSubmit() {
 		const { hasActiveUsers } = this.state
 		const { groupId } = this.props
 		if (hasActiveUsers) {

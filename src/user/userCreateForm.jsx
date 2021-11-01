@@ -105,8 +105,7 @@ class UserCreateForm extends React.Component {
 
     render() {
         const { showMessageModal,message } = this.state
-        const { user } = this.props
-        const { Title,Text } = Typography
+        const { Text } = Typography
         const layout = {
             labelCol: { span:5 },
             wrapperCol: {  span: 14 },

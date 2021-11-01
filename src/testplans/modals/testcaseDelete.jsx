@@ -27,7 +27,7 @@ class TestcaseDelete extends React.Component {
 		validDeletion: true
 	}
 
-	handleSubmit(values) {
+	handleSubmit() {
 		const { testcaseId, closeDelete, reloadSearch } = this.props
 		deleteTestcase(testcaseId).then((result)=>{
 			if(result.success) {

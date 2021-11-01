@@ -96,7 +96,7 @@ class TestplanExport extends React.Component {
 	cancelFile() {
 		const { id, fileName } = this.state
 		let values= { id: id, fileName: fileName }
-		cancelFile(values).then( (response) => {
+		cancelFile(values).then( () => {
 			
 		})
 		socket.removeAllListeners(); 
@@ -141,7 +141,7 @@ class TestplanExport extends React.Component {
 	}
 	
 	showExportOptions() {
-		const { casesCount, loading, exportSuccess, exportFailure, numExported } = this.state
+		const { loading, exportSuccess, exportFailure, numExported } = this.state
 		if(loading)
 		{
 			return(<>
@@ -187,14 +187,7 @@ class TestplanExport extends React.Component {
 	}
 
 	render() {
-		const { name, casesCount, loading, progress } = this.state
-		const layout = {
-			labelCol: { span: 7 },
-			wrapperCol: { span: 12 },
-		}
-		const tailLayout = {
-			wrapperCol: { offset: 7, span: 12 },
-		}
+		const { casesCount } = this.state
 		return(            
 			<>
 				<Breadcrumb>

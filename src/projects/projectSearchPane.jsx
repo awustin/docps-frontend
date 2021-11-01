@@ -93,7 +93,7 @@ class ProjectSearchPane extends React.Component {
 	}
 
 	showResults() {
-		const { results, groups } = this.state
+		const { results } = this.state
 
 		const editHandle = (function (id) {
 			this.setState({ visibleEdit: true, editProjectId: id })
