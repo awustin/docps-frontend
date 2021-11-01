@@ -5,8 +5,6 @@ import {
     Modal,
     Row,
     Col,
-	Alert,
-	Button
 } from 'antd';
 import {
     ExclamationCircleOutlined,
@@ -96,7 +94,7 @@ class GroupDelete extends React.Component {
 
 	closeMessageModal() {
 		const { closeDelete, reloadSearch } = this.props
-		const { success, showMessageModal } = this.state
+		const { success } = this.state
 		if(success)
 			reloadSearch()
 		closeDelete()
@@ -104,7 +102,7 @@ class GroupDelete extends React.Component {
 	
 	render() {
 		const { closeDelete, visibleDelete } = this.props
-		const { message,hasActiveUsers,showMessageModal,loading } = this.state
+		const { message, showMessageModal, loading } = this.state
 		
 		return(
 		<>

@@ -1,37 +1,18 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Line } from 'react-chartjs-2';
-import { saveAs } from 'file-saver';
-import { getProjectsDropdown } from '../services/projectsService';
-import { datePickerRangeConvert } from '../utils/format';
-import { getExecutionsReport } from '../services/reportsService';
-import { 
-    Row,
-    Col,
-    Breadcrumb,
-    Typography,
-    Divider,
-    Space,
-		Select,
-		Statistic,
-		Skeleton,
-		Tooltip,
-		Form,
-		Input,
-		Button,
-		DatePicker,
-		Card,
-		Spin
-} from 'antd';
 import {
-		LeftCircleOutlined,
-		DownloadOutlined,
-		LoadingOutlined 
+	DownloadOutlined, LeftCircleOutlined, LoadingOutlined
 } from '@ant-design/icons';
+import {
+	Breadcrumb, Button, Card, Col, DatePicker, Form, Row, Select, Spin, Statistic, Tooltip
+} from 'antd';
+import { saveAs } from 'file-saver';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
+import { withRouter } from "react-router";
 import '../CustomStyles.css';
+import { getProjectsDropdown } from '../services/projectsService';
+import { getExecutionsReport } from '../services/reportsService';
+import { datePickerRangeConvert } from '../utils/format';
 
-const { Title,Text } = Typography
 const { Option } = Select
 const { RangePicker } = DatePicker
 
@@ -39,7 +20,7 @@ class ExecutionsReport extends React.Component {
 		constructor(props) {
 			super(props)
 			this.handleSubmit = this.handleSubmit.bind(this)
-			this.downloadCanvas = this.downloadCanvas.bind(this) 
+			this.downloadCanvas = this.downloadCanvas.bind(this)
 		}
 		
 		state = {

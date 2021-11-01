@@ -1,17 +1,14 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { deleteTestcase } from '../../services/workspaceService';
 import {
-    Modal,
-    Row,
-    Col,
-	Alert,
-	Button
-} from 'antd';
-import {
-    ExclamationCircleOutlined,
+	ExclamationCircleOutlined
 } from '@ant-design/icons';
+import {
+	Col, Modal,
+	Row
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
 import MessageModal from '../../common/messageModal';
+import { deleteTestcase } from '../../services/workspaceService';
 
 class TestcaseDelete extends React.Component {
     constructor(props){

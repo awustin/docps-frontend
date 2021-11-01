@@ -3,17 +3,15 @@ import React from 'react';
 import { getGroupsDropdown, createProject } from '../services/projectsService';
 import {
     Typography,
-    Divider,
     Form,
     Input,
     Button,    
     Select,
-    Breadcrumb,
-		Col,
+	Col,
   } from 'antd';
 import MessageModal from '../common/messageModal';
 
-const { Text,Title } = Typography
+const { Text } = Typography
 const { Option } = Select
 
 class ProjectCreateForm extends React.Component {

@@ -5,15 +5,9 @@ import {
     Modal,
     Form,
     Input,
-    Alert,
-    Row,
-    Col,
     Select,
 		Divider
 } from 'antd';
-import {
-    ExclamationCircleOutlined,
-} from '@ant-design/icons';
 import MessageModal from '../../common/messageModal';
 
 const { Option } = Select
@@ -53,7 +47,7 @@ class ProjectTestplanCreate extends React.Component {
     }
 
     handleSubmit(values) {
-			const { close, projectId } = this.props        
+			const { projectId } = this.props        
 			let params = {
 					idproject: projectId,
 					name: values.name,
@@ -98,7 +92,7 @@ class ProjectTestplanCreate extends React.Component {
 
     render() {
         const { visibleCreateTestplan, close } = this.props
-        const { projectOptions, groupOptions, tagItems, newTag, showMessageModal, message } = this.state
+        const { tagItems, newTag, showMessageModal, message } = this.state
         const layout = {
             labelCol: { span: 7 },
             wrapperCol: { span: 12 },
@@ -152,12 +146,13 @@ class ProjectTestplanCreate extends React.Component {
 																		<Divider style={{ margin: '4px 0' }} />
 																		<div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
 																				<Input style={{ flex: 'auto' }} value={newTag} onChange={this.onNewTagChange} />
-																				<a
+																				<button
 																						style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
 																						onClick={this.addItemTag}
+																						className="add-tag-button"
 																				>
 																						Agregar etiqueta
-																				</a>
+																				</button>
 																		</div>
 																</div>
 														)}                            

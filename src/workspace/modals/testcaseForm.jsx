@@ -1,12 +1,10 @@
-import React from 'react';
 import {
-    Typography,
-    Tag,
     Form,
     Input,
     Modal,
-    Select,
+    Select, Tag
 } from 'antd';
+import React from 'react';
 import { withRouter } from "react-router";
 import * as d from '../../AppConsts.json';
 

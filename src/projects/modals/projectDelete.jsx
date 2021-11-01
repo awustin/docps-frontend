@@ -4,9 +4,7 @@ import { deleteProject } from '../../services/projectsService';
 import {
     Modal,
     Row,
-    Col,
-	Alert,
-	Button
+    Col
 } from 'antd';
 import {
     ExclamationCircleOutlined,
@@ -31,7 +29,7 @@ class ProjectDelete extends React.Component {
 	}
 
 	handleSubmit(values) {
-		const { userId, closeDelete, reloadSearch, projectId } = this.props
+		const { closeDelete, reloadSearch, projectId } = this.props
 		deleteProject(projectId).then((result)=>{
 			const { success } = result
 			if(success) {

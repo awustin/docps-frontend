@@ -27,7 +27,7 @@ class UserDelete extends React.Component {
 						closeDelete()
 						reloadSearch()
 					}
-				 })
+				})
     }
 
     render() {

@@ -1,24 +1,10 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-    Row,
-    Col,
-    Breadcrumb,
-    Typography,
-    Divider,
-		Card,
-		Space
-} from 'antd';
 import {
-		FolderOutlined,
-		ExperimentOutlined,
-		BarChartOutlined,
-		EyeOutlined
-} from '@ant-design/icons';
-import { ProjectsIso, TestplansIso, ReportsIso } from '../CustomIcons2.js';
-
-const { Text } = Typography
+	Card, Col, Divider, Row, Space
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
+import { ProjectsIso, ReportsIso, TestplansIso } from '../CustomIcons2.js';
 
 class CommonUserOptions extends React.Component {
 

@@ -1,13 +1,10 @@
 import { withRouter } from "react-router";
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
 import {
   UserOutlined,
   BarChartOutlined,
-  ThunderboltOutlined,
   ExperimentOutlined,
-  FileDoneOutlined,
   FolderOutlined,
 	TeamOutlined,
 	HomeOutlined,
@@ -15,8 +12,7 @@ import {
 } from '@ant-design/icons';
 
 
-const { Header, Footer, Sider, Content } = Layout;
-const { SubMenu } = Menu;
+const { Header, Sider, Content } = Layout;
 
 class AppLayout extends React.Component {
   constructor(props) {

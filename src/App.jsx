@@ -1,7 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { initSocket } from './services/socket';
 import { UserLogIn } from './services/usersService';
 import { getGroupById } from './services/groupsService';
 import LoginPage from './login/loginPage';
@@ -10,7 +9,6 @@ import GroupsMain from './groups/groupsMain';
 import ProjectsMain from './projects/projectsMain';
 import TestplansMain from './testplans/testplansMain';
 import WorkspaceMain from './workspace/workspaceMain';
-import ExecutionsMain from './executions/executionsMain';
 import ReportsMain from './reports/reportsMain';
 import 'antd/dist/antd.css';
 import './App.less';
@@ -43,7 +41,7 @@ class App extends Component {
 		UserLogIn(params).then(({ data }) => {
 			try
 			{
-				if (data.success && data.hasOwnProperty('user')) {				
+				if (data.success && Object.prototype.hasOwnProperty.call(data,'user')) {				
 					const { loggedUser, error } = this.state
 					const { user } = data
 					if (loggedUser.id !== user.id && user.id && !error) {
@@ -66,7 +64,6 @@ class App extends Component {
   }
 	
 	changeGroup(value) {
-		let { loggedUser } = this.state
 		getGroupById(value).then( (result) => {
 			let { success, id, name } = result
 			if(success)

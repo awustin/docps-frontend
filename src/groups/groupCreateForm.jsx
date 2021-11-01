@@ -2,25 +2,14 @@ import { withRouter } from "react-router";
 import React from 'react';
 import { createGroup, getUsersForGroups } from '../services/groupsService';
 import { 
-    Row,
     Col,
     Form,
     Button,
-    Breadcrumb,
     Typography,
-    Divider,
-    Modal,
     Input,
-    Alert,
-    message,
     Transfer,
-    Checkbox,
-		Select,
-		Tag
+	Select,
 } from 'antd';
-import {
-    ExclamationCircleOutlined,
-} from '@ant-design/icons';
 import MessageModal from '../common/messageModal';
 
 class GroupCreateForm extends React.Component {
@@ -133,8 +122,7 @@ class GroupCreateForm extends React.Component {
 
     render() {
         const { showMessageModal, message, userList, targetUsers } = this.state
-        const { user } = this.props
-        const { Title, Text } = Typography
+        const { Text } = Typography
         const layout = {
             labelCol: { span:5 },
             wrapperCol: {  span: 14 },

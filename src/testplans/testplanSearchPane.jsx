@@ -1,32 +1,21 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import '../CustomStyles.css';
-import { Link } from 'react-router-dom';
-import { searchTestplans, getTagsForTestplan } from '../services/testplansService';
-import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
-import { datePickerRangeConvert } from '../utils/format';
 import {
-    Divider,
-    Form,
-    Input,
-    Button,    
-    Select,
-    List,
-    Tag,
-    Avatar,
-    Tooltip,
-    Row,
-    Col,
-    DatePicker,
-		Typography,
-		Space
-} from 'antd';
-import {
-    EditOutlined,
-    DeleteOutlined,
-		ExportOutlined,
-		EyeOutlined
+	DeleteOutlined,
+	ExportOutlined,
+	EyeOutlined
 } from '@ant-design/icons';
+import {
+	Button, Col,
+	DatePicker, Divider,
+	Form,
+	Input, List, Row, Select, Space, Tag, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
+import '../CustomStyles.css';
+import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
+import { getTagsForTestplan, searchTestplans } from '../services/testplansService';
+import { datePickerRangeConvert } from '../utils/format';
 import TestplanDelete from './modals/testplanDelete';
 
 const { Text } = Typography;

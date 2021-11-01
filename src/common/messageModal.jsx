@@ -15,11 +15,7 @@ import {
 
 const { Text } = Typography;
 
-class MessageModal extends React.Component {
-    constructor(props){
-        super(props)
-    }
-		
+class MessageModal extends React.Component {		
     render() {
 				const { type, title, description, onClose, visible } = this.props
         

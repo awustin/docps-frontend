@@ -8,7 +8,6 @@ import {
     Input,
     Button,    
     Select,
-    DatePicker,
     List,
     Tag,
     Avatar,
@@ -210,7 +209,7 @@ class GroupSearchPane extends React.Component {
                 <GroupEdit
 									groupId={editGroupId}
 									visibleEdit={visibleEdit}
-									closeEdit={(()=>{this.setState({ visibleEdit: false })}).bind(this)}
+									closeEdit={ () => this.setState({ visibleEdit: false }) }
 									reloadSearch={this.reloadSearch}
                 />
             ) : (
@@ -220,7 +219,7 @@ class GroupSearchPane extends React.Component {
 								<GroupDelete
 									groupId={editGroupId}
 									visibleDelete={visibleDelete}
-									closeDelete={(()=>{this.setState({ visibleDelete: false })}).bind(this)}
+									closeDelete={ () => this.setState({ visibleDelete: false }) }
 									reloadSearch={this.reloadSearch}
                 />
             ) : (

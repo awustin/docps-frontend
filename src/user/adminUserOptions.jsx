@@ -1,19 +1,10 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-    Row,
-    Col,
-    Typography,
-    Divider,
-		Card,
-		Space
-} from 'antd';
 import {
-    UserOutlined,
-    TeamOutlined,
-} from '@ant-design/icons';
-import { UsersIso, GroupsIso } from '../CustomIcons2.js';
+	Card, Col, Divider, Row, Space, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
+import { GroupsIso, UsersIso } from '../CustomIcons2.js';
 
 class AdminUserOptions extends React.Component {
     render() {

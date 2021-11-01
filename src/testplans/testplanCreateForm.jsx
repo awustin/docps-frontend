@@ -1,20 +1,16 @@
-import React from 'react';
-import { createTestplan, getTagsForTestplan } from '../services/testplansService';
-import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
 import {
-    Typography,
-    Divider,
-    Form,
-    Input,
-    Button,    
-    Select,
-    Breadcrumb,
-} from 'antd';
-import { 
-PlusOutlined,
+	PlusOutlined
 } from '@ant-design/icons';
+import {
+	Button, Divider,
+	Form,
+	Input, Select, Typography
+} from 'antd';
+import React from 'react';
 import { withRouter } from "react-router";
 import MessageModal from '../common/messageModal';
+import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
+import { createTestplan, getTagsForTestplan } from '../services/testplansService';
 
 const { Title } = Typography
 const { Option } = Select

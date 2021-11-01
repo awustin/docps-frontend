@@ -1,22 +1,16 @@
-import React from 'react';
 import {
-    Space,
-    Button,
-    Typography,
-    Form,
-    Input,
-    Row,
-    Col,
-    Divider
-} from 'antd';
-import { withRouter } from "react-router";
-import { 
-    PlusCircleOutlined,
-    EditOutlined,
-    DeleteOutlined,
+    PlusCircleOutlined
 } from '@ant-design/icons';
-import StepSearch from '../steps/stepSearch';
+import {
+    Button, Col,
+    Divider, Form,
+    Input,
+    Row, Space, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
 import Step from '../steps/step';
+import StepSearch from '../steps/stepSearch';
 
 class TestcaseSteps extends React.Component {
     constructor(props){

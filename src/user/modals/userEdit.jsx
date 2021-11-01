@@ -1,22 +1,17 @@
-import { withRouter } from "react-router";
+import {
+	ExclamationCircleOutlined
+} from '@ant-design/icons';
+import {
+	Alert, Col, Form,
+	Input, Modal, Row, Select
+} from 'antd';
 import React from 'react';
+import { withRouter } from "react-router";
+import MessageModal from '../../common/messageModal';
 import {
 	getUserInfoById,
 	updateUser
 } from '../../services/usersService';
-import {
-    Modal,
-    Form,
-    Input,
-    Alert,
-    Row,
-    Col,
-    Select
-} from 'antd';
-import {
-    ExclamationCircleOutlined,
-} from '@ant-design/icons';
-import MessageModal from '../../common/messageModal';
 
 const { Option } = Select
 

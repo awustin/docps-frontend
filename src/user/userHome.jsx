@@ -1,27 +1,15 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-    Row,
-    Col,
-    Breadcrumb,
-    Typography,
-    Divider,
-		Card,
-		Space
-} from 'antd';
 import {
-    UserOutlined,
-    TeamOutlined,
-} from '@ant-design/icons';
-import UserBadge from './userBadge';
-import CommonUserOptions from './commonUserOptions';
+    Breadcrumb
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
 import AdminUserOptions from './adminUserOptions';
+import CommonUserOptions from './commonUserOptions';
+import UserBadge from './userBadge';
 
 class UserHome extends React.Component {
     render() {
         const { user } = this.props
-        const { Title, Text } = Typography
         return(
             <>
             <Breadcrumb>

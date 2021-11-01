@@ -5,19 +5,10 @@ import {
 	Form, 
 	Input,
 	Button,
-	Card,
 	Typography
 } from 'antd';
 
 const { Title } = Typography;
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-const tailLayout = {
-  wrapperCol: { offset: 8 , span: 16 },
-};
 
 class SignInForm extends React.Component {
   constructor(props) {

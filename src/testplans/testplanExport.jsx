@@ -1,35 +1,14 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { saveAs } from 'file-saver';
-import { getTestcasesCount, downloadTestplanFile, cancelFile } from '../services/testplansService';
-import { initSocket, emitExportTestplan, closeSocket } from '../services/socket';
 import {
-	Typography,
-	Divider,
-	Form,
-	Input,
-	Button,    
-	Select,
-	Breadcrumb,
-	List,
-	Tag,
-	Avatar,
-	Tooltip,
-	Row,
-	Col,
-	Space,
-	Alert,
-	Progress 
-} from 'antd';
-import {
-    EditOutlined,
-    DeleteOutlined,
-    LeftCircleOutlined,
-	DownloadOutlined,
-	LoadingOutlined,
-	CheckCircleTwoTone,
-	WarningTwoTone
+	CheckCircleTwoTone, DownloadOutlined, LeftCircleOutlined, WarningTwoTone
 } from '@ant-design/icons';
+import {
+	Breadcrumb, Button, Col, Divider, Progress, Row, Space, Tooltip, Typography
+} from 'antd';
+import { saveAs } from 'file-saver';
+import React from 'react';
+import { withRouter } from "react-router";
+import { emitExportTestplan, initSocket } from '../services/socket';
+import { cancelFile, downloadTestplanFile, getTestcasesCount } from '../services/testplansService';
 
 const { Title, Text } = Typography
 var socket = initSocket();

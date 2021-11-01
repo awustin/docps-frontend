@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    Descriptions,
-} from 'antd';
 import { withRouter } from "react-router";
 
 class Variable extends React.Component {
@@ -16,7 +13,6 @@ class Variable extends React.Component {
 
     render() {
         const { variable } = this.props
-        //recortar string max caracteres
         return(
             <>
             { (variable.values !== undefined) ? (

@@ -5,18 +5,14 @@ import {
     Modal,
     Form,
     Input,
-    Alert,
     Row,
     Col,
     Select,
     Transfer,
-    Checkbox,
-    Avatar,
-    Divider
+    Avatar
 } from 'antd';
 import {
     ExclamationCircleOutlined,
-    AntDesignOutlined,
 } from '@ant-design/icons';
 import MessageModal from '../../common/messageModal';
 
@@ -94,7 +90,6 @@ class GroupEdit extends React.Component {
     }
 
     handleSubmit(values) {
-			const { closeEdit, reloadSearch } = this.props
 			const { group } = this.state
 			values.id = group.id
 			console.log(values)
@@ -161,7 +156,7 @@ class GroupEdit extends React.Component {
 
 		closeMessageModal() {
 			const { closeEdit, reloadSearch } = this.props
-			const { success, showMessageModal } = this.state
+			const { success } = this.state
 			if(success) {
 				reloadSearch()
 				closeEdit()

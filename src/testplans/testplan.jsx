@@ -1,36 +1,18 @@
-import React from 'react';
-import { getTestplanById, updateTestplan, getTagsForTestplan } from '../services/testplansService';
 import {
-    Typography,
-    Divider,
-    Button,
-    Row,
-    Col,
-    Descriptions,
-    Tag,
-    Breadcrumb,
-    List,
-    Avatar,
-    Tooltip,
-		Space,
-		Select,
-		Input
-} from 'antd';
-import { withRouter } from "react-router";
-import { 
-    EditOutlined,
-    DeleteOutlined,
-    PlusCircleOutlined,
-		LeftCircleOutlined,
-		PlusOutlined
+	DeleteOutlined, EditOutlined, LeftCircleOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
+import {
+	Breadcrumb, Button, Col, Divider, List, Row, Select, Space, Tag, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
-import ViewExecutions from '../executions/viewExecutions';
 import MessageModal from '../common/messageModal';
+import ViewExecutions from '../executions/viewExecutions';
+import { getTestplanById, updateTestplan } from '../services/testplansService';
 import TestcaseDelete from './modals/testcaseDelete';
 
 const { Title,Text } = Typography;
-const { Option } = Select;
 
 class Testplan extends React.Component {
     constructor(props){
@@ -74,7 +56,7 @@ class Testplan extends React.Component {
 			loading: true
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         if(Object.keys(this.props).includes("match"))
         {
 						let testplanId = this.props.match.params.testplanId

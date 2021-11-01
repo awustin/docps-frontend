@@ -1,10 +1,9 @@
-import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Route,Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
+import { Route, Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
+import { createTestcase, getTestcaseById, saveSteps, updateTestcase } from '../services/workspaceService';
 import Testcase from './testCases/testcase';
-import { getTestcaseById, createTestcase, updateTestcase, saveSteps } from '../services/workspaceService';
 import './WorkspaceStyles.css';
 
 class WorkspaceMain extends React.Component {

@@ -1,24 +1,14 @@
-import React from 'react';
-import '../../CustomStyles.css';
 import {
-    Popover,
-    Tooltip,
-    Popconfirm,
-    Form,
-    Input,
-    Button,
-    Select,
-    Row,
-    Col,
-    message
-} from 'antd';
-import { withRouter } from "react-router";
-import { 
-    PlusOutlined,
     CloseOutlined,
-    EditOutlined,
-    DeleteOutlined,
+    EditOutlined, PlusOutlined
 } from '@ant-design/icons';
+import {
+    Button, Col, Form,
+    Input, message, Popconfirm, Popover, Row, Select, Tooltip
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import '../../CustomStyles.css';
 
 class VariableEditPopup extends React.Component {
     constructor(props){

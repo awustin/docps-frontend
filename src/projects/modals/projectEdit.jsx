@@ -5,17 +5,15 @@ import '../../CustomStyles.css';
 import { getProjectById, updateProject } from '../../services/projectsService';
 import {
     Modal,
-    Form,
-    Input,
     Row,
     Col,
-		Typography,
-		Tooltip,
-		Button,
-		Divider,
-		List,
-		Skeleton,
-		Tag
+	Typography,
+	Tooltip,
+	Button,
+	Divider,
+	List,
+	Skeleton,
+	Tag
 } from 'antd';
 import {
 	ExclamationCircleOutlined,
@@ -140,8 +138,7 @@ class ProjectEdit extends React.Component {
 	}
 
 	statusTag(status) {
-		switch(status)
-		{
+		switch(status) {
 				case 'Not executed':
 						return <Tag color="#999997">No ejecutado</Tag>
 				case 'In progress':
@@ -150,6 +147,8 @@ class ProjectEdit extends React.Component {
 						return <Tag color="#09de8c">Pasó</Tag>
 				case 'Failed':
 						return <Tag color="#f50">Falló</Tag>
+				default:
+					return <></>
 		}
 	}
 		
@@ -198,12 +197,8 @@ class ProjectEdit extends React.Component {
 
 	render() {
 			const { visibleEdit, closeEdit } = this.props
-			const { project, message, showCancelModal, showMessageModal, statusOptions, dirty, field, visibleTestplanDelete, visibleCreateTestplan, editTestplanId } = this.state
-			const layout = {
-					labelCol: { span: 7 },
-					wrapperCol: { span: 12 },
-			}
-			
+			const { project, message, showCancelModal, showMessageModal, dirty, field, visibleTestplanDelete, visibleCreateTestplan, editTestplanId } = this.state
+						
 			return(
 					<>
 							{(project.id!==undefined)?(
@@ -285,7 +280,7 @@ class ProjectEdit extends React.Component {
 									<TestplanDelete
 										testplanId={editTestplanId}
 										visibleDelete={visibleTestplanDelete}
-										closeDelete={(()=>{this.setState({ visibleTestplanDelete: false })}).bind(this)}
+										closeDelete={ () => this.setState({ visibleTestplanDelete: false }) }
 										reloadSearch={this.reloadTestplanSearch}				
 									/>
 								) : (
@@ -295,7 +290,7 @@ class ProjectEdit extends React.Component {
 										<ProjectTestplanCreate
 												projectId={project.id}
 												visibleCreateTestplan={visibleCreateTestplan}
-												close={(()=>{this.setState({ visibleCreateTestplan: false })}).bind(this)}
+												close={ () => this.setState({ visibleCreateTestplan: false }) }
 												reloadSearch={this.reloadTestplanSearch}
 										/>
 								) : (

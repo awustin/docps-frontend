@@ -1,32 +1,16 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { getCurrentGroupStats } from '../services/reportsService';
-import { 
-    Row,
-    Col,
-    Breadcrumb,
-    Typography,
-    Divider,
-    Space,
-		Avatar,
-		Select,
-		Card,
-		Statistic,
-		Skeleton,
-		Tooltip
-} from 'antd';
 import {
-    PlusCircleOutlined,
-    EditOutlined,
-    SearchOutlined,
-    UsergroupAddOutlined,
-		AntDesignOutlined,
-		ExperimentOutlined,
-		FileExcelOutlined,
-		LeftCircleOutlined		
+	ExperimentOutlined,
+	FileExcelOutlined,
+	LeftCircleOutlined
 } from '@ant-design/icons';
+import {
+	Avatar, Breadcrumb, Card, Col, Divider, Row, Select, Skeleton, Space, Statistic, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
 import { Report1Iso, Report2Iso } from '../CustomIcons2.js';
+import { getCurrentGroupStats } from '../services/reportsService';
 
 class ReportsMainView extends React.Component {
 		constructor(props) {

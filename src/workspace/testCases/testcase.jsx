@@ -1,26 +1,14 @@
-import React from 'react';
 import {
-    Typography,
-    Alert,
-    Row,
-    Col,
-    Descriptions,
-    Tag,
-    Breadcrumb,
-    Card,
-    Divider,
-    Button,
-    Tooltip,
-		Space
-} from 'antd';
-import { withRouter } from "react-router";
-import { 
-    EditOutlined,
-    LeftCircleOutlined,
+    LeftCircleOutlined
 } from '@ant-design/icons';
+import {
+    Alert, Breadcrumb, Button, Col, Divider, Row, Space, Tag, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
 import * as d from '../../AppConsts.json';
-import TestcaseSteps from './testcaseSteps';
 import TestcaseForm from '../modals/testcaseForm';
+import TestcaseSteps from './testcaseSteps';
 
 class Testcase extends React.Component {
     constructor(props){

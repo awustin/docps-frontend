@@ -1,14 +1,10 @@
-import React from 'react';
 import {
-    Row,
-    Col,
-    Space,
-    Tooltip,
-    Descriptions,
+    Col, Row, Space
 } from 'antd';
+import React from 'react';
 import { withRouter } from "react-router";
-import VariableEditPopup from './variableEditPopup';
 import Variable from './variable';
+import VariableEditPopup from './variableEditPopup';
 
 class VariablesView extends React.Component {
     constructor(props){

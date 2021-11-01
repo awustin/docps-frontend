@@ -1,6 +1,5 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
     Row,
     Col,
@@ -8,18 +7,12 @@ import {
     Typography,
     Divider,
     Tooltip,
-		Card,
-		Avatar,
-		Space,
-		Tabs
+	Tabs
 } from 'antd';
 import {
-    UserOutlined,
-    TeamOutlined,
     LeftCircleOutlined,
-		AntDesignOutlined,
-		SearchOutlined,
-		UserAddOutlined
+	SearchOutlined,
+	UserAddOutlined
 } from '@ant-design/icons';
 import GroupSearchPane from './groupSearchPane';
 import GroupCreateForm from './groupCreateForm';
@@ -27,7 +20,7 @@ import GroupCreateForm from './groupCreateForm';
 class GroupManagement extends React.Component {
     render() {
         const { user } = this.props
-        const { Title, Paragraph, Text } = Typography
+        const { Title } = Typography
 				const { TabPane } = Tabs
         return(
             <>

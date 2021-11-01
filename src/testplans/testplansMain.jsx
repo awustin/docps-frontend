@@ -1,11 +1,10 @@
-import { hot } from 'react-hot-loader';
 import React from 'react';
-import { Route,Switch } from 'react-router-dom';
 import { withRouter } from "react-router";
+import { Route, Switch } from 'react-router-dom';
 import AppLayout from '../AppLayout';
-import TestplanManagement from './testplanManagement';
 import Testplan from './testplan';
 import TestplanExport from './testplanExport';
+import TestplanManagement from './testplanManagement';
 
 class TestplansMain extends React.Component {
     constructor(props){
