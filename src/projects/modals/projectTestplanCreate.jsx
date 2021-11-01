@@ -68,7 +68,7 @@ class ProjectTestplanCreate extends React.Component {
 					})					
 				}
 				else {
-					if(result.hasOwnProperty('validate')) {
+					if(result.validate) {
 						this.setState({ 
 						success: false,
 						showMessageModal: true, 

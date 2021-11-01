@@ -48,7 +48,7 @@ class ProjectCreateForm extends React.Component {
 		createProject(values).then((result)=>{
 			let { success } = result
 			if(!success) {
-				if(result.hasOwnProperty('validate')) {
+				if(result.validate) {
 					this.setState({ 
 						success: true,
 						showMessageModal: true, 

@@ -1,8 +1,8 @@
 import { hot } from 'react-hot-loader';
 import React from 'react';
 import { validateUsername } from '../utils/format';
-import { 
-	Form, 
+import {
+	Form,
 	Input,
 	Button,
 	Typography
@@ -11,42 +11,42 @@ import {
 const { Title } = Typography;
 
 class SignInForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onFinish = this.onFinish.bind(this);
-  }
+	constructor(props) {
+		super(props);
+		this.onFinish = this.onFinish.bind(this);
+	}
 
-  state = {
-    usr: '',
-    pwd: '',
-    isValid: true,
-    errorMessage: '',
-  };
+	state = {
+		usr: '',
+		pwd: '',
+		isValid: true,
+		errorMessage: '',
+	};
 
-  onFinish(values){
-    if(validateUsername(values.username)) {
-      const { logIn } = this.props;
-      logIn({ username: values.username, password: values.password })
-      this.setState({ usr:values.username, pwd:values.password, errorMessage: '' })
-    }
-    else 
-      this.setState({ isValid: false, errorMessage: 'El usuario solo puede tener caracteres alfanuméricos.' })
-  };
+	onFinish(values) {
+		if (validateUsername(values.username)) {
+			const { logIn } = this.props;
+			logIn({ username: values.username, password: values.password })
+			this.setState({ usr: values.username, pwd: values.password, errorMessage: '' })
+		}
+		else
+			this.setState({ isValid: false, errorMessage: 'El usuario solo puede tener caracteres alfanuméricos.' })
+	}
 
-  render() {
-		const { errorMessage } = this.state 
+	render() {
+		const { errorMessage } = this.state
 		const layout = {
-				labelCol: { 
-					span: 16,
-					offset: 4
-				},
-				wrapperCol: {
-					span: 16,
-					offset: 4
-				},
+			labelCol: {
+				span: 16,
+				offset: 4
+			},
+			wrapperCol: {
+				span: 16,
+				offset: 4
+			},
 		}
 		const tailLayout = {
-			wrapperCol:{
+			wrapperCol: {
 				span: 16,
 				offset: 4
 			}
@@ -69,24 +69,24 @@ class SignInForm extends React.Component {
 							name="username"
 							rules={[{ required: true, message: 'Usuario vacío' }]}
 						>
-							<Input/>
+							<Input />
 						</Form.Item>
 						<Form.Item
 							label="Contraseña"
 							name="password"
 							rules={[{ required: true, message: 'Contraseña vacía' }]}
 						>
-							<Input.Password/>
+							<Input.Password />
 						</Form.Item>
 						<Form.Item {...tailLayout}>
-							<Button className= "login-button" type="primary" htmlType="submit">Iniciar sesión</Button>
+							<Button className="login-button" type="primary" htmlType="submit">Iniciar sesión</Button>
 						</Form.Item>
 					</Form>
 					<div>{errorMessage}</div>
 				</div>
 			</div>
 		);
-  }
+	}
 }
 
 export default hot(module)(SignInForm);

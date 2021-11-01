@@ -112,7 +112,7 @@ class ProjectEdit extends React.Component {
 					})					
 				}
 				else {
-					if(result.hasOwnProperty('validate')) {
+					if(result.validate) {
 						this.setState({
 							showMessageModal: true, 
 							message: {
@@ -174,10 +174,10 @@ class ProjectEdit extends React.Component {
 										span={4}
 										actions={[
 												this.statusTag(item.status),
-												<Link to={{ pathname: "/testplans/id=" + item.id }} style={{color:"#228cdbff"}}>
+												<Link key={`link-${item.key}`} to={{ pathname: "/testplans/id=" + item.id }} style={{color:"#228cdbff"}}>
 													<EditOutlined style={{ fontSize: '150%'}} />
 												</Link>,
-												<Tooltip title="Eliminar plan de pruebas" color="#108ee9">
+												<Tooltip key={`delete-${item.key}`} title="Eliminar plan de pruebas" color="#108ee9">
 													<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff"}} onClick={()=>this.setState({ visibleTestplanDelete:true, editTestplanId:item.id })}/>
 												</Tooltip>
 										]}

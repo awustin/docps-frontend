@@ -101,7 +101,7 @@ class TestplanCreateForm extends React.Component {
 					})					
 				}
 				else {
-					if(result.hasOwnProperty('validate')) {
+					if(result.validate) {
 						this.setState({ 
 							success: true,
 							showMessageModal: true, 

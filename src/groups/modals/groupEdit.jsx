@@ -108,7 +108,7 @@ class GroupEdit extends React.Component {
 			{
 				updateGroup(values).then((result)=>{
 					if(!result.success) {
-						if(!result.hasOwnProperty('validate'))
+						if(!result.validate)
 							this.setState({ 
 								showMessageModal: true, 
 								message: {

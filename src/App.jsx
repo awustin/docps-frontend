@@ -41,7 +41,7 @@ class App extends Component {
 		UserLogIn(params).then(({ data }) => {
 			try
 			{
-				if (data.success && Object.prototype.hasOwnProperty.call(data,'user')) {				
+				if (data.success && data.user) {				
 					const { loggedUser, error } = this.state
 					const { user } = data
 					if (loggedUser.id !== user.id && user.id && !error) {
