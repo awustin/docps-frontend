@@ -38,15 +38,15 @@ class AppLayout extends React.Component {
   };
 
   componentDidUpdate() {
-    const { collapsed } = this.state
-    if(('location' in this.props.children._self.props) && collapsed === false)
-    {
-      let pathname = this.props.children._self.props.location.pathname 
-      if(pathname.includes("workspace"))
-      {
-        this.setState({ collapsed: true })
-      }
-    }
+    // const { collapsed } = this.state
+    // if(('location' in this.props.children._self.props) && collapsed === false)
+    // {
+    //   let pathname = this.props.children._self.props.location.pathname 
+    //   if(pathname.includes("workspace"))
+    //   {
+    //     this.setState({ collapsed: true })
+    //   }
+    // }
   }
   
   onCollapse = collapsed => {
