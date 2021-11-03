@@ -1,29 +1,15 @@
-import { hot } from 'react-hot-loader';
-import React from 'react';
 import {
-    Button,
-    Modal,
-    Card,
-    Tag,
-    Row,
-    Col,
-    Popconfirm,
-    message,
-    Typography,
-    Space,
-    Divider,
-    Tooltip,
-    List,
-} from 'antd';
-import {
-    PlusCircleOutlined,
-    DeleteOutlined,
+    DeleteOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
+import {
+    Button, Divider, List, message, Modal, Popconfirm, Space, Tag, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { hot } from 'react-hot-loader';
 import * as d from '../../AppConsts.json';
-import EditExecutionButton from '../editExecutionButton'
+import EditExecutionButton from '../editExecutionButton';
 
-const { Meta } = Card
-const { Text,Title } = Typography
+const { Text, Title } = Typography
 
 class ExecutionList extends React.Component {
     constructor(props) {
@@ -57,48 +43,47 @@ class ExecutionList extends React.Component {
 
     showExecutionList() {
         const { list, updateExecution } = this.props
-        let renderItems = []
-        return(								
-					<List
-						size="small"
-						pagination={{
-						pageSize: 5
-						}}
-						dataSource={list}
-						bordered={false}
-						renderItem={item => (
-							<List.Item
-								key={item.key}
-								span={4}
-								actions={[
-									<Tag color={d.statuses[item.status].color}>{d.statuses[item.status].label}</Tag>,												
-									<EditExecutionButton key="edit-execution"
-											executionValues={{ id: item.id, status: item.status , commentary: item.commentary }}
-											updateExecution={updateExecution}
-									/>,												
-									<Tooltip title="Eliminar ejecución" color="#108ee9">
-											<Popconfirm
-													title="¿Eliminar la ejecución?"
-													placement="bottom"
-													onConfirm={ () => { this.handleDeleteExecution(item.id) }}
-													okText="Eliminar"
-													cancelText="No"
-											>
-													<DeleteOutlined key="delete-execution" />
-											</Popconfirm>
-									</Tooltip>,
-								]}
-								className={'list-item executions'}
-								style={{background: "#fff"}}
-							>
-								<Space direction="vertical" wrap>
-									{item.commentary ? item.commentary : <Text type="secondary"><i>Agregue un comentario.</i></Text>}
-									<div className={'executions-description'}>{'Fecha de creación: ' + item.createdOn}</div>
-								</Space>											
-							</List.Item>
-						)}
-					/>	
-				)
+        return (
+            <List
+                size="small"
+                pagination={{
+                    pageSize: 5
+                }}
+                dataSource={list}
+                bordered={false}
+                renderItem={item => (
+                    <List.Item
+                        key={item.key}
+                        span={4}
+                        actions={[
+                            <Tag key={`tag-${item.key}`} color={d.statuses[item.status].color}>{d.statuses[item.status].label}</Tag>,
+                            <EditExecutionButton key="edit-execution"
+                                executionValues={{ id: item.id, status: item.status, commentary: item.commentary }}
+                                updateExecution={updateExecution}
+                            />,
+                            <Tooltip key={`delete-${item.key}`} title="Eliminar ejecución" color="#108ee9">
+                                <Popconfirm
+                                    title="¿Eliminar la ejecución?"
+                                    placement="bottom"
+                                    onConfirm={() => { this.handleDeleteExecution(item.id) }}
+                                    okText="Eliminar"
+                                    cancelText="No"
+                                >
+                                    <DeleteOutlined key="delete-execution" />
+                                </Popconfirm>
+                            </Tooltip>,
+                        ]}
+                        className={'list-item executions'}
+                        style={{ background: "#fff" }}
+                    >
+                        <Space direction="vertical" wrap>
+                            {item.commentary ? item.commentary : <Text type="secondary"><i>Agregue un comentario.</i></Text>}
+                            <div className={'executions-description'}>{'Fecha de creación: ' + item.createdOn}</div>
+                        </Space>
+                    </List.Item>
+                )}
+            />
+        )
     }
 
     showEmptyList() {
@@ -116,30 +101,30 @@ class ExecutionList extends React.Component {
     render() {
         const { visible, list, addExecution } = this.props
         const { confirmLoading } = this.state
-        return(
-            <> 
-            <Modal
-                title={<Title level={3} >Ejecuciones</Title>}
-                visible={visible}
-                confirmLoading={confirmLoading}
-                destroyOnClose={true}
-                width={700}
-                closable={false}
-                footer={[<Button key="close" onClick={this.handleOk}>Cerrar</Button>]}
-            >
-                <div className="execution-list-container"  style={{margin: "10px"}}>
-                    { (list.length > 0) ? (this.showExecutionList()) : (this.showEmptyList()) }
-                </div>
-                <div className="execution-add" style={{display: "flex", margin: "10px"}}>
-                    <Button key="add-execution"
-                        onClick={ ()=> {addExecution()} }
-                        icon={<PlusCircleOutlined style={{ fontSize: "110%" }}/> }
-                        type="primary"
-                    >
-                        Agregar ejecución
-                    </Button>
-                </div>	
-            </Modal>
+        return (
+            <>
+                <Modal
+                    title={<Title level={3} >Ejecuciones</Title>}
+                    visible={visible}
+                    confirmLoading={confirmLoading}
+                    destroyOnClose={true}
+                    width={700}
+                    closable={false}
+                    footer={[<Button key="close" onClick={this.handleOk}>Cerrar</Button>]}
+                >
+                    <div className="execution-list-container" style={{ margin: "10px" }}>
+                        {(list.length > 0) ? (this.showExecutionList()) : (this.showEmptyList())}
+                    </div>
+                    <div className="execution-add" style={{ display: "flex", margin: "10px" }}>
+                        <Button key="add-execution"
+                            onClick={() => { addExecution() }}
+                            icon={<PlusCircleOutlined style={{ fontSize: "110%" }} />}
+                            type="primary"
+                        >
+                            Agregar ejecución
+                        </Button>
+                    </div>
+                </Modal>
             </>
         );
     }

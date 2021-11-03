@@ -1,3 +1,4 @@
+import { withRouter } from "react-router";
 import {
 	DownloadOutlined, LeftCircleOutlined, LoadingOutlined
 } from '@ant-design/icons';
@@ -6,9 +7,8 @@ import {
 } from 'antd';
 import { saveAs } from 'file-saver';
 import React from 'react';
+import { Bar } from 'react-chartjs-2';
 import '../CustomStyles.css';
-import { Line, Bar } from 'react-chartjs-2';
-import { saveAs } from 'file-saver';
 import { getProjectsDropdown } from '../services/projectsService';
 import { getTestplansTestcasesCount } from '../services/reportsService';
 import { datePickerRangeConvert } from '../utils/format';
