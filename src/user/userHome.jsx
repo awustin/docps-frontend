@@ -20,12 +20,12 @@ class UserHome extends React.Component {
 								<UserBadge
 										user={user}
 								/>
-								<CommonUserOptions/>
 								{(user.isAdmin) ? 
 									(
 										<AdminUserOptions/>
 									) : (<></>)
 								}
+								<CommonUserOptions/>
             </div>
             </>
         );

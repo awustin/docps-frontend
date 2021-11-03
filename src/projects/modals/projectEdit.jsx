@@ -204,7 +204,7 @@ class ProjectEdit extends React.Component {
 							{(project.id!==undefined)?(
 									<>
 									<Modal
-											title={"Proyecto"}
+											title={<Title level={3} >Proyecto</Title>}
 											visible={visibleEdit}
 											closable={false}
 											width={800}

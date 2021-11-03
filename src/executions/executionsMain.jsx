@@ -2,6 +2,7 @@ import { hot } from 'react-hot-loader';
 import React from 'react';
 import {Switch, Route} from "react-router-dom"
 import AppLayout from '../AppLayout';
+import './ExecutionsStyles.css';
 
 class ExecutionsMain extends React.Component {
     render() {

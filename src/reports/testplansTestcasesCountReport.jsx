@@ -6,9 +6,9 @@ import {
 } from 'antd';
 import { saveAs } from 'file-saver';
 import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { withRouter } from "react-router";
 import '../CustomStyles.css';
+import { Line, Bar } from 'react-chartjs-2';
+import { saveAs } from 'file-saver';
 import { getProjectsDropdown } from '../services/projectsService';
 import { getTestplansTestcasesCount } from '../services/reportsService';
 import { datePickerRangeConvert } from '../utils/format';
@@ -58,7 +58,7 @@ class TestplansTestcasesCountReport extends React.Component {
 							precision: 0,
 							beginAtZero: true
 						},
-					},
+					}
 				},
 				layout: {
 					padding: 12
@@ -98,6 +98,7 @@ class TestplansTestcasesCountReport extends React.Component {
 						data: data,
 						generatingReport: false					
 					});
+					console.log(data)
 				}
 				else {
 					this.setState({ generatingReport: false });					
@@ -191,7 +192,7 @@ class TestplansTestcasesCountReport extends React.Component {
 										}
 									/>
 									:
-									<Line 
+									<Bar 
 										height={200}
 										className='testplan-report' 
 										id='testplan-report' 

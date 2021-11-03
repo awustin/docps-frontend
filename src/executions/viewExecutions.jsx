@@ -26,9 +26,7 @@ class ViewExecutions extends React.Component {
 	handleClick() {
 			const { id } = this.props
 			getExecutionsForTestcase(id).then( (result) => {
-				if(result.success) {
-					this.setState({ executions: result.executions, showModal: true })						
-				}
+				this.setState({ executions: result.executions || [], showModal: true})
 			})
 	}
     
