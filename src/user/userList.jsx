@@ -1,5 +1,5 @@
 import {
-    DeleteOutlined, EditOutlined
+    DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 import {
     Avatar, Button, Col, DatePicker, Divider,
@@ -9,20 +9,21 @@ import {
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
-import { searchUsers } from '../services/usersService';
+import { getUserInfoById, searchUsers } from '../services/usersService';
 import { datePickerRangeConvert } from '../utils/format';
 import UserDelete from './modals/userDelete';
-import UserEdit from './modals/userEdit';
+import UserForm from './userForm';
 
 const { Text } = Typography
 
-class UserSearchPane extends React.Component {
+class UserList extends React.Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.showResults = this.showResults.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
+        this.updateUser = this.updateUser.bind(this)
     }
     state = {
         lastValues: undefined,
@@ -44,7 +45,9 @@ class UserSearchPane extends React.Component {
         error: undefined,
         visibleEdit: false,
         visibleDelete: false,
-        editUserId: undefined
+        user: undefined,
+        openForm: false,
+        mode: 'add'
     }
 
     handleSubmit(values) {
@@ -80,6 +83,14 @@ class UserSearchPane extends React.Component {
         }
     }
 
+    updateUser(id) {
+        getUserInfoById(id).then((result) => {
+            let { success, user } = result
+            if (success)
+                this.setState({ mode:'update', openForm: true, user: user })
+        })
+    }
+
     showResults() {
         const { results } = this.state
         if (results !== undefined)
@@ -102,7 +113,7 @@ class UserSearchPane extends React.Component {
                                             {this.statusTag(item.status, item.key)}
                                         </>,
                                         <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
-                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleEdit: true, editUserId: item.id }) }} />
+                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id) } />
                                         </Tooltip>,
                                         <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
                                             <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
@@ -142,7 +153,7 @@ class UserSearchPane extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleEdit, visibleDelete, editUserId } = this.state
+        const { statusOptions, visibleEdit, visibleDelete, editUserId, openForm, mode, user } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
@@ -204,19 +215,25 @@ class UserSearchPane extends React.Component {
                         <Divider type="vertical" style={{ height: "100%" }} dashed />
                     </Col>
                     <Col span={16}>
+                        <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+                            <Button
+                                icon={<PlusCircleOutlined />}
+                                type="primary"
+                                onClick={() => this.setState({ openForm: true, mode:'add', user: undefined })}
+                            >
+                                Crear usuario
+                            </Button>
+                        </Col>
                         {this.showResults()}
                     </Col>
                 </Row>
-                {(visibleEdit) ? (
-                    <UserEdit
-                        userId={editUserId}
-                        visibleEdit={visibleEdit}
-                        closeEdit={(() => { this.setState({ visibleEdit: false }) })}
-                        reloadSearch={this.reloadSearch}
-                    />
-                ) : (
-                    <></>
-                )}
+                <UserForm
+                    mode={mode}
+                    open={openForm}
+                    user={user}
+                    close={() => this.setState({ openForm: false })}
+                    reloadSearch={this.reloadSearch}
+                />
                 {(visibleDelete) ? (
                     <UserDelete
                         userId={editUserId}
@@ -232,4 +249,4 @@ class UserSearchPane extends React.Component {
     }
 }
 
-export default withRouter(UserSearchPane);
+export default withRouter(UserList);
