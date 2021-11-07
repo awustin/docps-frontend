@@ -1,38 +1,28 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import '../CustomStyles.css';
-import { searchGroups } from '../services/groupsService';
 import {
-    Divider,
-    Form,
-    Input,
-    Button,
-    Select,
-    List,
-    Tag,
-    Avatar,
-    Tooltip,
-    Row,
-    Col,
-    Space,
-    Typography
-} from 'antd';
-import {
-    EditOutlined,
-    DeleteOutlined
+    DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
-import GroupEdit from './modals/groupEdit';
+import {
+    Avatar, Button, Col, Divider,
+    Form,
+    Input, List, Row, Select, Space, Tag, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import '../CustomStyles.css';
+import { getGroupAndMembersById, searchGroups } from '../services/groupsService';
+import GroupForm from './groupForm';
 import GroupDelete from './modals/groupDelete';
 
 const { Text } = Typography;
 
-class GroupSearchPane extends React.Component {
+class GroupList extends React.Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.showResults = this.showResults.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
+        this.updateGroup = this.updateGroup.bind(this)
     }
     state = {
         lastValues: undefined,
@@ -54,7 +44,10 @@ class GroupSearchPane extends React.Component {
         error: undefined,
         visibleEdit: false,
         visibleDelete: false,
-        editGroupId: undefined
+        editGroupId: undefined,
+        openForm: false,
+        mode: 'add',
+        group: undefined
     }
 
     handleSubmit(values) {
@@ -76,6 +69,18 @@ class GroupSearchPane extends React.Component {
                 }
             })
         }
+    }
+
+    updateGroup(id) {
+        getGroupAndMembersById(id).then((result) => {
+            const { success, group } = result;
+            if (success)
+                this.setState({
+                    openForm: true,
+                    mode: 'update',
+                    group: group
+                })
+        })
     }
 
     statusTag(status, itemKey) {
@@ -111,7 +116,7 @@ class GroupSearchPane extends React.Component {
                                             {this.statusTag(item.status, item.key)}
                                         </>,
                                         <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
-                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleEdit: true, editGroupId: item.id }) }} />
+                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
                                         </Tooltip>,
                                         <Tooltip key={`delete-${item.key}`} title="Eliminar grupo" color="#108ee9">
                                             <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editGroupId: item.id }) }} />
@@ -149,7 +154,7 @@ class GroupSearchPane extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleEdit, visibleDelete, editGroupId } = this.state
+        const { statusOptions, visibleDelete, editGroupId, mode, openForm, group } = this.state
         const { Option } = Select
         const layout = {
             labelCol: { span: 18 },
@@ -198,19 +203,25 @@ class GroupSearchPane extends React.Component {
                         <Divider type="vertical" style={{ height: "100%" }} dashed />
                     </Col>
                     <Col span={16}>
+                        <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+                            <Button
+                                icon={<PlusCircleOutlined />}
+                                type="primary"
+                                onClick={() => this.setState({ openForm: true, mode: 'add', group: undefined })}
+                            >
+                                Crear Grupo
+                            </Button>
+                        </Col>
                         {this.showResults()}
                     </Col>
                 </Row>
-                {(visibleEdit) ? (
-                    <GroupEdit
-                        groupId={editGroupId}
-                        visibleEdit={visibleEdit}
-                        closeEdit={() => this.setState({ visibleEdit: false })}
-                        reloadSearch={this.reloadSearch}
-                    />
-                ) : (
-                    <></>
-                )}
+                <GroupForm
+                    mode={mode}
+                    open={openForm}
+                    group={group}
+                    close={() => this.setState({ openForm: false })}
+                    reloadSearch={this.reloadSearch}
+                />
                 {(visibleDelete) ? (
                     <GroupDelete
                         groupId={editGroupId}
@@ -226,4 +237,4 @@ class GroupSearchPane extends React.Component {
     }
 }
 
-export default withRouter(GroupSearchPane);
+export default withRouter(GroupList);

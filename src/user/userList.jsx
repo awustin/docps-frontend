@@ -153,7 +153,7 @@ class UserList extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleEdit, visibleDelete, editUserId, openForm, mode, user } = this.state
+        const { statusOptions, visibleDelete, editUserId, openForm, mode, user } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
