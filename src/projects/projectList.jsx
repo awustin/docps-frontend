@@ -1,30 +1,22 @@
-import { withRouter } from "react-router";
-import React from 'react';
-import '../CustomStyles.css';
-import { searchProjects, getGroupsDropdown } from '../services/projectsService';
 import {
-	Divider,
-	Form,
-	Input,
-	Button,
-	Select,
-	List,
-	Avatar,
-	Tooltip,
-	Row,
-	Col,
-	Typography
-} from 'antd';
-import {
-	EditOutlined,
-	DeleteOutlined
+	DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
-import ProjectEdit from './modals/projectEdit';
+import {
+	Avatar, Button, Col, Divider,
+	Form,
+	Input, List, Row, Select, Tooltip, Typography
+} from 'antd';
+import React from 'react';
+import { withRouter } from "react-router";
+import '../CustomStyles.css';
+import { getGroupsDropdown, searchProjects } from '../services/projectsService';
 import ProjectDelete from './modals/projectDelete';
+import ProjectEdit from './modals/projectEdit';
+import ProjectForm from './projectForm';
 
 const { Text } = Typography
 
-class ProjectSearchPane extends React.Component {
+class ProjectList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -41,7 +33,10 @@ class ProjectSearchPane extends React.Component {
 		visibleDelete: false,
 		visibleCreateTestplan: false,
 		editProjectId: undefined,
-		loading: true
+		loading: true,
+		project: undefined,
+		openForm: false,
+		mode: 'add'
 	}
 
 	componentDidMount() {
@@ -163,7 +158,8 @@ class ProjectSearchPane extends React.Component {
 	}
 
 	render() {
-		const { groupOptions, visibleEdit, visibleDelete, editProjectId, loading } = this.state
+		const { groupOptions, visibleEdit, visibleDelete, editProjectId, loading, mode, openForm, project } = this.state
+		const { user } = this.props
 		const { Option } = Select
 		const layout = {
 			labelCol: { span: 18 },
@@ -221,9 +217,26 @@ class ProjectSearchPane extends React.Component {
 						<Divider type="vertical" style={{ height: "100%" }} dashed />
 					</Col>
 					<Col span={16}>
+						<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+							<Button
+								icon={<PlusCircleOutlined />}
+								type="primary"
+								onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+							>
+								Crear proyecto
+							</Button>
+						</Col>
 						{this.showResults()}
 					</Col>
 				</Row>
+				<ProjectForm
+					mode={mode}
+					open={openForm}
+					project={project}
+					user={user}
+					close={() => this.setState({ openForm: false })}
+					reloadSearch={this.reloadSearch}
+				/>
 				{(visibleEdit) ? (
 					<ProjectEdit
 						projectId={editProjectId}
@@ -249,4 +262,4 @@ class ProjectSearchPane extends React.Component {
 	}
 }
 
-export default withRouter(ProjectSearchPane);
+export default withRouter(ProjectList);

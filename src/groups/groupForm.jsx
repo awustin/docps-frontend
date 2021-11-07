@@ -15,8 +15,8 @@ export default function GroupForm(props) {
     const [form] = Form.useForm();
     const { mode, open, close, group, reloadSearch } = props;
     const layout = {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 18 },
+        labelCol: { span: 5 },
+        wrapperCol: { span: 24 },
     };
     const statusOptions = [
         {
@@ -129,7 +129,7 @@ export default function GroupForm(props) {
                 title="Grupo"
                 visible={open}
                 closable={false}
-                width={800}
+                width={700}
                 okText="Confirmar"
                 okButtonProps={{ form: 'groupForm', key: 'submit', htmlType: 'submit' }}
                 cancelText="Cancelar"
@@ -138,7 +138,7 @@ export default function GroupForm(props) {
                 maskClosable={false}
                 keyboard={false}
             >
-                <Col offset={4} style={{ marginBlockEnd: "1%" }}>
+                <Col offset={5} style={{ marginBlockEnd: "1%" }}>
                     <Text type="secondary">Los campos marcados con * son requeridos.</Text>
                 </Col>
                 <Form {...layout}
