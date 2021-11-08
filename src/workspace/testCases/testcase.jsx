@@ -89,13 +89,11 @@ class Testcase extends React.Component {
             <>
             { (action === 'create') ?
                 <Breadcrumb>
-                    <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
                     <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
                     <Breadcrumb.Item>Crear caso de prueba</Breadcrumb.Item>
                 </Breadcrumb>
                 : (
                 <Breadcrumb>
-                    <Breadcrumb.Item>Planes de prueba</Breadcrumb.Item>
                     <Breadcrumb.Item>{testcase.testplanName}</Breadcrumb.Item>
                     <Breadcrumb.Item>{testcase.testcaseName}</Breadcrumb.Item>
                 </Breadcrumb>

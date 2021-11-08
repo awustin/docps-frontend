@@ -1,7 +1,8 @@
 import {
 	DeleteOutlined,
 	ExportOutlined,
-	EyeOutlined
+	EyeOutlined,
+	PlusCircleOutlined
 } from '@ant-design/icons';
 import {
 	Button, Col,
@@ -17,8 +18,11 @@ import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsServ
 import { getTagsForTestplan, searchTestplans } from '../services/testplansService';
 import { datePickerRangeConvert } from '../utils/format';
 import TestplanDelete from './modals/testplanDelete';
+import TestplanForm from './testplanForm';
 
 const { Text } = Typography;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 class TestplanSearchPane extends React.Component {
 	constructor(props) {
@@ -37,8 +41,10 @@ class TestplanSearchPane extends React.Component {
 		projectOptions: [],
 		tagOptions: [],
 		error: undefined,
-		visibleEdit: false,
 		editTestplanId: undefined,
+		testplan: undefined,
+		openForm: false,
+		mode: 'add'
 	}
 
 	componentDidMount() {
@@ -173,9 +179,8 @@ class TestplanSearchPane extends React.Component {
 
 
 	render() {
-		const { groupOptions, projectOptions, tagOptions, visibleEdit, visibleDelete, editTestplanId } = this.state
-		const { Option } = Select
-		const { RangePicker } = DatePicker
+		const { groupOptions, projectOptions, tagOptions, visibleDelete, editTestplanId, testplan, openForm, mode } = this.state
+		const { user } = this.props
 		const layout = {
 			labelCol: { span: 18 },
 			wrapperCol: { span: 20 },
@@ -217,6 +222,7 @@ class TestplanSearchPane extends React.Component {
 											mode="multiple"
 											allowClear
 											placeholder="Seleccione uno o más proyectos"
+											disabled={(projectOptions || []).length === 0}
 										>
 											{projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
 										</Select>
@@ -259,14 +265,25 @@ class TestplanSearchPane extends React.Component {
 						<Divider type="vertical" style={{ height: "100%" }} dashed />
 					</Col>
 					<Col span={16}>
+						<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+							<Button
+								icon={<PlusCircleOutlined />}
+								type="primary"
+								onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+							>
+								Crear plan de pruebas
+							</Button>
+						</Col>
 						{this.showResults()}
 					</Col>
 				</Row>
-				{(visibleEdit) ? (
-					'Edit'
-				) : (
-					<></>
-				)}
+				<TestplanForm
+					mode={mode}
+					open={openForm}
+					user={user}
+					close={() => this.setState({ openForm: false })}
+					reloadSearch={this.reloadSearch}
+				/>
 				{(visibleDelete) ? (
 					<TestplanDelete
 						testplanId={editTestplanId}
