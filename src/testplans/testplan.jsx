@@ -238,7 +238,6 @@ class Testplan extends React.Component {
 	}
 
 	render() {
-		const { user } = this.props
 		const { testplan, field, dirty, message, showMessageModal, visibleDelete, deleteTestcaseId, loading } = this.state
 		if (loading) return (<></>)
 		return (

@@ -179,7 +179,7 @@ class TestplanSearchPane extends React.Component {
 
 
 	render() {
-		const { groupOptions, projectOptions, tagOptions, visibleDelete, editTestplanId, testplan, openForm, mode } = this.state
+		const { groupOptions, projectOptions, tagOptions, visibleDelete, editTestplanId, openForm, mode } = this.state
 		const { user } = this.props
 		const layout = {
 			labelCol: { span: 18 },

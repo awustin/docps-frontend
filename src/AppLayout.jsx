@@ -22,7 +22,7 @@ class AppLayout extends React.Component {
 
   state = {
     collapsed: false,
-		menuOptions: 
+		menuOptions:
 		[
 			{key:'home', label:'Home', icon:<HomeOutlined style={{ fontSize: '150%'}}/>, toPath:'/home', onlyAdmin: false},
 			{key:'user', label:'Usuarios', icon:<UserOutlined style={{ fontSize: '150%'}}/>, toPath:'/user/admin', onlyAdmin: true},
@@ -37,25 +37,14 @@ class AppLayout extends React.Component {
 		]
   };
 
-  componentDidUpdate() {
-    // const { collapsed } = this.state
-    // if(('location' in this.props.children._self.props) && collapsed === false)
-    // {
-    //   let pathname = this.props.children._self.props.location.pathname 
-    //   if(pathname.includes("workspace"))
-    //   {
-    //     this.setState({ collapsed: true })
-    //   }
-    // }
-  }
-  
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
-	
+
 	menuOnClick(option) {
+    const { logout } = this.props;
 		if(option.key === 'logout')
-			alert('Log out')
+      logout();
 	}
 
   render() {
@@ -71,7 +60,7 @@ class AppLayout extends React.Component {
 								.filter( item => !item.onlyAdmin || user.isAdmin )
 								.map( e => (<Menu.Item key={e.key} icon={e.icon} onClick={()=>{this.props.history.push(e.toPath)}}>{e.label}</Menu.Item>) )
 							}
-							{								
+							{
 								otherOptions
 								.filter( item => !item.onlyAdmin || user.isAdmin )
 								.map( e => (<Menu.Item key={e.key} icon={e.icon}>{e.label}</Menu.Item>) )
