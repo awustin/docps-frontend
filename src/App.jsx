@@ -32,10 +32,12 @@ class App extends Component {
       name: undefined,
       currentGroup: {
         id: undefined,
-        name: undefined
+        name: undefined,
+        isGroupAdmin: undefined
       },
       isAdmin: undefined,
-      memberOf: []
+      memberOf: [],
+      role: undefined
     },
     error: undefined,
     showLogout: false
