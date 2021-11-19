@@ -90,35 +90,13 @@
 	}
 }
 
-/*ADMIN OPTIONS*/
-.admin-card .ant-card-body {
-	background: #fff;
-	transition: .3s ease-out;
-	padding: 15px;
-}
-
-.admin-icon {
-	font-size: 400%;
-	color: rgb(255,120,90) !important;
-	transition: .3s ease-out;
-}
-
-.admin-card .ant-card-body:hover {	
-	background: #3b56ad !important;
-	/*background: rgb(255,120,90);*/
-}
-
-.admin-card .ant-card-body:hover .admin-icon {
-	color: #fff !important;
-}
-
-.admin-card .ant-card-head {
-	font-size: 150%;
-	font-weight: 300 !important;
-}
-
 /*COMMON USER OPTIONS*/
-.common-user-card .ant-card-body {
+.home-option {
+	width: 25vw;
+	text-align: center;
+}
+
+.home-option .ant-card-body {
 	background: #fff;
 	transition: .3s ease-out;
 	padding: 15px;
@@ -130,17 +108,17 @@
 	transition: .3s ease-out;
 }
 
-.common-user-card .ant-card-body:hover {
+.home-option .ant-card-body:hover {
 	background: #3b56ad !important;
 	/*background : rgb(36, 47, 145) !important;*/
 	/*background: rgb(34,140,219);*/
 }
 
-.common-user-card .ant-card-body:hover .common-user-icon {
+.home-option .ant-card-body:hover .common-user-icon {
 	color: #fff !important;
 }
 
-.common-user-card .ant-card-head {
+.home-option .ant-card-head {
 	font-size: 120%;
 	font-weight: 300 !important;
 }

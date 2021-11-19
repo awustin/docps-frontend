@@ -17,7 +17,7 @@ class GroupsMain extends React.Component {
         return (
             <Switch>
                 <Route path="/groups/admin" render={() => (
-                    (user.isAdmin) ? (
+                    (user.role === 'admin' || user.role === 'groupAdmin') ? (
                         <>
                             <Breadcrumb>
                                 <Breadcrumb.Item>{user.name}</Breadcrumb.Item>

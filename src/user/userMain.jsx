@@ -23,7 +23,7 @@ class UserMain extends React.Component {
                     />)}
                 />
                 <Route exact path="/user/admin" render={() => (
-                    (user.isAdmin) ? (
+                    (user.role === 'admin') ? (
                         <>
                             <Breadcrumb>
                                 <Breadcrumb.Item>{user.name}</Breadcrumb.Item>
