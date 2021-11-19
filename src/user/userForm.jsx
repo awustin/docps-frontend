@@ -37,6 +37,8 @@ export default function UserForm(props) {
             })
         }
         else if (mode === 'update') {
+            if (user.status === 'inactive' && values.status === 'active')
+                values.activateUser = true;
             values.id = user.id
             updateUser(values).then((result) => {
                 handleResponse(result);
@@ -85,7 +87,7 @@ export default function UserForm(props) {
             }
         }
         else {
-            if(mode === 'add') {
+            if (mode === 'add') {
                 setMessage({
                     title: 'Usuario creado',
                     description: 'Se envió un mail de verificación al correo ingresado',
@@ -178,6 +180,16 @@ export default function UserForm(props) {
                         rules={[{ required: true, message: 'Debe ingresar un nombre de usuario válido.' }]}
                     >
                         <Input placeholder="Escriba un nombre de usuario" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Contraseña"
+                        name="password"
+                        rules={[{ required: mode === 'add', message: 'Debe ingresar una contraseña válida.' }]}
+                    >
+                        <Input.Password
+                            disabled={mode === 'update'}
+                            placeholder="Escriba una contraseña"
+                        />
                     </Form.Item>
                     <Form.Item
                         label="D.N.I."
