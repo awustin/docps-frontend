@@ -72,3 +72,12 @@ export function getCurrentUserInfoById(id) {
       return error;
     });
 }
+
+export function verifyUser(values) {
+  return request.post(`${baseUrl()}/verifyUser`, values)
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}

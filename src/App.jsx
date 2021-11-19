@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import './App.less';
+import './App.css';
 import AppLayout from './AppLayout';
 import './AppLayout.css';
 import './CustomStyles.css';
@@ -16,6 +17,7 @@ import TestplansMain from './testplans/testplansMain';
 import UserMain from './user/userMain';
 import WorkspaceMain from './workspace/workspaceMain';
 import Logout from './logout/logout';
+import UserVerification from './verification/userVerification';
 
 class App extends Component {
   constructor(props) {
@@ -111,6 +113,9 @@ class App extends Component {
                     <Route path="/home" render={() => (
                       <Redirect to="/user" />)}
                     />
+                    <Route path="/verification/:code" render={() =>
+                      <UserVerification />}
+                    />
                     <Route exact path="/" render={() => (
                       <Redirect to="/user" />)}
                     />
@@ -125,6 +130,9 @@ class App extends Component {
                 <Switch>
                   <Route path="/login" render={() => (
                     <LoginPage logIn={this.userLogIn} errorCode={error} />)}
+                  />
+                  <Route path="/verification/:code" render={() =>
+                    <UserVerification />}
                   />
                   <Route path="/" render={() => (
                     <Redirect to="/login" />)}
