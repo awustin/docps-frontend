@@ -51,6 +51,9 @@ class GroupList extends React.Component {
     }
 
     handleSubmit(values) {
+        const { user } = this.props;
+        values['userId'] = user.id;
+        values['role'] = user.role;
         searchGroups(values).then((result) => {
             let { success, groups } = result
             if (success) {
@@ -155,6 +158,7 @@ class GroupList extends React.Component {
 
     render() {
         const { statusOptions, visibleDelete, editGroupId, mode, openForm, group } = this.state
+        const { user } = this.props
         const { Option } = Select
         const layout = {
             labelCol: { span: 18 },
@@ -204,13 +208,16 @@ class GroupList extends React.Component {
                     </Col>
                     <Col span={16}>
                         <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
-                            <Button
-                                icon={<PlusCircleOutlined />}
-                                type="primary"
-                                onClick={() => this.setState({ openForm: true, mode: 'add', group: undefined })}
-                            >
-                                Crear Grupo
-                            </Button>
+                            {(user.role === 'admin') ?
+                                <Button
+                                    icon={<PlusCircleOutlined />}
+                                    type="primary"
+                                    onClick={() => this.setState({ openForm: true, mode: 'add', group: undefined })}
+                                >
+                                    Crear Grupo
+                                </Button>
+                                : <></>
+                            }
                         </Col>
                         {this.showResults()}
                     </Col>
@@ -221,6 +228,7 @@ class GroupList extends React.Component {
                     group={group}
                     close={() => this.setState({ openForm: false })}
                     reloadSearch={this.reloadSearch}
+                    role={user.role}
                 />
                 {(visibleDelete) ? (
                     <GroupDelete

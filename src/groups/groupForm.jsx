@@ -13,7 +13,7 @@ export default function GroupForm(props) {
     const [message, setMessage] = useState({});
     const [showMessage, setShowMessage] = useState(false);
     const [form] = Form.useForm();
-    const { mode, open, close, group, reloadSearch } = props;
+    const { mode, open, close, group, reloadSearch, role } = props;
     const layout = {
         labelCol: { span: 5 },
         wrapperCol: { span: 24 },
@@ -155,7 +155,7 @@ export default function GroupForm(props) {
                         label="Estado"
                         name="status"
                     >
-                        <Select disabled={mode === 'add'}>
+                        <Select disabled={mode === 'add' || role !== 'admin'}>
                             {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
                         </Select>
                     </Form.Item>
@@ -164,7 +164,7 @@ export default function GroupForm(props) {
                         name="name"
                         rules={[{ required: true, message: 'El nombre es requerido.' }]}
                     >
-                        <Input />
+                        <Input disabled={role !== 'admin'}/>
                     </Form.Item>
                     <Form.Item
                         label="Miembros"
