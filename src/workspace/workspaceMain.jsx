@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';
 import { createTestcase, getTestcaseById, saveSteps, updateTestcase } from '../services/workspaceService';
 import Testcase from './testCases/testcase';
+import withUnloadPrevention from '../hocs/withUnloadPrevention';
 import './WorkspaceStyles.css';
 
 class WorkspaceMain extends React.Component {
@@ -279,4 +280,4 @@ class WorkspaceMain extends React.Component {
 	}
 }
 
-export default withRouter(WorkspaceMain);
+export default withRouter(withUnloadPrevention(WorkspaceMain));
