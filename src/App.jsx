@@ -2,22 +2,22 @@ import 'antd/dist/antd.css';
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import './App.less';
 import './App.css';
+import './App.less';
 import AppLayout from './AppLayout';
 import './AppLayout.css';
 import './CustomStyles.css';
 import GroupsMain from './groups/groupsMain';
-import LoginPage from './login/loginPage';
+import Login from './login/login';
+import Logout from './logout/logout';
 import ProjectsMain from './projects/projectsMain';
 import ReportsMain from './reports/reportsMain';
 import { getGroupById } from './services/groupsService';
 import { UserLogIn } from './services/usersService';
 import TestplansMain from './testplans/testplansMain';
 import UserMain from './user/userMain';
-import WorkspaceMain from './workspace/workspaceMain';
-import Logout from './logout/logout';
 import UserVerification from './verification/userVerification';
+import WorkspaceMain from './workspace/workspaceMain';
 
 class App extends Component {
   constructor(props) {
@@ -46,21 +46,21 @@ class App extends Component {
   };
 
   userLogIn(params) {
+    this.setState({ error: undefined });
     UserLogIn(params).then(({ data }) => {
       try {
         if (data.success && data.user) {
-          const { loggedUser, error } = this.state
+          const { loggedUser } = this.state
           const { user } = data
-          if (loggedUser.id !== user.id && user.id && !error) {
+          if (loggedUser.id !== user.id && user.id) {
+            console.log('loged in')
             this.setState({ loggedIn: true, loggedUser: user, error: undefined })
           }
         }
-        else {
-          this.setState({ error: 'INVALID_USERNAME' });
-        }
+        else
+          this.setState({ error: data.message });
       }
-      catch
-      {
+      catch {
         this.setState({ error: 'NETWORK_ERROR' });
       }
     });
@@ -128,8 +128,8 @@ class App extends Component {
             ) : (
               <div>
                 <Switch>
-                  <Route path="/login" render={() => (
-                    <LoginPage logIn={this.userLogIn} errorCode={error} />)}
+                  <Route path="/login" render={() =>
+                    <Login logIn={this.userLogIn} error={error} />}
                   />
                   <Route path="/verification/:code" render={() =>
                     <UserVerification />}

@@ -191,53 +191,55 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 
 /*LOGIN*/
 .login-container {
-	display: grid;
-	grid-template-columns: 25vw [main-left] 50vw [main-right] 25vw;
-	grid-template-rows: 10vh [main-top] 50vh [main-bottom] 40vh;
-	grid-template-areas:
-        ". . ."
-        ". login ."
-        ". . .";
-	place-items: center;
-	background: #043e74;
+	display: flex;
+	background: #4b7ead;
+	height: 100vh;
+    justify-content: center;
 }
 
 .login-pane {
-	grid-area: login;
-	border-radius: 10px;
-	width: 75%;
-	height: 100%;
+	background: white;
+	margin-top: 5vh;
+	width: 40vw;
+	height: min-content;
 	display: grid;
-	grid-template-rows: 2fr 1fr 1fr;
-	grid-template-areas: 
+	grid-template-rows: 150px 300px min-content;
+	grid-template-areas:
 	"header"
 	"form"
-	"error";
-	background: white;
-  box-shadow: 0px 0px 9px 0px #b7b6b6;
+	"error"
+	;
 }
 
 .login-header {
 	grid-area: header;
-  position: relative;
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
 }
 
-.fancy-title {	
-	font-family: 'Helvetica Neue', sans-serif;
-	font-size: calc(1em + 7vh) !important;
-	text-align: center;
-	position: relative;
-	top: 15%;
-	text-shadow: 
-		-3px 0px 0px #6ec0ff, 
-		3px 0px 0px #c1c1c1;
-  color: #043e74 !important;
+.login-header h1,
+.login-header h5 {
+	margin-left: 8%;
+	text-align: left;
+}
+
+.fancy-title {
+  	color: #0a5296 !important;
+	margin-top: 5%;
+}
+
+.fancy-subtitle {
+	font-weight: 400 !important;
 }
 
 .login-form {
 	grid-area: form;
+	margin-top: 5%;
+}
+
+.login-error {
+	grid-area: error;
+	font-size: large;
+	margin-bottom: 5%;
+	color: #eb1757;
 }
 
 .login-button {
