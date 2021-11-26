@@ -77,10 +77,8 @@ export function downloadTestplanFile(value) {
   return request.get(`${baseUrl()}/downloadTestplanFile`, { 
 		params: {fileName: value},
 		responseType: 'blob',
-		headers: { 
-			'Accept' : ['application/octet-stream', 'application/*'],
-			'Access-Control-Allow-Origin' : 'http://localhost:3000',
-			'Access-Control-Allow-Headers' : ['X-Suggested-Name']
+		headers: {
+			'Accept' : ['application/octet-stream', 'application/*']
 		}
 	})
     .then((response) => response.data)
