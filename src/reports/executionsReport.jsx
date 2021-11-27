@@ -2,7 +2,8 @@ import {
 	DownloadOutlined, LeftCircleOutlined, LoadingOutlined
 } from '@ant-design/icons';
 import {
-	Breadcrumb, Button, Card, Col, DatePicker, Form, Row, Select, Spin, Statistic, Tooltip
+	Breadcrumb, Button, Card, Col, DatePicker, Form,
+	Row, Select, Spin, Statistic, Tooltip
 } from 'antd';
 import 'chartjs-adapter-date-fns';
 import { saveAs } from 'file-saver';
@@ -123,101 +124,100 @@ class ExecutionsReport extends React.Component {
 		const tailLayout = {
 			wrapperCol: { span: 12 },
 		}
-
-		if (loading)
-			return (<></>)
 		return (
 			<>
 				<Breadcrumb>
 					<Breadcrumb.Item>Reportes</Breadcrumb.Item>
 					<Breadcrumb.Item>{user.currentGroup.name}</Breadcrumb.Item>
 				</Breadcrumb>
-				<div className="navigation" style={{ margin: "20px" }}>
-					<Row>
-						<Col span={2}>
-							<Tooltip title="Atrás">
-								<LeftCircleOutlined style={{ fontSize: "150%" }} onClick={() => { this.props.history.goBack() }} />
-							</Tooltip>
-						</Col>
-						<Col span={22}>
-							<Form {...layout}
-								name="reportsExecutions"
-								layout="vertical"
-								onFinish={this.handleSubmit}
-							>
-								<Row>
-									<Col span={12}>
-										<Form.Item
-											label="Proyectos"
-											name="projects"
-											rules={[{ required: true, message: 'Seleccione uno o mas proyectos.' }]}
-										>
-											<Select
-												mode="multiple"
-												allowClear
-												placeholder="Seleccione uno o más proyectos"
-											>
-												{projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
-											</Select>
-										</Form.Item>
-									</Col>
-									<Col span={12}>
-										<Form.Item
-											label="Fechas"
-											name="dates"
-										>
-											<RangePicker />
-										</Form.Item>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={24}>
-										<Form.Item {...tailLayout}>
-											<Button type="primary" htmlType="submit">Generar reporte</Button>
-										</Form.Item>
-									</Col>
-								</Row>
-							</Form>
-						</Col>
-					</Row>
-				</div>
-				{(data.labels.length === 0) ? <></> : (
-					<div className='report-container'>
+				<Spin spinning={loading} size="large">
+					<div className="navigation" style={{ margin: "20px" }}>
 						<Row>
-							<Col span={16} className='report-column'>
-								{(generatingReport) ?
-									<Spin
-										indicator={
-											<LoadingOutlined style={{ fontSize: 150 }} spin />
-										}
-									/>
-									:
-									<Bar
-										height={200}
-										className='executions-report'
-										id='executions-report'
-										data={data}
-										options={options}
-									/>
-								}
+							<Col span={2}>
+								<Tooltip title="Atrás">
+									<LeftCircleOutlined style={{ fontSize: "150%" }} onClick={() => { this.props.history.goBack() }} />
+								</Tooltip>
 							</Col>
-							<Col span={8} className='report-stats-column'>
-								<Card>
-									<Statistic
-										title="Número de ejecuciones totales"
-										value={totals.executions}
-										precision={0}
-										valueStyle={{ color: '#5ed6ba', fontSize: "250%" }}
-										loading={loading}
-									/>
-									<Button disabled={generatingReport} icon={<DownloadOutlined />} onClick={this.downloadCanvas}>
-										Descargar
-									</Button>
-								</Card>
+							<Col span={22}>
+								<Form {...layout}
+									name="reportsExecutions"
+									layout="vertical"
+									onFinish={this.handleSubmit}
+								>
+									<Row>
+										<Col span={12}>
+											<Form.Item
+												label="Proyectos"
+												name="projects"
+												rules={[{ required: true, message: 'Seleccione uno o mas proyectos.' }]}
+											>
+												<Select
+													mode="multiple"
+													allowClear
+													placeholder="Seleccione uno o más proyectos"
+												>
+													{projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
+												</Select>
+											</Form.Item>
+										</Col>
+										<Col span={12}>
+											<Form.Item
+												label="Fechas"
+												name="dates"
+											>
+												<RangePicker />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row>
+										<Col span={24}>
+											<Form.Item {...tailLayout}>
+												<Button type="primary" htmlType="submit">Generar reporte</Button>
+											</Form.Item>
+										</Col>
+									</Row>
+								</Form>
 							</Col>
 						</Row>
 					</div>
-				)}
+					{(data.labels.length === 0) ? <></> : (
+						<div className='report-container'>
+							<Row>
+								<Col span={16} className='report-column'>
+									{(generatingReport) ?
+										<Spin
+											indicator={
+												<LoadingOutlined style={{ fontSize: 150 }} spin />
+											}
+										/>
+										:
+										<Bar
+											height={200}
+											className='executions-report'
+											id='executions-report'
+											data={data}
+											options={options}
+										/>
+									}
+								</Col>
+								<Col span={8} className='report-stats-column'>
+									<Card>
+										<Statistic
+											title="Número de ejecuciones totales"
+											value={totals.executions}
+											precision={0}
+											valueStyle={{ color: '#5ed6ba', fontSize: "250%" }}
+											loading={loading}
+										/>
+										<Button disabled={generatingReport} icon={<DownloadOutlined />} onClick={this.downloadCanvas}>
+											Descargar
+										</Button>
+									</Card>
+								</Col>
+							</Row>
+						</div>
+					)}
+				</Spin>
 			</>
 		);
 	}

@@ -41,27 +41,27 @@ class App extends Component {
       memberOf: [],
       role: undefined
     },
+    loading: false,
     error: undefined,
     showLogout: false
   };
 
   userLogIn(params) {
-    this.setState({ error: undefined });
+    this.setState({ loading: true, error: undefined });
     UserLogIn(params).then(({ data }) => {
       try {
         if (data.success && data.user) {
           const { loggedUser } = this.state
           const { user } = data
           if (loggedUser.id !== user.id && user.id) {
-            console.log('loged in')
-            this.setState({ loggedIn: true, loggedUser: user, error: undefined })
+            this.setState({ loading: false, loggedIn: true, loggedUser: user, error: undefined })
           }
         }
         else
-          this.setState({ error: data.message });
+          this.setState({ loading: false, error: data.message });
       }
       catch {
-        this.setState({ error: 'NETWORK_ERROR' });
+        this.setState({ loading: false, error: 'NETWORK_ERROR' });
       }
     });
   }
@@ -80,7 +80,7 @@ class App extends Component {
   }
 
   render() {
-    const { loggedIn, loggedUser, error, showLogout } = this.state;
+    const { loggedIn, loggedUser, error, loading, showLogout } = this.state;
     return (
       <>
         <Router>
@@ -129,7 +129,7 @@ class App extends Component {
               <div>
                 <Switch>
                   <Route path="/login" render={() =>
-                    <Login logIn={this.userLogIn} error={error} />}
+                    <Login logIn={this.userLogIn} loading={loading} error={error} />}
                   />
                   <Route path="/verification/:code" render={() =>
                     <UserVerification />}

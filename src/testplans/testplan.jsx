@@ -2,7 +2,7 @@ import {
 	DeleteOutlined, EditOutlined, LeftCircleOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 import {
-	Breadcrumb, Button, Col, Divider, List, Row, Select, Space, Tag, Tooltip, Typography
+	Breadcrumb, Button, Col, Divider, List, Row, Select, Space, Tag, Tooltip, Typography, Spin
 } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
@@ -239,7 +239,6 @@ class Testplan extends React.Component {
 
 	render() {
 		const { testplan, field, dirty, message, showMessageModal, visibleDelete, deleteTestcaseId, loading } = this.state
-		if (loading) return (<></>)
 		return (
 			<>
 				<Breadcrumb>
@@ -259,71 +258,74 @@ class Testplan extends React.Component {
 				<div className="container">
 					<Title className="testplan-title" level={3}>Plan de pruebas</Title>
 					<Divider />
-					<Row>
-						<Col span={5}>
-							<Space direction="vertical">
-								<Text className="modal-title-label">Nombre</Text>
-								<Title
-									className="modal-editable-title"
-									level={4}
-									editable={{
-										tooltip: <Tooltip>Modificar nombre</Tooltip>,
-										autoSize: { minRows: 1, maxRows: 2 },
-										onChange: ((e) => {
-											this.setState({ dirty: true, field: { ...this.state.field, name: e } })
-										})
-									}}
-								>
-									{field.name}
-								</Title>
-								<Text className="modal-title-label">Estado</Text>
-								{this.statusTag(testplan.status)}
-								<Text className="modal-title-label">Descripción</Text>
-								<Text
-									className="modal-editable-text"
-									editable={{
-										tooltip: <Tooltip>Modificar descripción</Tooltip>,
-										autoSize: { minRows: 1, maxRows: 2 },
-										onChange: ((e) => {
-											this.setState({ field: { ...this.state.field, description: e }, dirty: true })
-										})
-									}}
-								>
-									{field.description}
-								</Text>
-								<Text className="modal-title-label">Etiquetas</Text>
-								<Select
-									mode="tags"
-									defaultValue={testplan.tags}
-									onChange={(e) => this.setState({ field: { ...this.state.field, tags: e }, dirty: true })}
-									dropdownMatchSelectWidth={false}
-								/>
-								<Button type="primary" disabled={!dirty} onClick={this.handleSubmit} style={{ marginTop: "25px" }}>Guardar cambios</Button>
-							</Space>
-						</Col>
+					<Spin spinning={loading} size="large">
+						<Row>
+							<Col span={5}>
+								<Space direction="vertical">
+									<Text className="modal-title-label">Nombre</Text>
+									<Title
+										className="modal-editable-title"
+										level={4}
+										editable={{
+											tooltip: <Tooltip>Modificar nombre</Tooltip>,
+											autoSize: { minRows: 1, maxRows: 2 },
+											onChange: ((e) => {
+												this.setState({ dirty: true, field: { ...this.state.field, name: e } })
+											})
+										}}
+									>
+										{field.name}
+									</Title>
+									<Text className="modal-title-label">Estado</Text>
+									{this.statusTag(testplan.status)}
+									<Text className="modal-title-label">Descripción</Text>
+									<Text
+										className="modal-editable-text"
+										editable={{
+											tooltip: <Tooltip>Modificar descripción</Tooltip>,
+											autoSize: { minRows: 1, maxRows: 2 },
+											onChange: ((e) => {
+												this.setState({ field: { ...this.state.field, description: e }, dirty: true })
+											})
+										}}
+									>
+										{field.description}
+									</Text>
+									<Text className="modal-title-label">Etiquetas</Text>
+									{ (loading) ? <></> :
+									<Select
+										mode="tags"
+										defaultValue={testplan.tags}
+										onChange={(e) => this.setState({ field: { ...this.state.field, tags: e }, dirty: true })}
+										dropdownMatchSelectWidth={false}
+									/>}
+									<Button type="primary" disabled={!dirty} onClick={this.handleSubmit} style={{ marginTop: "25px" }}>Guardar cambios</Button>
+								</Space>
+							</Col>
 
-						<Col span={1}>
-							<Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
-						</Col>
+							<Col span={1}>
+								<Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
+							</Col>
 
-						<Col span={18}>
-							<Row style={{ display: "flex", alignItems: "center", paddingBottom: "1%" }}>
-								<Col span={12}>
-									<Title level={4}>Casos de prueba</Title>
-								</Col>
-								<Col span={12} style={{ textAlign: "end" }}>
-									<Link to={{ pathname: "/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName }}>
-										<Button type="primary"
-											icon={<PlusCircleOutlined />}
-										>
-											Crear caso de prueba
-										</Button>
-									</Link>
-								</Col>
-							</Row>
-							{this.showTestCases()}
-						</Col>
-					</Row>
+							<Col span={18}>
+								<Row style={{ display: "flex", alignItems: "center", paddingBottom: "1%" }}>
+									<Col span={12}>
+										<Title level={4}>Casos de prueba</Title>
+									</Col>
+									<Col span={12} style={{ textAlign: "end" }}>
+										<Link to={{ pathname: "/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName }}>
+											<Button type="primary"
+												icon={<PlusCircleOutlined />}
+											>
+												Crear caso de prueba
+											</Button>
+										</Link>
+									</Col>
+								</Row>
+								{this.showTestCases()}
+							</Col>
+						</Row>
+					</Spin>
 				</div>
 				{(visibleDelete) ? (
 					<TestcaseDelete

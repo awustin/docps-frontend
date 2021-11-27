@@ -2,9 +2,8 @@ import {
     DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 import {
-    Avatar, Button, Col, DatePicker, Divider,
-    Form,
-    Input, List, Row, Select, Space, Tag, Tooltip, Typography
+    Avatar, Button, Col, DatePicker, Divider, Form,
+    Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography
 } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
@@ -47,27 +46,32 @@ class UserList extends React.Component {
         visibleDelete: false,
         user: undefined,
         openForm: false,
-        mode: 'add'
+        mode: 'add',
+        loading: false
     }
 
     handleSubmit(values) {
         values.createdOn = (values.createdOn) ? datePickerRangeConvert(values.createdOn) : undefined
+        this.setState({ loading: true })
         searchUsers(values).then((result) => {
             let { success, users } = result
             if (success) {
                 this.setState({ results: users, lastValues: values })
             }
+            this.setState({ loading: false })
         })
     }
 
     reloadSearch() {
         const { lastValues } = this.state
         if (lastValues !== undefined) {
+            this.setState({ loading: true })
             searchUsers(lastValues).then((result) => {
                 let { success, users } = result
                 if (success) {
                     this.setState({ results: users })
                 }
+                this.setState({ loading: false })
             })
         }
     }
@@ -87,7 +91,7 @@ class UserList extends React.Component {
         getUserInfoById(id).then((result) => {
             let { success, user } = result
             if (success)
-                this.setState({ mode:'update', openForm: true, user: user })
+                this.setState({ mode: 'update', openForm: true, user: user })
         })
     }
 
@@ -113,7 +117,7 @@ class UserList extends React.Component {
                                             {this.statusTag(item.status, item.key)}
                                         </>,
                                         <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
-                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id) } />
+                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
                                         </Tooltip>,
                                         <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
                                             <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
@@ -153,7 +157,7 @@ class UserList extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleDelete, editUserId, openForm, mode, user } = this.state
+        const { statusOptions, visibleDelete, editUserId, openForm, mode, user, loading } = this.state
         const { Option } = Select
         const { RangePicker } = DatePicker
         const layout = {
@@ -165,68 +169,70 @@ class UserList extends React.Component {
         }
         return (
             <>
-                <Row>
-                    <Col span={7}>
-                        <Form {...layout}
-                            name="userSearch"
-                            layout="vertical"
-                            style={{ marginBlockStart: "1%" }}
-                            onFinish={this.handleSubmit}
-                        >
-                            <Row>
-                                <Col span={24}>
-                                    <Form.Item
-                                        label="Nombre"
-                                        name="name"
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Correo electrónico"
-                                        name="email"
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Fecha de creación"
-                                        name="createdOn"
-                                    >
-                                        <RangePicker />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Estado"
-                                        name="status"
-                                        initialValue={statusOptions[2].value}
-                                    >
-                                        <Select>
-                                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row span={16}>
-                                <Form.Item {...tailLayout}>
-                                    <Button type="primary" htmlType="submit">Buscar</Button>
-                                </Form.Item>
-                            </Row>
-                        </Form>
-                    </Col>
-                    <Col span={1}>
-                        <Divider type="vertical" style={{ height: "100%" }} dashed />
-                    </Col>
-                    <Col span={16}>
-                        <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
-                            <Button
-                                icon={<PlusCircleOutlined />}
-                                type="primary"
-                                onClick={() => this.setState({ openForm: true, mode:'add', user: undefined })}
+                <Spin spinning={loading} size="large">
+                    <Row>
+                        <Col span={7}>
+                            <Form {...layout}
+                                name="userSearch"
+                                layout="vertical"
+                                style={{ marginBlockStart: "1%" }}
+                                onFinish={this.handleSubmit}
                             >
-                                Crear usuario
-                            </Button>
+                                <Row>
+                                    <Col span={24}>
+                                        <Form.Item
+                                            label="Nombre"
+                                            name="name"
+                                        >
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Correo electrónico"
+                                            name="email"
+                                        >
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Fecha de creación"
+                                            name="createdOn"
+                                        >
+                                            <RangePicker />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Estado"
+                                            name="status"
+                                            initialValue={statusOptions[2].value}
+                                        >
+                                            <Select>
+                                                {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+                                            </Select>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row span={16}>
+                                    <Form.Item {...tailLayout}>
+                                        <Button type="primary" htmlType="submit">Buscar</Button>
+                                    </Form.Item>
+                                </Row>
+                            </Form>
                         </Col>
-                        {this.showResults()}
-                    </Col>
-                </Row>
+                        <Col span={1}>
+                            <Divider type="vertical" style={{ height: "100%" }} dashed />
+                        </Col>
+                        <Col span={16}>
+                            <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+                                <Button
+                                    icon={<PlusCircleOutlined />}
+                                    type="primary"
+                                    onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+                                >
+                                    Crear usuario
+                                </Button>
+                            </Col>
+                            {this.showResults()}
+                        </Col>
+                    </Row>
+                </Spin>
                 <UserForm
                     mode={mode}
                     open={openForm}

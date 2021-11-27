@@ -2,8 +2,7 @@ import {
 	DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 import {
-	Avatar, Button, Col, Divider,
-	Form,
+	Avatar, Button, Col, Divider, Spin, Form,
 	Input, List, Row, Select, Tooltip, Typography
 } from 'antd';
 import React from 'react';
@@ -33,7 +32,7 @@ class ProjectList extends React.Component {
 		visibleDelete: false,
 		visibleCreateTestplan: false,
 		editProjectId: undefined,
-		loading: true,
+		loading: false,
 		project: undefined,
 		openForm: false,
 		mode: 'add'
@@ -41,6 +40,7 @@ class ProjectList extends React.Component {
 
 	componentDidMount() {
 		const { user } = this.props
+		this.setState({ loading: true })
 		getGroupsDropdown(user.id).then((result) => {
 			let { success, groups } = result
 			if (success) {
@@ -50,22 +50,26 @@ class ProjectList extends React.Component {
 	}
 
 	handleSubmit(values) {
+		this.setState({ loading: true })
 		searchProjects(values).then((result) => {
 			let { success, projects } = result
 			if (success) {
 				this.setState({ results: projects, lastValues: values })
 			}
+			this.setState({ loading: false })
 		})
 	}
 
 	reloadSearch() {
 		const { lastValues } = this.state
 		if (lastValues !== undefined) {
+			this.setState({ loading: true })
 			searchProjects(lastValues).then((result) => {
 				let { success, projects } = result
 				if (success) {
 					this.setState({ results: projects })
 				}
+				this.setState({ loading: false })
 			})
 		}
 	}
@@ -168,67 +172,65 @@ class ProjectList extends React.Component {
 		const tailLayout = {
 			wrapperCol: { span: 12 },
 		}
-
-		if (loading)
-			return (<></>)
-
 		return (
 			<>
-				<Row>
-					<Col span={7}>
-						<Form {...layout}
-							name="projectSearch"
-							layout="vertical"
-							style={{ marginBlockStart: "1%" }}
-							onFinish={this.handleSubmit}
-						>
-							<Row>
-								<Col span={24}>
-									<Form.Item
-										label="Nombre"
-										name="projectName"
-									>
-										<Input />
-									</Form.Item>
-									<Form.Item
-										label="Grupos"
-										name="projectGroups"
-										rules={[{ required: true, message: 'Seleccione al menos un grupo.' }]}
-									>
-										<Select
-											mode="multiple"
-											allowClear
-											style={{ width: '100%' }}
-											placeholder="Seleccione uno o más grupos"
-										>
-											{groupOptions.map(i => <Option key={i.key}>{i.name}</Option>)}
-										</Select>
-									</Form.Item>
-								</Col>
-							</Row>
-							<Row span={16}>
-								<Form.Item {...tailLayout}>
-									<Button type="primary" htmlType="submit">Buscar</Button>
-								</Form.Item>
-							</Row>
-						</Form>
-					</Col>
-					<Col span={1}>
-						<Divider type="vertical" style={{ height: "100%" }} dashed />
-					</Col>
-					<Col span={16}>
-						<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
-							<Button
-								icon={<PlusCircleOutlined />}
-								type="primary"
-								onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+				<Spin spinning={loading} size="large">
+					<Row>
+						<Col span={7}>
+							<Form {...layout}
+								name="projectSearch"
+								layout="vertical"
+								style={{ marginBlockStart: "1%" }}
+								onFinish={this.handleSubmit}
 							>
-								Crear proyecto
-							</Button>
+								<Row>
+									<Col span={24}>
+										<Form.Item
+											label="Nombre"
+											name="projectName"
+										>
+											<Input />
+										</Form.Item>
+										<Form.Item
+											label="Grupos"
+											name="projectGroups"
+											rules={[{ required: true, message: 'Seleccione al menos un grupo.' }]}
+										>
+											<Select
+												mode="multiple"
+												allowClear
+												style={{ width: '100%' }}
+												placeholder="Seleccione uno o más grupos"
+											>
+												{groupOptions.map(i => <Option key={i.key}>{i.name}</Option>)}
+											</Select>
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row span={16}>
+									<Form.Item {...tailLayout}>
+										<Button type="primary" htmlType="submit">Buscar</Button>
+									</Form.Item>
+								</Row>
+							</Form>
 						</Col>
-						{this.showResults()}
-					</Col>
-				</Row>
+						<Col span={1}>
+							<Divider type="vertical" style={{ height: "100%" }} dashed />
+						</Col>
+						<Col span={16}>
+							<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+								<Button
+									icon={<PlusCircleOutlined />}
+									type="primary"
+									onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+								>
+									Crear proyecto
+								</Button>
+							</Col>
+							{this.showResults()}
+						</Col>
+					</Row>
+				</Spin>
 				<ProjectForm
 					mode={mode}
 					open={openForm}

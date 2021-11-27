@@ -5,9 +5,7 @@ import {
 	PlusCircleOutlined
 } from '@ant-design/icons';
 import {
-	Button, Col,
-	DatePicker, Divider,
-	Form,
+	Button, Col, Spin, DatePicker, Divider, Form,
 	Input, List, Row, Select, Space, Tag, Tooltip, Typography
 } from 'antd';
 import React from 'react';
@@ -44,42 +42,49 @@ class TestplanSearchPane extends React.Component {
 		editTestplanId: undefined,
 		testplan: undefined,
 		openForm: false,
-		mode: 'add'
+		mode: 'add',
+		loading: false
 	}
 
 	componentDidMount() {
 		const { user } = this.props
+		this.setState({ loading: true })
 		getGroupsDropdown(user.id).then((result) => {
 			if (result.success) {
-				this.setState({ groupOptions: result.groups })
+				this.setState({ groupOptions: result.groups, loading: false })
 			}
 		})
 	}
 
 	handleSubmit(values) {
 		values.createdOn = (values.createdOn) ? datePickerRangeConvert(values.createdOn) : undefined
+		this.setState({ loading: true })
 		searchTestplans(values).then((result) => {
 			if (result.success) {
 				this.setState({ results: result.testplans, lastValues: values })
 			}
+			this.setState({ loading: false })
 		})
 	}
 
 	reloadSearch() {
 		const { lastValues } = this.state
 		if (lastValues !== undefined) {
+			this.setState({ loading: true })
 			searchTestplans(lastValues).then((result) => {
 				if (result.success) {
 					this.setState({ results: result.testplans })
 				}
+				this.setState({ loading: false })
 			})
 		}
 	}
 
 	getProjectOptions(groupId) {
+		this.setState({ loading: true })
 		getProjectsDropdown(groupId).then((result) => {
 			if (result.success) {
-				this.setState({ projectOptions: result.projects })
+				this.setState({ projectOptions: result.projects, loading: false })
 			}
 		})
 	}
@@ -179,7 +184,7 @@ class TestplanSearchPane extends React.Component {
 
 
 	render() {
-		const { groupOptions, projectOptions, tagOptions, visibleDelete, editTestplanId, openForm, mode } = this.state
+		const { groupOptions, projectOptions, tagOptions, visibleDelete, editTestplanId, openForm, mode, loading } = this.state
 		const { user } = this.props
 		const layout = {
 			labelCol: { span: 18 },
@@ -190,93 +195,95 @@ class TestplanSearchPane extends React.Component {
 		}
 		return (
 			<>
-				<Row>
-					<Col span={7}>
-						<Form {...layout}
-							name="testplanSearch"
-							layout="vertical"
-							style={{ marginBlockStart: "1%" }}
-							onFinish={this.handleSubmit}
-						>
-							<Row>
-								<Col span={24}>
-									<Form.Item
-										label="Grupo"
-										name="group"
-										rules={[{ required: true, message: 'Seleccione un grupo.' }]}
-									>
-										<Select
-											allowClear
-											placeholder="Seleccione un grupo"
-											onChange={id => this.getProjectOptions(id)}
-										>
-											{groupOptions.map(e => (<Option key={e.key}>{e.name}</Option>))}
-										</Select>
-									</Form.Item>
-									<Form.Item
-										label="Proyecto"
-										name="projects"
-										rules={[{ required: true, message: 'Seleccione uno o mas proyectos.' }]}
-									>
-										<Select
-											mode="multiple"
-											allowClear
-											placeholder="Seleccione uno o más proyectos"
-											disabled={(projectOptions || []).length === 0}
-										>
-											{projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
-										</Select>
-									</Form.Item>
-									<Form.Item
-										label="Nombre"
-										name="testplanName"
-									>
-										<Input />
-									</Form.Item>
-									<Form.Item
-										label="Fecha de creación"
-										name="createdOn"
-									>
-										<RangePicker />
-									</Form.Item>
-									<Form.Item
-										label="Etiquetas"
-										name="testplanTags"
-									>
-										<Select
-											mode="multiple"
-											allowClear
-											placeholder="Seleccione una o más etiquetas"
-											onDropdownVisibleChange={this.getTagOptions}
-										>
-											{tagOptions.map(item => (<Option key={item.tag}>{item.tag}</Option>))}
-										</Select>
-									</Form.Item>
-								</Col>
-							</Row>
-							<Row span={16}>
-								<Form.Item {...tailLayout}>
-									<Button type="primary" htmlType="submit">Buscar</Button>
-								</Form.Item>
-							</Row>
-						</Form>
-					</Col>
-					<Col span={1}>
-						<Divider type="vertical" style={{ height: "100%" }} dashed />
-					</Col>
-					<Col span={16}>
-						<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
-							<Button
-								icon={<PlusCircleOutlined />}
-								type="primary"
-								onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+				<Spin spinning={loading} size="large">
+					<Row>
+						<Col span={7}>
+							<Form {...layout}
+								name="testplanSearch"
+								layout="vertical"
+								style={{ marginBlockStart: "1%" }}
+								onFinish={this.handleSubmit}
 							>
-								Crear plan de pruebas
-							</Button>
+								<Row>
+									<Col span={24}>
+										<Form.Item
+											label="Grupo"
+											name="group"
+											rules={[{ required: true, message: 'Seleccione un grupo.' }]}
+										>
+											<Select
+												allowClear
+												placeholder="Seleccione un grupo"
+												onChange={id => this.getProjectOptions(id)}
+											>
+												{groupOptions.map(e => (<Option key={e.key}>{e.name}</Option>))}
+											</Select>
+										</Form.Item>
+										<Form.Item
+											label="Proyecto"
+											name="projects"
+											rules={[{ required: true, message: 'Seleccione uno o mas proyectos.' }]}
+										>
+											<Select
+												mode="multiple"
+												allowClear
+												placeholder="Seleccione uno o más proyectos"
+												disabled={(projectOptions || []).length === 0}
+											>
+												{projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
+											</Select>
+										</Form.Item>
+										<Form.Item
+											label="Nombre"
+											name="testplanName"
+										>
+											<Input />
+										</Form.Item>
+										<Form.Item
+											label="Fecha de creación"
+											name="createdOn"
+										>
+											<RangePicker />
+										</Form.Item>
+										<Form.Item
+											label="Etiquetas"
+											name="testplanTags"
+										>
+											<Select
+												mode="multiple"
+												allowClear
+												placeholder="Seleccione una o más etiquetas"
+												onDropdownVisibleChange={this.getTagOptions}
+											>
+												{tagOptions.map(item => (<Option key={item.tag}>{item.tag}</Option>))}
+											</Select>
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row span={16}>
+									<Form.Item {...tailLayout}>
+										<Button type="primary" htmlType="submit">Buscar</Button>
+									</Form.Item>
+								</Row>
+							</Form>
 						</Col>
-						{this.showResults()}
-					</Col>
-				</Row>
+						<Col span={1}>
+							<Divider type="vertical" style={{ height: "100%" }} dashed />
+						</Col>
+						<Col span={16}>
+							<Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+								<Button
+									icon={<PlusCircleOutlined />}
+									type="primary"
+									onClick={() => this.setState({ openForm: true, mode: 'add', user: undefined })}
+								>
+									Crear plan de pruebas
+								</Button>
+							</Col>
+							{this.showResults()}
+						</Col>
+					</Row>
+				</Spin>
 				<TestplanForm
 					mode={mode}
 					open={openForm}

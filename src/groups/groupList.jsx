@@ -2,8 +2,7 @@ import {
     DeleteOutlined, EditOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 import {
-    Avatar, Button, Col, Divider,
-    Form,
+    Avatar, Button, Col, Divider, Form, Spin,
     Input, List, Row, Select, Space, Tag, Tooltip, Typography
 } from 'antd';
 import React from 'react';
@@ -47,29 +46,34 @@ class GroupList extends React.Component {
         editGroupId: undefined,
         openForm: false,
         mode: 'add',
-        group: undefined
+        group: undefined,
+        loading: false
     }
 
     handleSubmit(values) {
         const { user } = this.props;
         values['userId'] = user.id;
         values['role'] = user.role;
+        this.setState({ loading: true })
         searchGroups(values).then((result) => {
             let { success, groups } = result
             if (success) {
                 this.setState({ results: groups, lastValues: values })
             }
+            this.setState({ loading: false })
         })
     }
 
     reloadSearch() {
         const { lastValues } = this.state
         if (lastValues !== undefined) {
+            this.setState({ loading: true })
             searchGroups(lastValues).then((result) => {
                 let { success, groups } = result
                 if (success) {
                     this.setState({ results: groups })
                 }
+                this.setState({ loading: false })
             })
         }
     }
@@ -157,7 +161,7 @@ class GroupList extends React.Component {
     }
 
     render() {
-        const { statusOptions, visibleDelete, editGroupId, mode, openForm, group } = this.state
+        const { statusOptions, visibleDelete, editGroupId, mode, openForm, group, loading } = this.state
         const { user } = this.props
         const { Option } = Select
         const layout = {
@@ -169,59 +173,61 @@ class GroupList extends React.Component {
         }
         return (
             <>
-                <Row>
-                    <Col span={7}>
-                        <Form {...layout}
-                            name="groupSearch"
-                            layout="vertical"
-                            style={{ marginBlockStart: "1%" }}
-                            onFinish={this.handleSubmit}
-                        >
-                            <Row>
-                                <Col span={24}>
-                                    <Form.Item
-                                        label="Nombre"
-                                        name="name"
-                                    >
-                                        <Input />
+                <Spin spinning={loading} size="large">
+                    <Row>
+                        <Col span={7}>
+                            <Form {...layout}
+                                name="groupSearch"
+                                layout="vertical"
+                                style={{ marginBlockStart: "1%" }}
+                                onFinish={this.handleSubmit}
+                            >
+                                <Row>
+                                    <Col span={24}>
+                                        <Form.Item
+                                            label="Nombre"
+                                            name="name"
+                                        >
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Estado"
+                                            name="status"
+                                            initialValue={statusOptions[2].value}
+                                        >
+                                            <Select>
+                                                {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+                                            </Select>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row span={16}>
+                                    <Form.Item {...tailLayout}>
+                                        <Button type="primary" htmlType="submit">Buscar</Button>
                                     </Form.Item>
-                                    <Form.Item
-                                        label="Estado"
-                                        name="status"
-                                        initialValue={statusOptions[2].value}
-                                    >
-                                        <Select>
-                                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row span={16}>
-                                <Form.Item {...tailLayout}>
-                                    <Button type="primary" htmlType="submit">Buscar</Button>
-                                </Form.Item>
-                            </Row>
-                        </Form>
-                    </Col>
-                    <Col span={1}>
-                        <Divider type="vertical" style={{ height: "100%" }} dashed />
-                    </Col>
-                    <Col span={16}>
-                        <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
-                            {(user.role === 'admin') ?
-                                <Button
-                                    icon={<PlusCircleOutlined />}
-                                    type="primary"
-                                    onClick={() => this.setState({ openForm: true, mode: 'add', group: undefined })}
-                                >
-                                    Crear Grupo
-                                </Button>
-                                : <></>
-                            }
+                                </Row>
+                            </Form>
                         </Col>
-                        {this.showResults()}
-                    </Col>
-                </Row>
+                        <Col span={1}>
+                            <Divider type="vertical" style={{ height: "100%" }} dashed />
+                        </Col>
+                        <Col span={16}>
+                            <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+                                {(user.role === 'admin') ?
+                                    <Button
+                                        icon={<PlusCircleOutlined />}
+                                        type="primary"
+                                        onClick={() => this.setState({ openForm: true, mode: 'add', group: undefined })}
+                                    >
+                                        Crear Grupo
+                                    </Button>
+                                    : <></>
+                                }
+                            </Col>
+                            {this.showResults()}
+                        </Col>
+                    </Row>
+                </Spin>
                 <GroupForm
                     mode={mode}
                     open={openForm}

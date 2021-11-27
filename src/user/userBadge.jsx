@@ -28,11 +28,13 @@ class UserBadge extends React.Component {
     }
 
     componentDidMount() {
-        const { user } = this.props
+        const { user, setLoading } = this.props
+        setLoading(true)
         getCurrentUserInfoById({ id: user.id }).then((result) => {
             const { success, user } = result
             if (success)
                 this.setState({ userInfo: user })
+            setLoading(false)
         })
     }
 

@@ -2,7 +2,8 @@ import {
     LeftCircleOutlined
 } from '@ant-design/icons';
 import {
-    Alert, Breadcrumb, Button, Col, Divider, Row, Space, Tag, Tooltip, Typography
+    Alert, Breadcrumb, Button, Col, Divider,
+    Row, Space, Spin, Tag, Tooltip, Typography
 } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
@@ -81,7 +82,6 @@ class Testcase extends React.Component {
         const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations, loading } = this.props
         const { showEditModal } = this.state
         const { Title, Text } = Typography
-        if (loading) return (<></>)
         return (
             <>
                 {(action === 'create') ?
@@ -110,59 +110,59 @@ class Testcase extends React.Component {
                         {this.showMessages()}
                     </div>
                     <Title level={3}>Caso de prueba</Title>
-                    <Row style={{ display: "flex", alignItems: "top" }}>
-                        <Col span={4}>
-                            <Space direction="vertical">
-                                <Text className="modal-title-label">Nombre</Text>
-                                <Title level={4}>{testcase.testcaseName}</Title>
-                                <Text className="modal-title-label">Descripción</Text>
-                                <Text>{testcase.description}</Text>
-                                <Text className="modal-title-label">Precondiciones</Text>
-                                <Text>{testcase.preconditions}</Text>
-                                <Text className="modal-title-label">Prioridad</Text>
-                                <Tag color={(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["color"] : ''}>
-                                    {(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["label"] : ''}
-                                </Tag>
-                                <Button type="primary" onClick={this.handleEditClick} style={{ marginTop: "25px" }}>Modificar</Button>
-                            </Space>
-                            <TestcaseForm
-                                visible={showEditModal}
-                                isEditModalVisible={this.isEditModalVisible}
-                                upsertTestcase={upsertTestcase}
-                                values={{
-                                    id: testcase.id,
-                                    name: testcase.testcaseName,
-                                    description: testcase.description,
-                                    preconditions: testcase.preconditions,
-                                    priority: testcase.priority
-                                }}
-                            />
-                        </Col>
-
-                        <Col span={1}>
-                            <Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
-                        </Col>
-
-                        <Col span={18} style={{ textAlign: "middle" }}>
-                            <Row>
-                                <Col span={18}>
-                                    <Title level={4}>Pasos</Title>
-                                </Col>
-                                <Col span={6} style={{ textAlign: "end" }}>
-                                    <Button type="primary" disabled={!modifiedSteps} onClick={this.handleSaveStepsClick}>Guardar cambios</Button>
-                                </Col>
-                            </Row>
-                            <Divider style={{ marginBlock: "10px" }} />
-                            <TestcaseSteps
-                                testcase={testcase}
-                                steps={testcase.steps}
-                                addStep={addStep}
-                                editStep={editStep}
-                                deleteStep={deleteStep}
-                                variablesOperations={variablesOperations}
-                            />
-                        </Col>
-                    </Row>
+                    <Spin spinning={loading} size="large">
+                        <Row style={{ display: "flex", alignItems: "top" }}>
+                            <Col span={4}>
+                                <Space direction="vertical">
+                                    <Text className="modal-title-label">Nombre</Text>
+                                    <Title level={4}>{testcase.testcaseName}</Title>
+                                    <Text className="modal-title-label">Descripción</Text>
+                                    <Text>{testcase.description}</Text>
+                                    <Text className="modal-title-label">Precondiciones</Text>
+                                    <Text>{testcase.preconditions}</Text>
+                                    <Text className="modal-title-label">Prioridad</Text>
+                                    <Tag color={(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["color"] : ''}>
+                                        {(d.priorities[testcase.priority]) ? d.priorities[testcase.priority]["label"] : ''}
+                                    </Tag>
+                                    <Button type="primary" onClick={this.handleEditClick} style={{ marginTop: "25px" }}>Modificar</Button>
+                                </Space>
+                                <TestcaseForm
+                                    visible={showEditModal}
+                                    isEditModalVisible={this.isEditModalVisible}
+                                    upsertTestcase={upsertTestcase}
+                                    values={{
+                                        id: testcase.id,
+                                        name: testcase.testcaseName,
+                                        description: testcase.description,
+                                        preconditions: testcase.preconditions,
+                                        priority: testcase.priority
+                                    }}
+                                />
+                            </Col>
+                            <Col span={1}>
+                                <Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
+                            </Col>
+                            <Col span={18} style={{ textAlign: "middle" }}>
+                                <Row>
+                                    <Col span={18}>
+                                        <Title level={4}>Pasos</Title>
+                                    </Col>
+                                    <Col span={6} style={{ textAlign: "end" }}>
+                                        <Button type="primary" disabled={!modifiedSteps} onClick={this.handleSaveStepsClick}>Guardar cambios</Button>
+                                    </Col>
+                                </Row>
+                                <Divider style={{ marginBlock: "10px" }} />
+                                <TestcaseSteps
+                                    testcase={testcase}
+                                    steps={testcase.steps}
+                                    addStep={addStep}
+                                    editStep={editStep}
+                                    deleteStep={deleteStep}
+                                    variablesOperations={variablesOperations}
+                                />
+                            </Col>
+                        </Row>
+                    </Spin>
                 </div>
             </>
         );
