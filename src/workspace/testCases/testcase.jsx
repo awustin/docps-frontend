@@ -152,14 +152,15 @@ class Testcase extends React.Component {
                                     </Col>
                                 </Row>
                                 <Divider style={{ marginBlock: "10px" }} />
-                                <TestcaseSteps
-                                    testcase={testcase}
-                                    steps={testcase.steps}
-                                    addStep={addStep}
-                                    editStep={editStep}
-                                    deleteStep={deleteStep}
-                                    variablesOperations={variablesOperations}
-                                />
+                                {(action === 'create') ? <></> :
+                                    <TestcaseSteps
+                                        testcase={testcase}
+                                        steps={testcase.steps}
+                                        addStep={addStep}
+                                        editStep={editStep}
+                                        deleteStep={deleteStep}
+                                        variablesOperations={variablesOperations}
+                                    />}
                             </Col>
                         </Row>
                     </Spin>

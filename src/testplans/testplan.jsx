@@ -56,7 +56,7 @@ class Testplan extends React.Component {
 		loading: true
 	}
 
-	UNSAFE_componentWillMount() {
+	componentDidMount() {
 		if (Object.keys(this.props).includes("match")) {
 			let testplanId = this.props.match.params.testplanId
 			getTestplanById(testplanId).then((result) => {
@@ -223,6 +223,7 @@ class Testplan extends React.Component {
 
 	reloadSearch() {
 		const { testplan } = this.state
+		this.setState({ loading: true })
 		getTestplanById(testplan.testplanId).then((result) => {
 			if (result.success) {
 				const { testplan } = result
