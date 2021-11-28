@@ -4,10 +4,6 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { getStepsDropdown, getTestcasesDropdown, getTestplansDropdown } from '../../services/workspaceService';
 
-function random() {
-	return Math.random().toString(36).substring(2, 6)
-}
-
 class StepSearch extends React.Component {
 	constructor(props) {
 		super(props)
@@ -32,7 +28,7 @@ class StepSearch extends React.Component {
 
 	onLoadData(treeNode) {
 		return new Promise(resolve => {
-			const { id, pId } = treeNode.props;
+			const { id, pId } = treeNode;
 			if (!pId) {
 				this.getTestcaseList(id)
 			}
@@ -52,21 +48,6 @@ class StepSearch extends React.Component {
 				});
 			}
 		})
-		let list = []
-		for (let index = 0; index < 3; index++) {
-			let ran = random()
-			list.push({
-				id: 'step' + ran,
-				pId: testcaseId,
-				value: 'step' + ran,
-				title: 'step' + ran,
-				selectable: true,
-				isLeaf: true,
-				action: 'Paso ' + 'step' + ran,
-				data: 'Datos para utilizar',
-				result: 'Se insertó un paso'
-			})
-		}
 	}
 
 	getTestcaseList(testplanId) {

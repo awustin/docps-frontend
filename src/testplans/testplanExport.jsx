@@ -2,7 +2,7 @@ import {
 	CheckCircleTwoTone, DownloadOutlined, LeftCircleOutlined, WarningTwoTone
 } from '@ant-design/icons';
 import {
-	Breadcrumb, Button, Col, Divider, Progress, Row, Space, Tooltip, Typography
+	Breadcrumb, Button, Col, Divider, Progress, Row, Space, Tooltip, Typography, Spin
 } from 'antd';
 import { saveAs } from 'file-saver';
 import React from 'react';
@@ -37,6 +37,7 @@ class TestplanExport extends React.Component {
 	componentDidMount() {
 		if (Object.keys(this.props).includes("match")) {
 			const { id } = this.props.match.params
+			this.setState({ loading: true })
 			getTestcasesCount(id).then((result) => {
 				if (result.success) {
 					const { data } = result
@@ -45,9 +46,10 @@ class TestplanExport extends React.Component {
 						name: data.name,
 						casesCount: data.count,
 						exportSuccess: undefined,
-						exportFailure: undefined,
+						exportFailure: undefined
 					})
 				}
+				this.setState({ loading: false })
 			})
 		}
 		socket.on('update-progress', (data) => {
@@ -186,7 +188,7 @@ class TestplanExport extends React.Component {
 	}
 
 	render() {
-		const { casesCount } = this.state
+		const { casesCount, loading } = this.state
 		return (
 			<>
 				<Breadcrumb>
@@ -220,19 +222,20 @@ class TestplanExport extends React.Component {
 								</Col>
 							</>
 							:
-							<>
-								<Col flex="1 0 20%" style={{ fontSize: "120%" }}>
-									<Space direction="vertical">
-										<WarningTwoTone twoToneColor="#edb54c" style={{ fontSize: "500%" }} />
-									</Space>
-								</Col>
-								<Col flex="1 0 20%" style={{ fontSize: "105%" }}>
-									<Space direction="vertical" style={{ marginBlockStart: "20%" }}>
-										<Text style={{ fontSize: "120%", color: "#edb54c" }}>No hay casos de prueba para exportar</Text>
-										<Button onClick={() => { this.props.history.goBack() }}>Atrás</Button>
-									</Space>
-								</Col>
-							</>
+							(loading) ? <Spin size="large"></Spin> :
+								<>
+									<Col flex="1 0 20%" style={{ fontSize: "120%" }}>
+										<Space direction="vertical">
+											<WarningTwoTone twoToneColor="#edb54c" style={{ fontSize: "500%" }} />
+										</Space>
+									</Col>
+									<Col flex="1 0 20%" style={{ fontSize: "105%" }}>
+										<Space direction="vertical" style={{ marginBlockStart: "20%" }}>
+											<Text style={{ fontSize: "120%", color: "#edb54c" }}>No hay casos de prueba para exportar</Text>
+											<Button onClick={() => { this.props.history.goBack() }}>Atrás</Button>
+										</Space>
+									</Col>
+								</>
 						}
 					</Row>
 				</div>

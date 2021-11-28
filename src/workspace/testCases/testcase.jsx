@@ -21,13 +21,11 @@ class Testcase extends React.Component {
     }
 
     state = {
-        showEditModal: false,
-        loading: true
+        showEditModal: false
     }
 
     componentDidMount() {
         const { testcase, setTestplan, fetchTestcase, action } = this.props
-
         switch (action) {
             case ("create"):
                 if (Object.keys(this.props).includes("match") && setTestplan !== undefined) {
@@ -152,7 +150,7 @@ class Testcase extends React.Component {
                                     </Col>
                                 </Row>
                                 <Divider style={{ marginBlock: "10px" }} />
-                                {(action === 'create') ? <></> :
+                                {(action === 'create' || loading) ? <></> :
                                     <TestcaseSteps
                                         testcase={testcase}
                                         steps={testcase.steps}

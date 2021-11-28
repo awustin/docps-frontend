@@ -59,6 +59,7 @@ class WorkspaceMain extends React.Component {
 	}
 
 	fetchTestcase(ids) {
+		this.setState({ loading: true })
 		getTestcaseById(ids.id).then((result) => {
 			if (result.success) {
 				this.setState({ testcase: result.testcase, loading: false })
