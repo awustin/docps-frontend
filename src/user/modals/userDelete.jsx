@@ -1,37 +1,65 @@
 import { withRouter } from "react-router";
 import React from 'react';
-import {
-    deleteUserById,
-} from '../../services/usersService';
-import {
-    Modal,
-    Row,
-    Col
-} from 'antd';
-import {
-    ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { deleteUserById } from '../../services/usersService';
+import { Modal, Row, Col } from 'antd';
+import { ExclamationCircleOutlined, } from '@ant-design/icons';
+import MessageModal from '../../common/messageModal';
 
 class UserDelete extends React.Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.validationMessage = "No es posible eliminar el usuario porque pertenece a un Grupo, está en estado de alta o tiene ejecuciones asociadas.";
+        this.closeMessageModal = this.closeMessageModal.bind(this)
+    }
+
+    state = {
+        showMessageModal: false,
+        message: {
+            title: undefined,
+            description: undefined,
+            type: undefined
+        }
     }
 
     handleSubmit() {
-        const { userId, closeDelete, reloadSearch } = this.props
+        const { userId } = this.props
         deleteUserById(userId).then((result) => {
-            const { success } = result
-            if (success) {
-                closeDelete()
-                reloadSearch()
+            if (!result.success) {
+                this.setState({
+                    showMessageModal: true,
+                    message: {
+                        title: 'No se eliminó el usuario',
+                        description: this.validationMessage,
+                        type: 'validate'
+                    }
+                })
+            }
+            else {
+                this.setState({
+                    success: true,
+                    showMessageModal: true,
+                    message: {
+                        title: 'Usuario eliminado',
+                        description: 'El usuario fue eliminado con éxito',
+                        type: 'success'
+                    }
+                })
             }
         })
     }
 
+    closeMessageModal() {
+        const { closeDelete, reloadSearch } = this.props
+        const { success } = this.state
+        if (success)
+            reloadSearch()
+        closeDelete()
+    }
+
     render() {
         const { closeDelete, visibleDelete } = this.props
-
+        const { showMessageModal, message } = this.state
         return (
             <>
                 <Modal
@@ -52,6 +80,13 @@ class UserDelete extends React.Component {
                         </Col>
                     </Row>
                 </Modal>
+                <MessageModal
+                    type={message.type}
+                    title={message.title}
+                    description={message.description}
+                    visible={showMessageModal}
+                    onClose={this.closeMessageModal}
+                />
             </>
         );
     }
