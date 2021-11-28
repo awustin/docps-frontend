@@ -1,21 +1,16 @@
-import { withRouter } from "react-router";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Col, Modal, Row } from 'antd';
 import React from 'react';
-import { activeMembersforGroupById, deleteGroup } from '../../services/groupsService';
-import {
-	Modal,
-	Row,
-	Col,
-} from 'antd';
-import {
-	ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { withRouter } from "react-router";
 import MessageModal from '../../common/messageModal';
+import { deleteGroup } from '../../services/groupsService';
 
 class GroupDelete extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handleSubmit = this.handleSubmit.bind(this)
 		this.closeMessageModal = this.closeMessageModal.bind(this)
+		this.validationMessage = "No es posible eliminar el Grupo porque tiene usuarios miembros, está en estado de alta o tiene Proyectos asociados"
 	}
 	state = {
 		success: false,
@@ -23,73 +18,35 @@ class GroupDelete extends React.Component {
 		message: {
 			title: undefined,
 			description: undefined,
-			type: undefined,
-			def: '¿Desea eliminar este grupo?',
-			hasActiveUsers: 'Este grupo contiene usuarios que están dados de alta, ¿desea eliminarlo de todas formas?',
-		},
-		hasActiveUsers: false,
-		validDeletion: true,
-		loading: true
-	}
-
-	componentDidMount() {
-		const { groupId } = this.props
-		activeMembersforGroupById(groupId).then((result) => {
-			if (result.success) {
-				this.setState({ hasActiveUsers: result.bool, loading: false })
-			}
-		})
+			type: undefined
+		}
 	}
 
 	handleSubmit() {
-		const { hasActiveUsers } = this.state
 		const { groupId } = this.props
-		if (hasActiveUsers) {
-			this.setState({
-				showMessageModal: true,
-				message: {
-					title: 'No se eliminó el grupo',
-					description: 'Este grupo contiene usuarios asociados.',
-					type: 'validate'
-				}
-			})
-		}
-		else {
-			deleteGroup(groupId).then((result) => {
-				if (!result.success) {
-					if (!result.validate)
-						this.setState({
-							showMessageModal: true,
-							message: {
-								title: 'Se produjo un error',
-								description: 'Inténtelo de nuevo',
-								type: 'validate'
-							}
-						})
-					else {
-						this.setState({
-							showMessageModal: true,
-							message: {
-								title: 'No se eliminó el grupo',
-								description: 'Este grupo contiene proyectos, por lo que no se puede eliminar',
-								type: 'validate'
-							}
-						})
+		deleteGroup(groupId).then((result) => {
+			if (!result.success) {
+				this.setState({
+					showMessageModal: true,
+					message: {
+						title: 'No se eliminó el grupo',
+						description: this.validationMessage,
+						type: 'validate'
 					}
-				}
-				else {
-					this.setState({
-						success: true,
-						showMessageModal: true,
-						message: {
-							title: 'Grupo eliminado',
-							description: 'El grupo fue eliminado con éxito',
-							type: 'success'
-						}
-					})
-				}
-			})
-		}
+				})
+			}
+			else {
+				this.setState({
+					success: true,
+					showMessageModal: true,
+					message: {
+						title: 'Grupo eliminado',
+						description: 'El grupo fue eliminado con éxito',
+						type: 'success'
+					}
+				})
+			}
+		})
 	}
 
 	closeMessageModal() {
@@ -102,41 +59,35 @@ class GroupDelete extends React.Component {
 
 	render() {
 		const { closeDelete, visibleDelete } = this.props
-		const { message, showMessageModal, loading } = this.state
+		const { message, showMessageModal } = this.state
 
 		return (
 			<>
-				{(!loading) ? (
-					<>
-						<Modal
-							visible={visibleDelete}
-							closable={false}
-							width={400}
-							onOk={this.handleSubmit}
-							onCancel={closeDelete}
-							okText="Eliminar"
-							cancelText="Cancelar"
-						>
-							<Row>
-								<Col flex="1 0 20%" style={{ textAlign: "center", fontSize: "160%", alignItems: "center" }}>
-									<ExclamationCircleOutlined style={{ color: "#ffc02e" }} />
-								</Col>
-								<Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
-									{message.def}
-								</Col>
-							</Row>
-						</Modal>
-						<MessageModal
-							type={message.type}
-							title={message.title}
-							description={message.description}
-							visible={showMessageModal}
-							onClose={this.closeMessageModal}
-						/>
-					</>
-				)
-					: (<></>)
-				}
+				<Modal
+					visible={visibleDelete}
+					closable={false}
+					width={400}
+					onOk={this.handleSubmit}
+					onCancel={closeDelete}
+					okText="Eliminar"
+					cancelText="Cancelar"
+				>
+					<Row>
+						<Col flex="1 0 20%" style={{ textAlign: "center", fontSize: "160%", alignItems: "center" }}>
+							<ExclamationCircleOutlined style={{ color: "#ffc02e" }} />
+						</Col>
+						<Col flex="1 0 80%" style={{ textAlign: "start", alignSelf: "center" }}>
+							¿Eliminar este grupo?
+						</Col>
+					</Row>
+				</Modal>
+				<MessageModal
+					type={message.type}
+					title={message.title}
+					description={message.description}
+					visible={showMessageModal}
+					onClose={this.closeMessageModal}
+				/>
 			</>
 		)
 	}
