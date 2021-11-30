@@ -1,30 +1,13 @@
-import {
-    Form, Input, Modal, Select
-} from 'antd';
+import { Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import MessageModal from '../common/messageModal';
-import {
-    createUser,
-    updateUser
-} from '../services/usersService';
-
-const { Option } = Select
+import { createUser, updateUser } from '../services/usersService';
 
 export default function UserForm(props) {
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState({});
     const [showMessage, setShowMessage] = useState(false);
     const { mode, open, close, user, reloadSearch } = props;
-    const statusOptions = [
-        {
-            value: 'active',
-            name: 'Activo'
-        },
-        {
-            value: 'inactive',
-            name: 'Inactivo'
-        }
-    ];
     const layout = {
         labelCol: { span: 7 },
         wrapperCol: { span: 12 },
@@ -37,8 +20,6 @@ export default function UserForm(props) {
             })
         }
         else if (mode === 'update') {
-            if (user.status === 'inactive' && values.status === 'active')
-                values.activateUser = true;
             values.id = user.id
             updateUser(values).then((result) => {
                 handleResponse(result);
@@ -129,7 +110,6 @@ export default function UserForm(props) {
                     initialValues={
                         (user) ?
                             {
-                                status: user.status,
                                 name: user.name,
                                 lastname: user.lastname,
                                 email: user.email,
@@ -143,16 +123,6 @@ export default function UserForm(props) {
                             {}
                     }
                 >
-                    <Form.Item
-                        label="Estado"
-                        name="status"
-                    >
-                        <Select
-                            disabled={mode === 'add'}
-                        >
-                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
                     <Form.Item
                         label="Nombre"
                         name="name"

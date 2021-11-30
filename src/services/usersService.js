@@ -81,3 +81,12 @@ export function verifyUser(values) {
       return error;
     });
 }
+
+export function changeUserStatusById(values) {
+  return request.post(`${baseUrl()}/changeUserStatusById`, values)
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}

@@ -1,15 +1,11 @@
-import {
-    DeleteOutlined, EditOutlined, PlusCircleOutlined
-} from '@ant-design/icons';
-import {
-    Avatar, Button, Col, DatePicker, Divider, Form,
-    Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography
-} from 'antd';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, DatePicker, Divider, Form, Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
 import { getUserInfoById, searchUsers } from '../services/usersService';
 import { datePickerRangeConvert } from '../utils/format';
+import UserActivate from './modals/userActivate';
 import UserDelete from './modals/userDelete';
 import UserForm from './userForm';
 
@@ -42,7 +38,6 @@ class UserList extends React.Component {
         ],
         results: undefined,
         error: undefined,
-        visibleEdit: false,
         visibleDelete: false,
         user: undefined,
         openForm: false,
@@ -103,9 +98,7 @@ class UserList extends React.Component {
                     <div className="user-search-results">
                         <List
                             size="small"
-                            pagination={{
-                                pageSize: 15
-                            }}
+                            pagination={{ pageSize: 15 }}
                             dataSource={results}
                             bordered={false}
                             renderItem={item => (
@@ -116,6 +109,14 @@ class UserList extends React.Component {
                                         <>
                                             {this.statusTag(item.status, item.key)}
                                         </>,
+                                        <UserActivate
+                                            key={item.key}
+                                            status={item.status}
+                                            email={item.email}
+                                            id={item.id}
+                                            defaultChecked={item.status === 'active'}
+                                            reloadSearch={this.reloadSearch}
+                                        />,
                                         <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
                                             <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
                                         </Tooltip>,
@@ -244,7 +245,7 @@ class UserList extends React.Component {
                     <UserDelete
                         userId={editUserId}
                         visibleDelete={visibleDelete}
-                        closeDelete={(() => { this.setState({ visibleDelete: false }) })}
+                        closeDelete={() => this.setState({ visibleDelete: false })}
                         reloadSearch={this.reloadSearch}
                     />
                 ) : (
