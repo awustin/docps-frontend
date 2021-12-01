@@ -159,7 +159,7 @@ export default function GroupForm(props) {
                             label="Modificar miembros"
                             name="updateMembers"
                         >
-                            <Switch value={updateMembers} onClick={value => setUpdateMembers(value)} />
+                            <Switch checked={updateMembers} onClick={value => setUpdateMembers(value)} />
                         </Form.Item>
                         : <></>
                     }

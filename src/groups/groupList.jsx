@@ -18,6 +18,7 @@ class GroupList extends React.Component {
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
         this.updateGroup = this.updateGroup.bind(this)
+        this.actionsPerRole = this.actionsPerRole.bind(this)
     }
     state = {
         lastValues: undefined,
@@ -89,12 +90,42 @@ class GroupList extends React.Component {
     statusTag(status, itemKey) {
         switch (status) {
             case 'active':
-                return <Tag key={itemKey + 'green'} color="green" onClick={() => { console.log('Dar de baja') }}>Activo</Tag>
+                return <Tag key={itemKey + 'green'} color="green">Activo</Tag>
             case 'inactive':
-                return <Tag key={itemKey + 'red'} color="volcano" onClick={() => { console.log('Dar de alta') }}>Inactivo</Tag>
+                return <Tag key={itemKey + 'red'} color="volcano">Inactivo</Tag>
             default:
                 break
         }
+    }
+
+    actionsPerRole(item) {
+        const { user } = this.props
+        if (user.role === 'admin')
+            return [
+                this.statusTag(item.status, item.key),
+                <GroupActivate
+                    key={item.key}
+                    status={item.status}
+                    id={item.id}
+                    defaultChecked={item.status === 'active'}
+                    reloadSearch={this.reloadSearch}
+                />,
+                <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
+                    <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
+                </Tooltip>,
+                <Tooltip key={`delete-${item.key}`} title="Eliminar grupo" color="#108ee9">
+                    <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editGroupId: item.id }) }} />
+                </Tooltip>
+            ];
+        if (item.status !== 'inactive') {
+            return [
+                this.statusTag(item.status, item.key),
+                <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
+                    <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
+                </Tooltip>
+            ];
+        }
+        return [this.statusTag(item.status, item.key)];
     }
 
     showResults() {
@@ -114,24 +145,7 @@ class GroupList extends React.Component {
                                 <List.Item
                                     key={item.key}
                                     span={4}
-                                    actions={[
-                                        <>
-                                            {this.statusTag(item.status, item.key)}
-                                        </>,
-                                        <GroupActivate
-                                            key={item.key}
-                                            status={item.status}
-                                            id={item.id}
-                                            defaultChecked={item.status === 'active'}
-                                            reloadSearch={this.reloadSearch}
-                                        />,
-                                        <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
-                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
-                                        </Tooltip>,
-                                        <Tooltip key={`delete-${item.key}`} title="Eliminar grupo" color="#108ee9">
-                                            <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editGroupId: item.id }) }} />
-                                        </Tooltip>
-                                    ]}
+                                    actions={this.actionsPerRole(item)}
                                     className={'list-item'}
                                     style={{ background: "#fff" }}
                                 >
