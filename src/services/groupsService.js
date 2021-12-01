@@ -72,3 +72,12 @@ export function deleteGroup(value) {
       return error;
     });
 }
+
+export function changeGroupStatusById(values) {
+  return request.post(`${baseUrl()}/changeGroupStatusById`, values)
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}

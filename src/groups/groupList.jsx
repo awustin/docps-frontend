@@ -1,15 +1,11 @@
-import {
-    DeleteOutlined, EditOutlined, PlusCircleOutlined
-} from '@ant-design/icons';
-import {
-    Avatar, Button, Col, Divider, Form, Spin,
-    Input, List, Row, Select, Space, Tag, Tooltip, Typography
-} from 'antd';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, Divider, Form, Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
 import { getGroupAndMembersById, searchGroups } from '../services/groupsService';
 import GroupForm from './groupForm';
+import GroupActivate from './modals/groupActivate';
 import GroupDelete from './modals/groupDelete';
 
 const { Text } = Typography;
@@ -122,6 +118,13 @@ class GroupList extends React.Component {
                                         <>
                                             {this.statusTag(item.status, item.key)}
                                         </>,
+                                        <GroupActivate
+                                            key={item.key}
+                                            status={item.status}
+                                            id={item.id}
+                                            defaultChecked={item.status === 'active'}
+                                            reloadSearch={this.reloadSearch}
+                                        />,
                                         <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
                                             <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
                                         </Tooltip>,

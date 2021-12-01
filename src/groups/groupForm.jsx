@@ -1,4 +1,4 @@
-import { Col, Form, Input, Modal, Select, Typography } from 'antd';
+import { Col, Form, Input, Modal, Select, Typography, Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 import MessageModal from '../common/messageModal';
 import { createGroup, getUsersForGroups, updateGroup } from '../services/groupsService';
@@ -9,6 +9,7 @@ const { Option } = Select
 export default function GroupForm(props) {
     const [userList, setUserList] = useState([]);
     const [adminMembersOptions, setAdminMembersOptions] = useState();
+    const [updateMembers, setUpdateMembers] = useState(false);
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState({});
     const [showMessage, setShowMessage] = useState(false);
@@ -18,16 +19,6 @@ export default function GroupForm(props) {
         labelCol: { span: 5 },
         wrapperCol: { span: 24 },
     };
-    const statusOptions = [
-        {
-            value: 'active',
-            name: 'Activo'
-        },
-        {
-            value: 'inactive',
-            name: 'Inactivo'
-        }
-    ];
 
     useEffect(() => {
         getUsersForGroups().then((result) => {
@@ -52,6 +43,11 @@ export default function GroupForm(props) {
                 members: undefined,
                 adminMembers: undefined
             });
+        if( mode === 'update')
+            setUpdateMembers(false);
+        else
+            setUpdateMembers(true);
+
         buildAdminMembersOptions();
     }, [group])
 
@@ -152,25 +148,27 @@ export default function GroupForm(props) {
                     }}
                 >
                     <Form.Item
-                        label="Estado"
-                        name="status"
-                    >
-                        <Select disabled={mode === 'add' || role !== 'admin'}>
-                            {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
                         label="Nombre"
                         name="name"
                         rules={[{ required: true, message: 'El nombre es requerido.' }]}
                     >
-                        <Input disabled={role !== 'admin'}/>
+                        <Input disabled={role !== 'admin'} />
                     </Form.Item>
+                    {(mode === 'update') ?
+                        <Form.Item
+                            label="Modificar miembros"
+                            name="updateMembers"
+                        >
+                            <Switch value={updateMembers} onClick={value => setUpdateMembers(value)} />
+                        </Form.Item>
+                        : <></>
+                    }
                     <Form.Item
                         label="Miembros"
                         name="members"
                     >
                         <Select
+                            disabled={mode === 'update' && !updateMembers}
                             mode="multiple"
                             showArrow
                         >
@@ -182,6 +180,7 @@ export default function GroupForm(props) {
                         name="adminMembers"
                     >
                         <Select
+                            disabled={mode === 'update' && !updateMembers}
                             mode="multiple"
                             showArrow
                         >
