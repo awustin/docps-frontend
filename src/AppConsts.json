@@ -4,7 +4,8 @@
         "NOT_EXISTS": "Esta cuenta no pertenece a un usuario activo. Verifique las credenciales ingresadas.",
 		"INACTIVE": "Esta cuenta no pertenece a un usuario activo. Verifique las credenciales ingresadas.",
         "NETWORK_ERROR": "Error al conectar con el servidor.",
-        "WRONG_FORMAT": "Formato incorrecto."
+        "WRONG_FORMAT": "Formato incorrecto.",
+		"WRONG_CURRENT_PASSWORD": "La contraseña ingresada no es correcta. Por favor, ingrese su contraseña actual nuevamente."
     },
     "priorities":
     {

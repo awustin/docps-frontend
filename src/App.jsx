@@ -2,6 +2,7 @@ import 'antd/dist/antd.css';
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import ChangePassword from './account/changePassword';
 import './App.css';
 import './App.less';
 import AppLayout from './AppLayout';
@@ -115,6 +116,12 @@ class App extends Component {
                     />
                     <Route path="/verification/:code" render={() =>
                       <UserVerification />}
+                    />
+                    <Route path="/account/changePassword" render={() =>
+                      <ChangePassword
+                        user={loggedUser}
+                        userLogOut={this.userLogOut}
+                      />}
                     />
                     <Route exact path="/" render={() => (
                       <Redirect to="/user" />)}

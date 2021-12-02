@@ -1,0 +1,25 @@
+/*COMMON USER OPTIONS*/
+.home__option {
+    margin-block: .15em;
+    background: white;
+	font-size: 150%;
+	font-weight: 300 !important;
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+}
+
+.home__option .icon {
+    margin: .5em;
+}
+
+.home__option .label {
+    margin-left: 1em;
+}
+
+.home__option:hover {
+    cursor: pointer;
+	background: #3b56ad !important;
+	transition: .3s ease-out;
+    color: white;
+}

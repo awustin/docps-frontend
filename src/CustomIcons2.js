@@ -4,8 +4,8 @@ import React from 'react';
 const ProjectsIsoSvg = () => (
 	<svg
       xmlns="http://www.w3.org/2000/svg"
-      width="150"
-      height="150"
+      width="60"
+      height="60"
       version="1.1"
       viewBox="0 0 41.703 63.623"
     >
@@ -141,8 +141,8 @@ const TestplansIsoSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="116.132"
-      height="150"
+      width="60"
+      height="60"
       version="1.1"
       viewBox="0 0 30.727 52.378"
     >
@@ -510,8 +510,8 @@ const ReportsIsoSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="135.578"
-      height="150"
+      width="60"
+      height="60"
       version="1.1"
       viewBox="0 0 35.872 54.6"
     >
@@ -1078,8 +1078,8 @@ const UsersIsoSvg = () => (
 	<svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="136.773"
-      height="150"
+      width="60"
+      height="60"
       version="1.1"
       viewBox="0 0 36.188 57.069"
     >
@@ -1718,8 +1718,8 @@ const GroupsIsoSvg = () => (
 		<svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="173.871"
-      height="150"
+      width="60"
+      height="60"
       version="1.1"
       viewBox="0 0 46.003 43.959"
     >

@@ -89,39 +89,6 @@
 	}
 }
 
-/*COMMON USER OPTIONS*/
-.home-option {
-	width: 25vw;
-	text-align: center;
-}
-
-.home-option .ant-card-body {
-	background: #fff;
-	transition: .3s ease-out;
-	padding: 15px;
-}
-
-.common-user-icon {
-	font-size: 400%;
-	color: rgb(34,140,219) !important;
-	transition: .3s ease-out;
-}
-
-.home-option .ant-card-body:hover {
-	background: #3b56ad !important;
-	/*background : rgb(36, 47, 145) !important;*/
-	/*background: rgb(34,140,219);*/
-}
-
-.home-option .ant-card-body:hover .common-user-icon {
-	color: #fff !important;
-}
-
-.home-option .ant-card-head {
-	font-size: 120%;
-	font-weight: 300 !important;
-}
-
 /*USER BADGE*/
 
 .badge-name {
