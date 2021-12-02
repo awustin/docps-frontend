@@ -151,16 +151,17 @@ export default function UserForm(props) {
                     >
                         <Input placeholder="Escriba un nombre de usuario" />
                     </Form.Item>
-                    <Form.Item
-                        label="Contraseña"
-                        name="password"
-                        rules={[{ required: mode === 'add', message: 'Debe ingresar una contraseña válida.' }]}
-                    >
-                        <Input.Password
-                            disabled={mode === 'update'}
-                            placeholder="Escriba una contraseña"
-                        />
-                    </Form.Item>
+                    {(mode === 'add') ?
+                        <Form.Item
+                            label="Contraseña"
+                            name="password"
+                            rules={[{ required: true, message: 'Debe ingresar una contraseña válida.' }]}
+                        >
+                            <Input.Password
+                                placeholder="Escriba una contraseña"
+                            />
+                        </Form.Item> : <></>
+                    }
                     <Form.Item
                         label="D.N.I."
                         name="dni"

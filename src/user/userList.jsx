@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, DatePicker, Divider, Form, Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { Avatar, Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Space, Spin, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
@@ -9,13 +9,13 @@ import UserActivate from './modals/userActivate';
 import UserDelete from './modals/userDelete';
 import UserForm from './userForm';
 
-const { Text } = Typography
+const { Meta } = Card;
 
 class UserList extends React.Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.showResults = this.showResults.bind(this)
+        this.showCardResults = this.showCardResults.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
         this.updateUser = this.updateUser.bind(this)
@@ -74,9 +74,9 @@ class UserList extends React.Component {
     statusTag(status, itemKey) {
         switch (status) {
             case 'active':
-                return <Tag key={itemKey + 'green'} color="green" onClick={() => { console.log('Dar de baja') }}>Activo</Tag>
+                return <Tag key={itemKey + 'green'} color="green">Activo</Tag>
             case 'inactive':
-                return <Tag key={itemKey + 'red'} color="volcano" onClick={() => { console.log('Dar de alta') }}>Inactivo</Tag>
+                return <Tag key={itemKey + 'red'} color="volcano">Inactivo</Tag>
             default:
                 break
         }
@@ -90,70 +90,52 @@ class UserList extends React.Component {
         })
     }
 
-    showResults() {
-        const { results } = this.state
-        if (results !== undefined)
-            return (
-                <>
-                    <div className="user-search-results">
-                        <List
-                            size="small"
-                            pagination={{ pageSize: 15 }}
-                            dataSource={results}
-                            bordered={false}
-                            renderItem={item => (
-                                <List.Item
-                                    key={item.key}
-                                    span={4}
-                                    actions={[
-                                        <>
-                                            {this.statusTag(item.status, item.key)}
-                                        </>,
-                                        <UserActivate
-                                            key={item.key}
-                                            status={item.status}
-                                            email={item.email}
-                                            id={item.id}
-                                            defaultChecked={item.status === 'active'}
-                                            reloadSearch={this.reloadSearch}
-                                        />,
-                                        <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
-                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
-                                        </Tooltip>,
-                                        <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
-                                            <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
-                                        </Tooltip>
-                                    ]}
-                                    className={'list-item'}
-                                    style={{ background: "#fff" }}
-                                >
-                                    <List.Item.Meta
-                                        avatar={(item.avatar) ? (
-                                            <Avatar src={item.avatar} />
-                                        ) : (
-                                            <Avatar className={"userdefavatar" + Math.floor(Math.random() * 5)} />
-                                        )}
-                                    />
-                                    <Space direction="vertical" size={5} style={{ width: '100%' }}>
-                                        <Row>
-                                            <div className={'list-item description'}>
-                                                <Text className={'date hideable'} key={item.key + 'created'} type="secondary"><i> Fecha de creación: {item.createdOn}</i></Text>
-                                            </div>
-                                        </Row>
-                                        <Row gutter={16}>
-                                            <Col>
-                                                <Text className={'list-item-main-content'}>{item.name + ' ' + item.lastname}</Text>
-                                            </Col>
-                                            <Col>
-                                                <Text className={'list-item-secondary-content'}>{item.email}</Text>
-                                            </Col>
-                                        </Row>
-                                    </Space>
-                                </List.Item>
-                            )}
-                        />
-                    </div>
-                </>
+    showCardResults() {
+        const { results } = this.state;
+        if ((results || []).length > 0)
+            return results.map(item =>
+                <Card
+                    className="search-results__card"
+                    key={item.key}
+                    cover={
+                        <div className="cover" align="center">
+                            {(item.avatar) ? (
+                                <Avatar src={item.avatar} />
+                            ) : (
+                                <Avatar className={`cover__avatar ${item.defAvatar}`} />
+                            )
+                            }
+                        </div>
+                    }
+                    actions={[
+                        <UserActivate
+                            key={item.key}
+                            status={item.status}
+                            email={item.email}
+                            id={item.id}
+                            defaultChecked={item.status === 'active'}
+                            reloadSearch={this.reloadSearch}
+                        />,
+                        <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
+                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
+                        </Tooltip>,
+                        <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
+                            <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
+                        </Tooltip>
+                    ]}
+                >
+                    <Meta
+                        title={item.name}
+                        description={
+                            <Space direction="vertical">
+                                {this.statusTag(item.status, item.key)}
+                                <Tooltip key={`email-${item.key}`} title={item.email} color="#108ee9">
+                                    {item.email}
+                                </Tooltip>
+                            </Space>
+                        }
+                    />
+                </Card>
             )
     }
 
@@ -220,7 +202,7 @@ class UserList extends React.Component {
                         <Col span={1}>
                             <Divider type="vertical" style={{ height: "100%" }} dashed />
                         </Col>
-                        <Col span={16}>
+                        <Col span={16} style={{ justifyContent: "center" }}>
                             <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
                                 <Button
                                     icon={<PlusCircleOutlined />}
@@ -230,7 +212,9 @@ class UserList extends React.Component {
                                     Crear usuario
                                 </Button>
                             </Col>
-                            {this.showResults()}
+                            <div className="search-results">
+                                {this.showCardResults()}
+                            </div>
                         </Col>
                     </Row>
                 </Spin>

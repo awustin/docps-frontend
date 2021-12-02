@@ -8,6 +8,7 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';
 import GroupList from './groupList';
+import './groups.css';
 
 const { Title } = Typography;
 

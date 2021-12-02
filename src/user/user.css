@@ -23,3 +23,46 @@
 	transition: .3s ease-out;
     color: white;
 }
+
+/*USER MANGAEMENT*/
+.search-results {
+    display: grid;
+    grid-template-columns: repeat(4, 240px);
+    grid-gap: .4em .6em;
+}
+
+.search-results__card {
+    border-radius: 2px;
+    box-shadow: 0 0 1px 0px #b4b4b5;
+}
+
+.search-results__card .cover {
+    display: flex;
+    justify-content: center;
+    margin-block: 1em;
+}
+
+.search-results__card .cover .cover__avatar {
+    width: 100px;
+    height: 100px;
+}
+
+.userred {
+	background: linear-gradient(47deg, rgb(248, 145, 104) 0%, rgb(247, 75, 63) 100%) !important;
+}
+
+.useryellow {
+    background: linear-gradient(47deg, rgb(247, 201, 114) 0%, rgb(255, 171, 16) 100%) !important;
+}
+
+.usergreen {
+    background: linear-gradient(47deg, rgb(173, 201, 253) 0%, rgb(42, 255, 202) 100%) !important;
+}
+
+.userblue {
+    background: linear-gradient(45deg, rgba(148,204,197,1) 0%, rgba(83,108,255,1) 99%, rgba(83,108,255,1) 100%) !important;
+}
+
+.userpurple {
+    background: linear-gradient(45deg, rgba(238,155,155,1) 0%, rgba(141,81,255,1) 100%);
+}

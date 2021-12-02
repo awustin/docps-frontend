@@ -1,4 +1,4 @@
-import { Col, Form, Input, Modal, Select, Typography, Switch } from 'antd';
+import { Col, Form, Input, Modal, Select, Typography, Switch, Space, Avatar } from 'antd';
 import React, { useEffect, useState } from 'react';
 import MessageModal from '../common/messageModal';
 import { createGroup, getUsersForGroups, updateGroup } from '../services/groupsService';
@@ -43,7 +43,7 @@ export default function GroupForm(props) {
                 members: undefined,
                 adminMembers: undefined
             });
-        if( mode === 'update')
+        if (mode === 'update')
             setUpdateMembers(false);
         else
             setUpdateMembers(true);
@@ -116,7 +116,14 @@ export default function GroupForm(props) {
     }
 
     function buildAdminMembersOptions() {
-        setAdminMembersOptions((form.getFieldValue("members") || []).map(key => <Option key={key} value={key}>{userList.filter(u => u.key === key)[0].completeName}</Option>));
+        setAdminMembersOptions((form.getFieldValue("members") || []).map(key =>
+            <Option key={key} value={key}>
+                <Space className="user-option">
+                    <Avatar className={`user-option__avatar ${userList.filter(u => u.key === key)[0].defAvatar}`} />
+                    {userList.filter(u => u.key === key)[0].completeName}
+                </Space>
+            </Option>
+        ));
     }
 
     return (
@@ -172,7 +179,16 @@ export default function GroupForm(props) {
                             mode="multiple"
                             showArrow
                         >
-                            {userList.map(i => <Option key={i.key} value={i.key}>{i.completeName}</Option>)}
+                            {userList.map(i =>
+                                <Option
+                                    key={i.key}
+                                    value={i.key}
+                                >
+                                    <Space className="user-option">
+                                        <Avatar className={`user-option__avatar ${i.defAvatar}`} />
+                                        {i.completeName}
+                                    </Space>
+                                </Option>)}
                         </Select>
                     </Form.Item>
                     <Form.Item
