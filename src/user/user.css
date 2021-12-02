@@ -2,26 +2,18 @@
 .home__option {
     margin-block: .15em;
     background: white;
-	font-size: 150%;
-	font-weight: 300 !important;
-    display: inline-flex;
-    width: 100%;
+    width: 250px;
     align-items: center;
 }
 
 .home__option .icon {
-    margin: .5em;
+    margin-block: 1em;
 }
 
-.home__option .label {
-    margin-left: 1em;
-}
-
-.home__option:hover {
-    cursor: pointer;
-	background: #3b56ad !important;
-	transition: .3s ease-out;
-    color: white;
+.home__option__meta .ant-card-meta-title {
+    color: rgb(59, 59, 59);
+    font-size: large;
+	font-weight: 400 !important;
 }
 
 /*LIST MANGAEMENT*/

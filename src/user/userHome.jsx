@@ -1,12 +1,12 @@
-import { Breadcrumb, Col, Divider, Row, Spin, Typography } from 'antd';
+import { Breadcrumb, Card, Col, Divider, Row, Space, Spin, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
-import { GroupsIso, ProjectsIso, ReportsIso, TestplansIso, UsersIso } from '../CustomIcons2.js';
-import { KeyOutlined } from '@ant-design/icons';
+import { GroupsIso, PasswordIso, ProjectsIso, ReportsIso, TestplansIso, UsersIso } from '../CustomIcons2.js';
 import './user.css';
 import UserBadge from './userBadge';
 
-const { Text } = Typography
+const { Text } = Typography;
+const { Meta } = Card;
 
 class UserHome extends React.Component {
     constructor(props) {
@@ -16,12 +16,12 @@ class UserHome extends React.Component {
 
     state = {
         homeOptions: [
-            { key: 'passwordOption', title: 'Cambiar contraseña', icon: <KeyOutlined style={{fontSize: "60px", color: "#e0bc42"}}/>, toPath: '/account/changePassword', roles: ['account'] },
-            { key: 'userOption', title: 'Gestión de usuarios', icon: <UsersIso />, toPath: '/user/admin', roles: ['admin'] },
-            { key: 'groupsOption', title: 'Gestión de grupos', icon: <GroupsIso />, toPath: '/groups/admin', roles: ['admin', 'groupAdmin'] },
-            { key: 'projectsOption', title: 'Gestión de proyectos', icon: <ProjectsIso />, toPath: '/projects/manage', roles: [] },
-            { key: 'testplansOption', title: 'Gestión de planes de pruebas', icon: <TestplansIso />, toPath: '/testplans/manage', roles: [] },
-            { key: 'reportsOption', title: 'Reportes', icon: <ReportsIso />, toPath: '/reports', roles: [] }
+            { key: 'passwordOption', title: 'Cambiar contraseña', icon: <PasswordIso className="icon"/>, toPath: '/account/changePassword', roles: ['account'] },
+            { key: 'userOption', title: 'Gestión de usuarios', icon: <UsersIso className="icon"/>, toPath: '/user/admin', roles: ['admin'] },
+            { key: 'groupsOption', title: 'Gestión de grupos', icon: <GroupsIso className="icon" />, toPath: '/groups/admin', roles: ['admin', 'groupAdmin'] },
+            { key: 'projectsOption', title: 'Gestión de proyectos', icon: <ProjectsIso className="icon" />, toPath: '/projects/manage', roles: [] },
+            { key: 'testplansOption', title: 'Gestión de planes', icon: <TestplansIso className="icon" />, toPath: '/testplans/manage', roles: [] },
+            { key: 'reportsOption', title: 'Reportes', icon: <ReportsIso className="icon" />, toPath: '/reports', roles: [] }
         ],
         loading: false
     }
@@ -42,75 +42,93 @@ class UserHome extends React.Component {
                     </Breadcrumb>
                     <div className="home">
                         <Row>
-                            <Col offset={8} span={8}>
+                            <Col offset={6} span={12}>
                                 <UserBadge user={user} setLoading={this.setLoading} />
                                 <Divider orientation="left">
                                     <Text type="secondary">Cuenta</Text>
                                 </Divider>
+                                <Space>
                                 {
                                     homeOptions
                                         .filter(o => o.roles.includes('account'))
                                         .map(o =>
-                                            <div
-                                                className="home__option"
+                                            <Card
                                                 key={o.key}
+                                                className="home__option"
                                                 onClick={() => this.props.history.push(o.toPath)}
+                                                hoverable
+                                                cover={
+                                                    <div className="cover" align="center">
+                                                        {o.icon}
+                                                    </div>
+                                                }
                                             >
-                                                <div className="icon">
-                                                    {o.icon}
-                                                </div>
-                                                <div className="label">
-                                                    {o.title}
-                                                </div>
-                                            </div>
+                                                <Meta
+                                                    className="home__option__meta"
+                                                    title={o.title}
+                                                />
+                                            </Card>
                                         )
                                 }
+                                </Space>
                                 {(user.role === 'admin' || user.role === 'groupAdmin') ?
                                     <>
                                         <Divider orientation="left">
                                             <Text type="secondary">Herramientas de administrador</Text>
                                         </Divider>
+                                        <Space>
                                         {
                                             homeOptions
                                                 .filter(o => o.roles.includes(user.role))
                                                 .map(o =>
-                                                    <div
-                                                        className="home__option"
+                                                    <Card
                                                         key={o.key}
+                                                        className="home__option"
                                                         onClick={() => this.props.history.push(o.toPath)}
+                                                        hoverable
+                                                        cover={
+                                                            <div className="cover" align="center">
+                                                                {o.icon}
+                                                            </div>
+                                                        }
                                                     >
-                                                        <div className="icon">
-                                                            {o.icon}
-                                                        </div>
-                                                        <div className="label">
-                                                            {o.title}
-                                                        </div>
-                                                    </div>
+                                                        <Meta
+                                                            className="home__option__meta"
+                                                            title={o.title}
+                                                        />
+                                                    </Card>
                                                 )
                                         }
+                                        </Space>
                                     </> : <></>
                                 }
                                 <Divider orientation="left">
                                     <Text type="secondary">Herramientas de gestión</Text>
                                 </Divider>
+                                <Space>
                                 {
                                     homeOptions
                                         .filter(o => o.roles.length === 0)
                                         .map(o =>
-                                            <div
-                                                className="home__option"
+                                            <Card
                                                 key={o.key}
+                                                className="home__option"
                                                 onClick={() => this.props.history.push(o.toPath)}
+                                                hoverable
+                                                cover={
+                                                    <div className="cover" align="center">
+                                                        {o.icon}
+                                                    </div>
+                                                }
                                             >
-                                                <div className="icon">
-                                                    {o.icon}
-                                                </div>
-                                                <div className="label">
-                                                    {o.title}
-                                                </div>
-                                            </div>
+                                                <Meta
+                                                    className="home__option__meta"
+                                                    title={o.title}
+                                                />
+                                            </Card>
                                         )
                                 }
+                                </Space>
                             </Col>
                         </Row>
                     </div>

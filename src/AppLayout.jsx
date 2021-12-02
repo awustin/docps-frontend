@@ -1,9 +1,4 @@
-import {
-  BarChartOutlined,
-  ExperimentOutlined,
-  FolderOutlined, HomeOutlined,
-  PoweroffOutlined, TeamOutlined, UserOutlined
-} from '@ant-design/icons';
+import { BarChartOutlined, ExperimentOutlined, FolderOutlined, HomeOutlined, PoweroffOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
@@ -49,7 +44,6 @@ class AppLayout extends React.Component {
             </Menu>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background" style={{ padding: 0 }} />
             <Content>
               <div className="site-layout-container" style={{ padding: 24, minHeight: 360 }}>
                 {this.props.children}
