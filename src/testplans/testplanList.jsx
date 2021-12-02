@@ -153,10 +153,11 @@ class TestplanSearchPane extends React.Component {
 					>
 						<Space direction="vertical" size={5} style={{ width: "100%" }}>
 							<List.Item.Meta
-								description=<div className={'list-item description'}>
-								{'Proyecto: ' + item.projectName + ' '}
-								<Text className={'date hideable'} key={item.key + 'created'} type="secondary"><i>{item.createdOn}</i></Text>
-							</div>								
+								description={
+									<div className={'list-item description'}>
+										{'Proyecto: ' + item.projectName + ' '}
+										<Text className={'date hideable'} key={item.key + 'created'} type="secondary"><i>{item.createdOn}</i></Text>
+									</div>}
 							/>
 							<Row gutter={16}>
 								<Col>
@@ -174,11 +175,7 @@ class TestplanSearchPane extends React.Component {
 
 
 		return (
-			<>
-				<div className="search-results">
-					{list}
-				</div>
-			</>
+			<>{list}</>
 		)
 	}
 

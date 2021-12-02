@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Divider, Form, Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Divider, Form, Input, Row, Select, Space, Spin, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
@@ -8,13 +8,13 @@ import GroupForm from './groupForm';
 import GroupActivate from './modals/groupActivate';
 import GroupDelete from './modals/groupDelete';
 
-const { Text } = Typography;
+const { Meta } = Card;
 
 class GroupList extends React.Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.showResults = this.showResults.bind(this)
+        this.showCardResults = this.showCardResults.bind(this)
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
         this.updateGroup = this.updateGroup.bind(this)
@@ -102,7 +102,6 @@ class GroupList extends React.Component {
         const { user } = this.props
         if (user.role === 'admin')
             return [
-                this.statusTag(item.status, item.key),
                 <GroupActivate
                     key={item.key}
                     status={item.status}
@@ -119,62 +118,43 @@ class GroupList extends React.Component {
             ];
         if (item.status !== 'inactive') {
             return [
-                this.statusTag(item.status, item.key),
                 <Tooltip key={`edit-${item.key}`} title="Modificar grupo" color="#108ee9">
                     <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.updateGroup(item.id) }} />
                 </Tooltip>
             ];
         }
-        return [this.statusTag(item.status, item.key)];
     }
 
-    showResults() {
+    showCardResults() {
         const { results } = this.state
-        if (results !== undefined)
-            return (
-                <>
-                    <div className="group-search-results">
-                        <List
-                            size="small"
-                            pagination={{
-                                pageSize: 15
-                            }}
-                            dataSource={results}
-                            bordered={false}
-                            renderItem={item => (
-                                <List.Item
-                                    key={item.key}
-                                    span={4}
-                                    actions={this.actionsPerRole(item)}
-                                    className={'list-item'}
-                                    style={{ background: "#fff" }}
-                                >
-                                    <List.Item.Meta
-                                        avatar={(item.avatar) ? (
-                                            <Avatar src={item.avatar} />
-                                        ) : (
-                                            <Avatar className={item.defaultAvatar} />
-                                        )
-                                        }
-                                    />
-                                    <Space direction="vertical" size={0.5} style={{ width: '100%' }}>
-                                        <Row>
-                                            <div className={'list-item description'}>
-                                                <Text className={'date hideable'} key={item.key + 'created'} type="secondary"><i> Fecha de creación: {item.createdOn}</i></Text>
-                                            </div>
-                                        </Row>
-                                        <Row gutter={16}>
-                                            <Col>
-                                                <Text className={'list-item-main-content'}>{item.name}</Text>
-                                            </Col>
-                                        </Row>
-                                    </Space>
-                                </List.Item>
-                            )}
-                        />
-                    </div>
-                </>
+        if ((results || []).length > 0)
+            return results.map(item =>
+                <Card
+                    className="search-results__card"
+                    key={item.key}
+                    cover={
+                        <div className="cover" align="center">
+                            {(item.avatar) ? (
+                                <Avatar src={item.avatar} />
+                            ) : (
+                                <Avatar className={`cover__avatar ${item.defaultAvatar}`} />
+                            )
+                            }
+                        </div>
+                    }
+                    actions={this.actionsPerRole(item)}
+                >
+                    <Meta
+                        title={item.name}
+                        description={
+                            <Space direction="vertical">
+                                {this.statusTag(item.status, item.key)}
+                            </Space>
+                        }
+                    />
+                </Card>
             )
+
     }
 
     render() {
@@ -241,7 +221,9 @@ class GroupList extends React.Component {
                                     : <></>
                                 }
                             </Col>
-                            {this.showResults()}
+                            <div className="search-results">
+                                {this.showCardResults()}
+                            </div>
                         </Col>
                     </Row>
                 </Spin>

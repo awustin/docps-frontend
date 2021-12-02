@@ -1,9 +1,5 @@
-import {
-    LeftCircleOutlined
-} from '@ant-design/icons';
-import {
-    Breadcrumb, Col, Divider, Row, Tooltip, Typography
-} from 'antd';
+import { LeftCircleOutlined } from '@ant-design/icons';
+import { Breadcrumb, Col, Divider, Row, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';

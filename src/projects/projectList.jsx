@@ -1,10 +1,5 @@
-import {
-	DeleteOutlined, EditOutlined, PlusCircleOutlined
-} from '@ant-design/icons';
-import {
-	Avatar, Button, Col, Divider, Spin, Form,
-	Input, List, Row, Select, Tooltip, Typography
-} from 'antd';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Divider, Form, Input, Row, Select, Space, Spin, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
@@ -14,12 +9,13 @@ import ProjectEdit from './modals/projectEdit';
 import ProjectForm from './projectForm';
 
 const { Text } = Typography
+const { Meta } = Card;
 
 class ProjectList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handleSubmit = this.handleSubmit.bind(this)
-		this.showResults = this.showResults.bind(this)
+		this.showCardResults = this.showCardResults.bind(this)
 		this.reloadSearch = this.reloadSearch.bind(this)
 	}
 
@@ -91,7 +87,7 @@ class ProjectList extends React.Component {
 		return groupedResults
 	}
 
-	showResults() {
+	showCardResults() {
 		const { results } = this.state
 
 		const editHandle = (function (id) {
@@ -102,50 +98,55 @@ class ProjectList extends React.Component {
 			this.setState({ visibleDelete: true, editProjectId: id })
 		}).bind(this)
 
-		if (results !== undefined) {
+		if ((results || []).length > 0) {
 			let groupedResults = this.groupResultsByGroup()
 			let listSections = []
 
 			Object.keys(groupedResults).forEach(function (e) {
+				let list = groupedResults[e]
 				listSections.push(
-					<Divider key={e + 'Divider'} orientation="left" style={{ alignItems: 'center' }}>
-						<Avatar className={groupedResults[e][0].defaultAvatar + ' divider-list-avatar'} size={{ xs: 20, sm: 20, md: 20, lg: 20, xl: 20, xxl: 20 }}></Avatar>
-						<Text className='divider-list-title'>{e}</Text>
-					</Divider>
-				)
-
-				listSections.push(
-					<List
-						key={e + 'List'}
-						size="small"
-						pagination={{
-							size: "small",
-							pageSize: 20
-						}}
-						dataSource={groupedResults[e]}
-						bordered={false}
-						renderItem={item => (
-							<List.Item
-								key={item.key}
-								span={4}
-								actions={[
-									<Tooltip key={`edit-${item.key}`} title="Modificar proyecto" color="#108ee9">
-										<EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { editHandle(item.id) }} />
-									</Tooltip>,
-									<Tooltip key={`delete-${item.key}`} title="Eliminar proyecto" color="#108ee9">
-										<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { deleteHandle(item.id) }} />
-									</Tooltip>
-								]}
-								className={'list-item project'}
-								style={{ background: "#fff" }}
-							>
-								<List.Item.Meta
-									title={item.name}
-								/>
-								{item.testplanCount} planes de pruebas
-							</List.Item>
-						)}
-					/>
+					<>
+						<Divider key={e + 'Divider'} orientation="left" style={{ alignItems: 'center' }}>
+							<Text className='divider-list-title'>{e}</Text>
+						</Divider>
+						<div className="search-results">
+							{
+								list.map(item =>
+									<Card
+										className="search-results__card"
+										key={item.key}
+										cover={
+											<div className="cover" align="center">
+												{(item.avatar) ? (
+													<Avatar src={item.avatar} />
+												) : (
+													<Avatar className={`cover__avatar ${item.defaultAvatar}`} />
+												)
+												}
+											</div>
+										}
+										actions={[
+											<Tooltip key={`edit-${item.key}`} title="Modificar proyecto" color="#108ee9">
+												<EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { editHandle(item.id) }} />
+											</Tooltip>,
+											<Tooltip key={`delete-${item.key}`} title="Eliminar proyecto" color="#108ee9">
+												<DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { deleteHandle(item.id) }} />
+											</Tooltip>
+										]}
+									>
+										<Meta
+											title={item.name}
+											description={
+												<Space>
+													Casos de prueba: {item.testplanCount}
+												</Space>
+											}
+										/>
+									</Card>
+								)
+							}
+						</div>
+					</>
 				)
 
 			}
@@ -153,9 +154,7 @@ class ProjectList extends React.Component {
 
 			return (
 				<>
-					<div className="search-results">
-						{listSections}
-					</div>
+					{listSections}
 				</>
 			)
 		}
@@ -227,7 +226,7 @@ class ProjectList extends React.Component {
 									Crear proyecto
 								</Button>
 							</Col>
-							{this.showResults()}
+							{this.showCardResults()}
 						</Col>
 					</Row>
 				</Spin>
