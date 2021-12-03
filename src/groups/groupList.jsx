@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Divider, Form, Input, Row, Select, Space, Spin, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Card, Col, Divider, Form, Input, Row, Select, Space, Spin, Tag, Tooltip, Pagination, Alert } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
@@ -19,6 +19,7 @@ class GroupList extends React.Component {
         this.reloadSearch = this.reloadSearch.bind(this)
         this.updateGroup = this.updateGroup.bind(this)
         this.actionsPerRole = this.actionsPerRole.bind(this)
+        this.pageSize = 8;
     }
     state = {
         lastValues: undefined,
@@ -44,7 +45,8 @@ class GroupList extends React.Component {
         openForm: false,
         mode: 'add',
         group: undefined,
-        loading: false
+        loading: false,
+        currentPage: 1
     }
 
     handleSubmit(values) {
@@ -54,9 +56,10 @@ class GroupList extends React.Component {
         this.setState({ loading: true })
         searchGroups(values).then((result) => {
             let { success, groups } = result
-            if (success) {
-                this.setState({ results: groups, lastValues: values })
-            }
+            if (success)
+                this.setState({ results: groups, lastValues: values, error: undefined })
+            else
+                this.setState({ results: undefined, error: "NO_DATA" })
             this.setState({ loading: false })
         })
     }
@@ -126,35 +129,57 @@ class GroupList extends React.Component {
     }
 
     showCardResults() {
-        const { results } = this.state
-        if ((results || []).length > 0)
-            return results.map(item =>
-                <Card
-                    className="search-results__card"
-                    key={item.key}
-                    cover={
-                        <div className="cover" align="center">
-                            {(item.avatar) ? (
-                                <Avatar src={item.avatar} />
-                            ) : (
-                                <Avatar className={`cover__avatar ${item.defaultAvatar}`} />
-                            )
-                            }
-                        </div>
+        const { results, error, currentPage } = this.state;
+        if ((results || []).length > 0) {
+            let paginatedResults = results.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize);
+            console.log(paginatedResults)
+            return (<>
+                <div className="search-results">
+                    {
+                        paginatedResults.map(item =>
+                            <Card
+                                className="search-results__card"
+                                key={item.key}
+                                cover={
+                                    <div className="cover" align="center">
+                                        {(item.avatar) ? (
+                                            <Avatar src={item.avatar} />
+                                        ) : (
+                                            <Avatar className={`cover__avatar ${item.defaultAvatar}`} />
+                                        )
+                                        }
+                                    </div>
+                                }
+                                actions={this.actionsPerRole(item)}
+                            >
+                                <Meta
+                                    title={item.name}
+                                    description={
+                                        <Space direction="vertical">
+                                            {this.statusTag(item.status, item.key)}
+                                        </Space>
+                                    }
+                                />
+                            </Card>
+                        )
                     }
-                    actions={this.actionsPerRole(item)}
-                >
-                    <Meta
-                        title={item.name}
-                        description={
-                            <Space direction="vertical">
-                                {this.statusTag(item.status, item.key)}
-                            </Space>
-                        }
-                    />
-                </Card>
-            )
-
+                </div>
+                <Pagination
+                    className={"pagination-bottom"}
+                    pageSize={this.pageSize}
+                    total={results.length}
+                    onChange={page => this.setState({ currentPage: page })}
+                />
+            </>)
+        }
+        if (error === 'NO_DATA')
+            return <Alert
+                message="No hay resultados"
+                description="No se encontraron resultados que coincidan con los criterios de búsqueda."
+                type="info"
+                showIcon
+                closable={false}
+            />
     }
 
     render() {
@@ -221,9 +246,7 @@ class GroupList extends React.Component {
                                     : <></>
                                 }
                             </Col>
-                            <div className="search-results">
-                                {this.showCardResults()}
-                            </div>
+                            {this.showCardResults()}
                         </Col>
                     </Row>
                 </Spin>

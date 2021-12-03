@@ -44,7 +44,7 @@ class UserBadge extends React.Component {
         return (
             <>
                 <div className="user-badge" >
-                    <Row style={{ height: "100%" }}>
+                    <Row gutter={16} style={{ height: "100%" , marginBlock: "1em"}}>
                         <Col flex="1 0 15%" style={{ textAlign: "center", alignSelf: "center" }}>
                             <Avatar className="default-avatar-1"
                                 size={{ xs: 85, sm: 85, md: 85, lg: 100, xl: 120, xxl: 120 }}

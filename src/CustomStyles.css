@@ -245,3 +245,7 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
     width: 100px;
     height: 100px;
 }
+
+.pagination-bottom {
+	margin-block: 1em;
+}

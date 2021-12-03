@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Space, Spin, Tag, Tooltip } from 'antd';
+import { Alert, Avatar, Button, Card, Col, DatePicker, Divider, Form, Input, Pagination, Row, Select, Space, Spin, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import '../CustomStyles.css';
@@ -19,6 +19,7 @@ class UserList extends React.Component {
         this.statusTag = this.statusTag.bind(this)
         this.reloadSearch = this.reloadSearch.bind(this)
         this.updateUser = this.updateUser.bind(this)
+        this.pageSize = 8;
     }
     state = {
         lastValues: undefined,
@@ -42,7 +43,8 @@ class UserList extends React.Component {
         user: undefined,
         openForm: false,
         mode: 'add',
-        loading: false
+        loading: false,
+        currentPage: 1
     }
 
     handleSubmit(values) {
@@ -50,9 +52,10 @@ class UserList extends React.Component {
         this.setState({ loading: true })
         searchUsers(values).then((result) => {
             let { success, users } = result
-            if (success) {
-                this.setState({ results: users, lastValues: values })
-            }
+            if (success)
+                this.setState({ results: users, lastValues: values, error: undefined })
+            else
+                this.setState({ results: undefined, error: "NO_DATA" })
             this.setState({ loading: false })
         })
     }
@@ -91,52 +94,75 @@ class UserList extends React.Component {
     }
 
     showCardResults() {
-        const { results } = this.state;
-        if ((results || []).length > 0)
-            return results.map(item =>
-                <Card
-                    className="search-results__card"
-                    key={item.key}
-                    cover={
-                        <div className="cover" align="center">
-                            {(item.avatar) ? (
-                                <Avatar src={item.avatar} />
-                            ) : (
-                                <Avatar className={`cover__avatar ${item.defAvatar}`} />
-                            )
-                            }
-                        </div>
-                    }
-                    actions={[
-                        <UserActivate
-                            key={item.key}
-                            status={item.status}
-                            email={item.email}
-                            id={item.id}
-                            defaultChecked={item.status === 'active'}
-                            reloadSearch={this.reloadSearch}
-                        />,
-                        <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
-                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
-                        </Tooltip>,
-                        <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
-                            <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
-                        </Tooltip>
-                    ]}
-                >
-                    <Meta
-                        title={item.name}
-                        description={
-                            <Space direction="vertical">
-                                {this.statusTag(item.status, item.key)}
-                                <Tooltip key={`email-${item.key}`} title={item.email} color="#108ee9">
-                                    {item.email}
-                                </Tooltip>
-                            </Space>
+        const { results, error, currentPage } = this.state;
+        if ((results || []).length > 0) {
+            let paginatedResults = results.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize);
+            return (
+                <>
+                    <div className="search-results">
+                        {
+                            paginatedResults.map(item =>
+                                <Card
+                                    className="search-results__card"
+                                    key={item.key}
+                                    cover={
+                                        <div className="cover" align="center">
+                                            {(item.avatar) ? (
+                                                <Avatar src={item.avatar} />
+                                            ) : (
+                                                <Avatar className={`cover__avatar ${item.defAvatar}`} />
+                                            )
+                                            }
+                                        </div>
+                                    }
+                                    actions={[
+                                        <UserActivate
+                                            key={item.key}
+                                            status={item.status}
+                                            email={item.email}
+                                            id={item.id}
+                                            defaultChecked={item.status === 'active'}
+                                            reloadSearch={this.reloadSearch}
+                                        />,
+                                        <Tooltip key={`edit-${item.key}`} title="Modificar usuario" color="#108ee9">
+                                            <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => this.updateUser(item.id)} />
+                                        </Tooltip>,
+                                        <Tooltip key={`delete-${item.key}`} title="Eliminar usuario" color="#108ee9">
+                                            <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, editUserId: item.id }) }} />
+                                        </Tooltip>
+                                    ]}
+                                >
+                                    <Meta
+                                        title={item.name}
+                                        description={
+                                            <Space direction="vertical">
+                                                {this.statusTag(item.status, item.key)}
+                                                <Tooltip key={`email-${item.key}`} title={item.email} color="#108ee9">
+                                                    {item.email}
+                                                </Tooltip>
+                                            </Space>
+                                        }
+                                    />
+                                </Card>)
                         }
+                    </div>
+                    <Pagination
+                        className={"pagination-bottom"}
+                        pageSize={this.pageSize}
+                        total={results.length}
+                        onChange={page => this.setState({ currentPage: page })}
                     />
-                </Card>
+                </>
             )
+        }
+        if (error === 'NO_DATA')
+            return <Alert
+                message="No hay resultados"
+                description="No se encontraron resultados que coincidan con los criterios de búsqueda."
+                type="info"
+                showIcon
+                closable={false}
+            />
     }
 
     render() {
@@ -155,49 +181,51 @@ class UserList extends React.Component {
                 <Spin spinning={loading} size="large">
                     <Row>
                         <Col span={7}>
-                            <Form {...layout}
-                                name="userSearch"
-                                layout="vertical"
-                                style={{ marginBlockStart: "1%" }}
-                                onFinish={this.handleSubmit}
-                            >
-                                <Row>
-                                    <Col span={24}>
-                                        <Form.Item
-                                            label="Nombre"
-                                            name="name"
-                                        >
-                                            <Input />
+                            <div>
+                                <Form {...layout}
+                                    name="userSearch"
+                                    layout="vertical"
+                                    style={{ marginBlockStart: "1%" }}
+                                    onFinish={this.handleSubmit}
+                                >
+                                    <Row>
+                                        <Col span={24}>
+                                            <Form.Item
+                                                label="Nombre"
+                                                name="name"
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Correo electrónico"
+                                                name="email"
+                                            >
+                                                <Input />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Fecha de creación"
+                                                name="createdOn"
+                                            >
+                                                <RangePicker />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Estado"
+                                                name="status"
+                                                initialValue={statusOptions[2].value}
+                                            >
+                                                <Select>
+                                                    {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                    <Row span={16}>
+                                        <Form.Item {...tailLayout}>
+                                            <Button type="primary" htmlType="submit">Buscar</Button>
                                         </Form.Item>
-                                        <Form.Item
-                                            label="Correo electrónico"
-                                            name="email"
-                                        >
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item
-                                            label="Fecha de creación"
-                                            name="createdOn"
-                                        >
-                                            <RangePicker />
-                                        </Form.Item>
-                                        <Form.Item
-                                            label="Estado"
-                                            name="status"
-                                            initialValue={statusOptions[2].value}
-                                        >
-                                            <Select>
-                                                {statusOptions.map(item => (<Option key={item.value} value={item.value}>{item.name}</Option>))}
-                                            </Select>
-                                        </Form.Item>
-                                    </Col>
-                                </Row>
-                                <Row span={16}>
-                                    <Form.Item {...tailLayout}>
-                                        <Button type="primary" htmlType="submit">Buscar</Button>
-                                    </Form.Item>
-                                </Row>
-                            </Form>
+                                    </Row>
+                                </Form>
+                            </div>
                         </Col>
                         <Col span={1}>
                             <Divider type="vertical" style={{ height: "100%" }} dashed />
@@ -212,9 +240,7 @@ class UserList extends React.Component {
                                     Crear usuario
                                 </Button>
                             </Col>
-                            <div className="search-results">
-                                {this.showCardResults()}
-                            </div>
+                            {this.showCardResults()}
                         </Col>
                     </Row>
                 </Spin>

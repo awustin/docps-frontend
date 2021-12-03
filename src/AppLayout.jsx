@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 class AppLayout extends React.Component {
   state = {
