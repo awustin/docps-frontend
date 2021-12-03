@@ -1,16 +1,9 @@
-import {
-	DeleteOutlined,
-	ExportOutlined,
-	EyeOutlined,
-	PlusCircleOutlined
-} from '@ant-design/icons';
-import {
-	Button, Col, Spin, DatePicker, Divider, Form,
-	Input, List, Row, Select, Space, Tag, Tooltip, Typography
-} from 'antd';
+import { DeleteOutlined, FileExcelOutlined, FormOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Divider, Form, Input, List, Row, Select, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
+import * as d from '../AppConsts.json';
 import '../CustomStyles.css';
 import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
 import { getTagsForTestplan, searchTestplans } from '../services/testplansService';
@@ -61,7 +54,7 @@ class TestplanSearchPane extends React.Component {
 		this.setState({ loading: true })
 		searchTestplans(values).then((result) => {
 			if (result.success) {
-				this.setState({ results: result.testplans, lastValues: values })
+				this.setState({ lastValues: values, byProjects: result.byProjects })
 			}
 			this.setState({ loading: false })
 		})
@@ -98,85 +91,68 @@ class TestplanSearchPane extends React.Component {
 	}
 
 	showResults() {
-		const { results } = this.state
+		const { byProjects } = this.state
 
 		const deleteHandle = (function (id) {
 			this.setState({ visibleDelete: true, editTestplanId: id })
 		}).bind(this)
 
-		const statusTag = (function (status, key) {
-			switch (status) {
-				case 'Not executed':
-					return <Tag key={key + '999997'} color="#999997">No ejecutado</Tag>
-				case 'In progress':
-					return <Tag key={key + 'ebcf52'} color="#ebcf52">En progreso</Tag>
-				case 'Passed':
-					return <Tag key={key + '09de8c'} color="#09de8c">Pasó</Tag>
-				case 'Failed':
-					return <Tag key={key + 'f50'} color="#f50">Falló</Tag>
-			}
-		}).bind(this)
+		if ((byProjects || []).length > 0)
+			return byProjects.map(project => <>
+				<Divider key={project.name + '-divider'} orientation="left" style={{ alignItems: 'center' }}>
+					<Text type="secondary">{project.name}</Text>
+				</Divider>
 
-		let list;
+				<List
+					size="small"
+					pagination={{
+						size: "small",
+						pageSize: 20
+					}}
+					dataSource={project.testplans}
+					bordered={false}
+					renderItem={item => (
+						<List.Item
+							key={item.key}
+							span={4}
+							actions={[
+								<div key={`date-${item.key}`} className="row-result__date">{`Fecha de creación: ${item.createdOn}`}</div>,
+								<Tooltip key={`status-${item.key}`} title={d.tooltip.testplan[item.status]} color="#108ee9">
+									<Tag className={`status-tag ${d.statuses[item.status].class}`}>{d.statuses[item.status].label}</Tag>
+								</Tooltip>,
+								<Tooltip key={`view-${item.key}`} title="Modificar plan de pruebas" color="#108ee9">
+									<Link to={{ pathname: "/testplans/id=" + item.id }} style={{ color: "#228cdbff" }}>
+										<FormOutlined style={{ fontSize: '150%', color: "#228cdbff" }} />
+									</Link>
+								</Tooltip>,
+								<Tooltip key={`delete-${item.key}`} title="Eliminar plan de pruebas" color="#108ee9">
+									<DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { deleteHandle(item.id) }} />
+								</Tooltip>,
+								<Tooltip key={`export-${item.key}`} title="Exportar" color="#108ee9">
+									<Link to={{ pathname: `/testplans/export=${item.id}` }} style={{ color: "#000" }}>
+										<FileExcelOutlined style={{ fontSize: '150%', color: "#228cdbff" }} />
+									</Link>
+								</Tooltip>
+							]}
+							style={{ background: "#fff" }}
+						>
+							<Space direction="vertical" size={24} style={{ width: "100%" }}>
+								<Row gutter={16} className="row-result">
+									<div className={`row-result__status-mark ${d.statuses[item.status].class}`}>&nbsp;</div>
+									<Col>
+										{item.testplanName}
+									</Col>
+									<Col>
+										{item.tags.map(tag => <Tag className={'tags hideable'} key={item.key + tag}>{tag}</Tag>)}
+									</Col>
+								</Row>
+							</Space>
+						</List.Item>
+					)}
+				/>
 
-		if (results !== undefined) {
-			list = <List
-				size="small"
-				pagination={{
-					size: "small",
-					pageSize: 20
-				}}
-				dataSource={results}
-				bordered={false}
-				renderItem={item => (
-					<List.Item
-						key={item.key}
-						span={4}
-						actions={[
-							statusTag(item.status, item.key),
-							<Tooltip key={`view-${item.key}`} title="Ver plan de pruebas" color="#108ee9">
-								<Link to={{ pathname: "/testplans/id=" + item.id }} style={{ color: "#228cdbff" }}>
-									<EyeOutlined style={{ fontSize: '150%', color: "#228cdbff" }} />
-								</Link>
-							</Tooltip>,
-							<Tooltip key={`delete-${item.key}`} title="Eliminar plan de pruebas" color="#108ee9">
-								<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { deleteHandle(item.id) }} />
-							</Tooltip>,
-							<Tooltip key={`export-${item.key}`} title="Exportar" color="#108ee9">
-								<Link to={{ pathname: `/testplans/export=${item.id}` }} style={{ color: "#000" }}>
-									<ExportOutlined style={{ fontSize: '150%' }} />
-								</Link>
-							</Tooltip>
-						]}
-						className={'list-item testplan'}
-						style={{ background: "#fff" }}
-					>
-						<Space direction="vertical" size={5} style={{ width: "100%" }}>
-							<List.Item.Meta
-								description={
-									<div className={'list-item description'}>
-										{'Proyecto: ' + item.projectName + ' '}
-										<Text className={'date hideable'} key={item.key + 'created'} type="secondary"><i>{item.createdOn}</i></Text>
-									</div>}
-							/>
-							<Row gutter={16}>
-								<Col>
-									{item.testplanName}
-								</Col>
-								<Col>
-									{item.tags.map(tag => <Tag className={'tags hideable'} key={item.key + tag}>{tag}</Tag>)}
-								</Col>
-							</Row>
-						</Space>
-					</List.Item>
-				)}
-			/>
-		}
+			</>)
 
-
-		return (
-			<>{list}</>
-		)
 	}
 
 

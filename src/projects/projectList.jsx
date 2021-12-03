@@ -107,7 +107,7 @@ class ProjectList extends React.Component {
 				listSections.push(
 					<>
 						<Divider key={e + 'Divider'} orientation="left" style={{ alignItems: 'center' }}>
-							<Text className='divider-list-title'>{e}</Text>
+							<Text type="secondary">{e}</Text>
 						</Divider>
 						<div className="search-results">
 							{

@@ -24,54 +24,6 @@
 	background-color: #cce4ff !important;
 }
 
-.list-item {
-	border-radius: 10px !important;	
-	border: 1px solid #fff !important;
-	margin-block: 2px !important; 
-}
-
-.list-item:hover {
-	border: 1px solid #228cdbff !important;
-	border-radius: 10px !important;
-}
-
-.list-item.description {
-	display: block;
-	font-size: 0.7vw;
-	color: #228cdbff !important;
-	font-weight: 400 !important;
-}
-
-.list-item.description:hover {
-	border: 1px solid #fff !important;
-}
-
-.list-item .tags {
-	margin-left: 10px !important;
-	display: table-cell;
-	height: 1.7vh;
-	color: #fff !important;
-	font-size: 0.5vw;
-	font-weight: 500 !important;
-	background: #ebbd17 !important;
-	border: 1px solid #fff !important;
-	border-radius: 10px !important;
-}
-
-.list-item-main-content {
-	display: block;
-	color: #000 !important;
-	font-weight: 400 !important;	
-}
-
-.list-item-secondary-content {
-	display: block;
-	font-size: 0.7vw;
-	color: #228cdbff !important;
-	font-weight: 400 !important;	
-	
-}
-
 .divider-list-title {
 	font-size: 150%;
 	font-weight: 200 !important;	
@@ -248,4 +200,39 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 
 .pagination-bottom {
 	margin-block: 1em;
+}
+
+/*LIST AND STATUS */
+.row-result__status-mark {
+    width: 5px;
+	cursor:default;
+}
+
+.status-tag {
+	color: white;
+	cursor:default;
+}
+
+.row-result__date {
+	font-size: 12px;
+}
+
+.not-executed {
+	background-color: #979899;
+	border-color: #a1a19e;
+}
+
+.in-progress {
+	background-color: #e9ba38;
+	border-color: #c2a93a;
+}
+
+.passed {
+	background-color: #04cf7a;
+	border-color: #04c273;
+}
+
+.failed {
+	background-color: #f50;
+	border-color: rgb(218, 74, 2);
 }
