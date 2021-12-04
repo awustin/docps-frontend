@@ -13,22 +13,31 @@ export default function TestplanForm(props) {
     const [projectOptions, setProjectOptions] = useState([]);
     const [tagItems, setTagItems] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
-    const { mode, open, close, user, reloadSearch } = props;
+    const { mode, open, close, user, reloadSearch, groupId, projectId } = props;
     const layout = {
         labelCol: { span: 4 },
         wrapperCol: { span: 18 },
     };
 
     useEffect(() => {
-        getGroupsDropdown(user.id).then((result) => {
-            const { success, groups } = result
-            if (success)
-                setGroupOptions(groups);
-        })
+        if (user)
+            getGroupsDropdown(user.id).then((result) => {
+                const { success, groups } = result
+                if (success)
+                    setGroupOptions(groups);
+            })
     }, []);
 
     function handleSubmit(values) {
         if (mode === 'add') {
+            createTestplan(values).then((result) => {
+                handleResponse(result);
+            })
+        }
+        else if (mode == 'add-to-project') {
+            values.groupId = groupId;
+            values.projectId = projectId;
+            console.log(values)
             createTestplan(values).then((result) => {
                 handleResponse(result);
             })
@@ -56,13 +65,11 @@ export default function TestplanForm(props) {
             }
         }
         else {
-            if (mode === 'add') {
-                setMessage({
-                    title: 'Plan de pruebas creado',
-                    description: 'Se creó el plan de pruebas con éxito.',
-                    type: 'success'
-                });
-            }
+            setMessage({
+                title: 'Plan de pruebas creado',
+                description: 'Se creó el plan de pruebas con éxito.',
+                type: 'success'
+            });
             setShowMessage(true);
             setSuccess(true);
             reloadSearch();
@@ -90,36 +97,41 @@ export default function TestplanForm(props) {
                     layout="horizontal"
                     onFinish={handleSubmit}
                 >
-                    <Form.Item
-                        label="Grupo"
-                        name="groupId"
-                        rules={[{ required: true, message: 'Seleccione un grupo.' }]}
-                    >
-                        <Select
-                            allowClear
-                            placeholder="Seleccione un grupo"
-                            onChange={id => {
-                                getProjectsDropdown(id).then((result) => {
-                                    if (result.success)
-                                        setProjectOptions(result.projects)
-                                })
-                            }}
+                    {(mode === 'add') ? <>
+                        <Form.Item
+                            label="Grupo"
+                            name="groupId"
+                            rules={[{ required: true, message: 'Seleccione un grupo.' }]}
                         >
-                            {groupOptions.map(e => (<Option key={e.key}>{e.name}</Option>))}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Proyecto"
-                        name="projectId"
-                        rules={[{ required: true, message: 'Seleccione un proyecto.' }]}
-                    >
-                        <Select
-                            disabled={(projectOptions || []).length === 0}
-                            placeholder="Seleccione un proyecto"
+                            <Select
+                                allowClear
+                                placeholder="Seleccione un grupo"
+                                onChange={id => {
+                                    getProjectsDropdown(id).then((result) => {
+                                        if (result.success)
+                                            setProjectOptions(result.projects)
+                                    })
+                                }}
+                            >
+                                {groupOptions.map(e => (<Option key={e.key}>{e.name}</Option>))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Proyecto"
+                            name="projectId"
+                            rules={[{ required: true, message: 'Seleccione un proyecto.' }]}
                         >
-                            {projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
-                        </Select>
-                    </Form.Item>
+                            <Select
+                                disabled={(projectOptions || []).length === 0}
+                                placeholder="Seleccione un proyecto"
+                            >
+                                {projectOptions.map(item => (<Option key={item.id}>{item.name}</Option>))}
+                            </Select>
+                        </Form.Item>
+                    </>
+                        :
+                        <></>
+                    }
                     <Form.Item
                         label="Nombre"
                         name="name"

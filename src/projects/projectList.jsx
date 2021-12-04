@@ -5,7 +5,6 @@ import { withRouter } from "react-router";
 import '../CustomStyles.css';
 import { getGroupsDropdown, searchProjects } from '../services/projectsService';
 import ProjectDelete from './modals/projectDelete';
-import ProjectEdit from './modals/projectEdit';
 import ProjectForm from './projectForm';
 
 const { Text } = Typography
@@ -24,9 +23,7 @@ class ProjectList extends React.Component {
 		results: undefined,
 		groupOptions: [],
 		error: undefined,
-		visibleEdit: false,
 		visibleDelete: false,
-		visibleCreateTestplan: false,
 		editProjectId: undefined,
 		loading: false,
 		project: undefined,
@@ -90,12 +87,12 @@ class ProjectList extends React.Component {
 	showCardResults() {
 		const { results } = this.state
 
-		const editHandle = (function (id) {
-			this.setState({ visibleEdit: true, editProjectId: id })
-		}).bind(this)
-
 		const deleteHandle = (function (id) {
 			this.setState({ visibleDelete: true, editProjectId: id })
+		}).bind(this)
+
+		const navigateToEdit = (function (id) {
+			this.props.history.push(`id=${id}`);
 		}).bind(this)
 
 		if ((results || []).length > 0) {
@@ -127,7 +124,7 @@ class ProjectList extends React.Component {
 										}
 										actions={[
 											<Tooltip key={`edit-${item.key}`} title="Modificar proyecto" color="#108ee9">
-												<EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { editHandle(item.id) }} />
+												<EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => navigateToEdit(item.id)} />
 											</Tooltip>,
 											<Tooltip key={`delete-${item.key}`} title="Eliminar proyecto" color="#108ee9">
 												<DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { deleteHandle(item.id) }} />
@@ -138,7 +135,7 @@ class ProjectList extends React.Component {
 											title={item.name}
 											description={
 												<Space>
-													Casos de prueba: {item.testplanCount}
+													Planes de pruebas: {item.testplanCount}
 												</Space>
 											}
 										/>
@@ -161,7 +158,7 @@ class ProjectList extends React.Component {
 	}
 
 	render() {
-		const { groupOptions, visibleEdit, visibleDelete, editProjectId, loading, mode, openForm, project } = this.state
+		const { groupOptions, visibleDelete, editProjectId, loading, mode, openForm, project } = this.state
 		const { user } = this.props
 		const { Option } = Select
 		const layout = {
@@ -238,16 +235,6 @@ class ProjectList extends React.Component {
 					close={() => this.setState({ openForm: false })}
 					reloadSearch={this.reloadSearch}
 				/>
-				{(visibleEdit) ? (
-					<ProjectEdit
-						projectId={editProjectId}
-						visibleEdit={visibleEdit}
-						closeEdit={(() => { this.setState({ visibleEdit: false }) }).bind(this)}
-						reloadSearch={this.reloadSearch}
-					/>
-				) : (
-					<></>
-				)}
 				{(visibleDelete) ? (
 					<ProjectDelete
 						projectId={editProjectId}

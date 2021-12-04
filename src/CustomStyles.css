@@ -10,20 +10,6 @@
     width: 20%;
  }
 
-.modal-editable-title {
-	margin-top: 0px !important;
-}
-
-.modal-title-label {
-	color: #228cdbff !important;
-	font-weight: 200 !important;
-	margin-bottom: 0px !important;
-}
-
-.modal-list-item:hover {
-	background-color: #cce4ff !important;
-}
-
 .divider-list-title {
 	font-size: 150%;
 	font-weight: 200 !important;	
@@ -81,7 +67,7 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 }
 .defgreen {
 	background: rgb(22,203,140) !important;
-	background: linear-gradient(47deg, rgba(22,203,140,1) 0%, rgba(73,239,241,1) 100%) !important;
+	background: linear-gradient(47deg, rgb(123, 255, 226) 0%, rgb(42, 202, 127) 100%) !important;
 }
 .defblue {
 	background: rgb(34,140,219) !important;
@@ -89,11 +75,11 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 }
 .defyellow {
 	background: rgb(241,185,151) !important;
-	background: linear-gradient(47deg, rgba(241,185,151,1) 0%, rgba(255,212,126,1) 100%) !important;
+	background: linear-gradient(47deg, rgb(255, 188, 45) 0%, rgb(255, 221, 68) 100%) !important;
 }
 .defred {
 	background: rgb(255,160,181) !important;
-	background: linear-gradient(47deg, rgba(255,160,181,1) 0%, rgba(252,97,85,1) 100%) !important;
+	background: linear-gradient(47deg, rgb(248, 151, 106) 0%, rgb(248, 61, 108) 100%) !important;
 }
 
 /* REPORTS */
@@ -182,11 +168,6 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
     grid-gap: .4em .6em;
 }
 
-.search-results__card {
-    border-radius: 2px;
-    box-shadow: 0 0 1px 0px #b4b4b5;
-}
-
 .search-results__card .cover {
     display: flex;
     justify-content: center;
@@ -235,4 +216,11 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 .failed {
 	background-color: #f50;
 	border-color: rgb(218, 74, 2);
+}
+
+/* CARD ELEMENTS */
+
+.card-indicator {
+	height: 3px;
+	margin-bottom: 1em;
 }

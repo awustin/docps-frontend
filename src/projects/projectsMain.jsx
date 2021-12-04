@@ -4,6 +4,7 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';
 import ProjectList from './projectList';
+import Project from './project';
 
 const { Title } = Typography;
 
@@ -35,6 +36,12 @@ class ProjectsMain extends React.Component {
                             />
                         </div>
                     </>
+                )}
+                />
+                <Route path="/projects/id=:id" render={() => (
+                    <Project
+                        user={user}
+                    />
                 )}
                 />
                 <Route path="/projects" render={() => (
