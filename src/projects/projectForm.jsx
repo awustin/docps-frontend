@@ -1,11 +1,7 @@
-import {
-    Form, Input, Modal, Select
-} from 'antd';
+import { Form, Input, Modal, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import MessageModal from '../common/messageModal';
-import {
-    createProject, getGroupsDropdown
-} from '../services/projectsService';
+import { createProject, updateProject, getGroupsDropdown } from '../services/projectsService';
 
 const { Option } = Select
 
@@ -21,18 +17,20 @@ export default function ProjectForm(props) {
     };
 
     useEffect(() => {
-        getGroupsDropdown(user.id).then((result) => {
-            const { success, groups } = result
-            if (success)
-                setGroupList(groups);
-        })
+        if (mode === 'add')
+            getGroupsDropdown(user.id).then((result) => {
+                const { success, groups } = result
+                if (success)
+                    setGroupList(groups);
+            })
     }, []);
 
     function handleSubmit(values) {
-        if (mode === 'add') {
-            createProject(values).then((result) => {
-                handleResponse(result);
-            })
+        if (mode === 'add')
+            createProject(values).then(result => handleResponse(result));
+        else if (mode === 'update') {
+            values.id = project.id;
+            updateProject(values).then(result => handleResponse(result));
         }
     }
 
@@ -61,6 +59,12 @@ export default function ProjectForm(props) {
                 setMessage({
                     title: 'Proyecto creado',
                     description: 'Se creó el proyecto con éxito.',
+                    type: 'success'
+                });
+            } else if (mode === 'update') {
+                setMessage({
+                    title: 'Proyecto modificado',
+                    description: 'Se modificó el proyecto con éxito.',
                     type: 'success'
                 });
             }
@@ -97,15 +101,19 @@ export default function ProjectForm(props) {
                             } : {}
                     }
                 >
-                    <Form.Item
-                        label="Grupo"
-                        name="projectGroup"
-                        rules={[{ required: true, message: 'Seleccione un grupo.' }]}
-                    >
-                        <Select>
-                            {groupList.map((e) => <Option key={e.key}>{e.name}</Option>)}
-                        </Select>
-                    </Form.Item>
+                    {(mode === 'add') ?
+                        <Form.Item
+                            label="Grupo"
+                            name="projectGroup"
+                            rules={[{ required: true, message: 'Seleccione un grupo.' }]}
+                        >
+                            <Select>
+                                {groupList.map((e) => <Option key={e.key}>{e.name}</Option>)}
+                            </Select>
+                        </Form.Item>
+                        :
+                        <></>
+                    }
                     <Form.Item
                         label="Nombre"
                         name="projectName"

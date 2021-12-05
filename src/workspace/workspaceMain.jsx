@@ -245,7 +245,7 @@ class WorkspaceMain extends React.Component {
 		const { testcase, messages, modifiedSteps, loading } = this.state
 		return (
 			<Switch>
-				<Route exact path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
+				<Route path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
 					<Testcase action="create"
 						testcase={testcase}
 						setTestplan={this.setTestplan}

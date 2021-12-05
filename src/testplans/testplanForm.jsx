@@ -2,7 +2,7 @@ import { Form, Input, Modal, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import MessageModal from '../common/messageModal';
 import { getGroupsDropdown, getProjectsDropdown } from '../services/projectsService';
-import { createTestplan, getTagsForTestplan } from '../services/testplansService';
+import { createTestplan, getTagsForTestplan, updateTestplan } from '../services/testplansService';
 
 const { Option } = Select
 
@@ -13,7 +13,7 @@ export default function TestplanForm(props) {
     const [projectOptions, setProjectOptions] = useState([]);
     const [tagItems, setTagItems] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
-    const { mode, open, close, user, reloadSearch, groupId, projectId } = props;
+    const { mode, open, close, user, reloadSearch, groupId, projectId, id, testplan } = props;
     const layout = {
         labelCol: { span: 4 },
         wrapperCol: { span: 18 },
@@ -30,17 +30,15 @@ export default function TestplanForm(props) {
 
     function handleSubmit(values) {
         if (mode === 'add') {
-            createTestplan(values).then((result) => {
-                handleResponse(result);
-            })
+            createTestplan(values).then(result => handleResponse(result));
         }
         else if (mode == 'add-to-project') {
             values.groupId = groupId;
             values.projectId = projectId;
-            console.log(values)
-            createTestplan(values).then((result) => {
-                handleResponse(result);
-            })
+            createTestplan(values).then(result => handleResponse(result));
+        } else if (mode == 'update') {
+            values.id = id;
+            updateTestplan(values).then(result => handleResponse(result));
         }
     }
 
@@ -58,18 +56,25 @@ export default function TestplanForm(props) {
             else {
                 setMessage({
                     title: 'Hubo un error',
-                    description: 'No se pudo crear el plan de pruebas.',
+                    description: 'No se pudo crear o modificar el plan de pruebas.',
                     type: 'validate'
                 });
                 setShowMessage(true);
             }
         }
         else {
-            setMessage({
-                title: 'Plan de pruebas creado',
-                description: 'Se creó el plan de pruebas con éxito.',
-                type: 'success'
-            });
+            if (mode !== 'udpate')
+                setMessage({
+                    title: 'Plan de pruebas modificado',
+                    description: 'Se modificó el plan de pruebas con éxito.',
+                    type: 'success'
+                });
+            else
+                setMessage({
+                    title: 'Plan de pruebas creado',
+                    description: 'Se creó el plan de pruebas con éxito.',
+                    type: 'success'
+                });
             setShowMessage(true);
             setSuccess(true);
             reloadSearch();
@@ -96,6 +101,15 @@ export default function TestplanForm(props) {
                     id="testplanForm"
                     layout="horizontal"
                     onFinish={handleSubmit}
+                    initialValues={
+                        (testplan) ?
+                            {
+                                name: testplan.testplanName,
+                                description: testplan.description,
+                                tags: testplan.tags
+                            } : {}
+                    }
+
                 >
                     {(mode === 'add') ? <>
                         <Form.Item

@@ -218,6 +218,12 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 	border-color: rgb(218, 74, 2);
 }
 
+.tags {
+	cursor: default;
+	color: #607383;
+    font-weight: bold;
+}
+
 /* CARD ELEMENTS */
 
 .card-indicator {

@@ -6,6 +6,7 @@ import * as d from '../AppConsts.json';
 import { getProjectById } from '../services/projectsService';
 import TestplanDelete from '../testplans/modals/testplanDelete';
 import TestplanForm from '../testplans/testplanForm';
+import ProjectForm from './projectForm';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -15,6 +16,7 @@ export default function Project(props) {
     const { id } = useParams();
     const [project, setProject] = useState({});
     const [loading, setLoading] = useState(false);
+    const [editProjectProps, setEditProjectProps] = useState({ visible: false });
     const [deleteProps, setDeleteProps] = useState({ visible: false });
     const [createProps, setCreateProps] = useState({ visible: false });
     const { user } = props;
@@ -38,7 +40,15 @@ export default function Project(props) {
             className="search-results__card"
             actions={[
                 <Tooltip key={`edit-${id}`} title="Modificar" color="#108ee9">
-                    <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} />
+                    <EditOutlined
+                        style={{ fontSize: '150%', color: "#228cdbff" }}
+                        onClick={() => setEditProjectProps({
+                            visible: true,
+                            mode: 'update',
+                            project: project,
+                            reloadSearch: loadSearch
+                        })}
+                    />
                 </Tooltip>
             ]}
         >
@@ -175,6 +185,14 @@ export default function Project(props) {
                     </Col>
                 </Row>
             </Spin>
+            <ProjectForm
+                mode={editProjectProps.mode}
+                open={editProjectProps.visible}
+                project={editProjectProps.project}
+                user={editProjectProps.user}
+                close={() => setEditProjectProps({ visible: false })}
+                reloadSearch={editProjectProps.reloadSearch}
+            />
             <TestplanForm
                 mode={createProps.mode}
                 open={createProps.visible}

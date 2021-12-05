@@ -5,8 +5,8 @@ import {
 import React from 'react';
 import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';
-import Testplan from './testplan';
 import TestplanExport from './testplanExport';
+import Testplan from './testplan';
 import TestplanList from './testplanList';
 
 const { Title } = Typography;
@@ -41,7 +41,7 @@ class TestplansMain extends React.Component {
                     </>
                 )}
                 />
-                <Route exact path="/testplans/id=:testplanId" render={() => (
+                <Route exact path="/testplans/id=:id" render={() => (
                     <Testplan
                         user={user}
                     />

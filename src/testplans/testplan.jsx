@@ -1,353 +1,177 @@
-import {
-	DeleteOutlined, EditOutlined, LeftCircleOutlined, PlusCircleOutlined
-} from '@ant-design/icons';
-import {
-	Breadcrumb, Button, Col, Divider, List, Row, Select, Space, Tag, Tooltip, Typography, Spin
-} from 'antd';
-import React from 'react';
-import { withRouter } from "react-router";
-import { Link } from 'react-router-dom';
-import MessageModal from '../common/messageModal';
-import ViewExecutions from '../executions/viewExecutions';
-import { getTestplanById, updateTestplan } from '../services/testplansService';
-import TestcaseDelete from './modals/testcaseDelete';
+import { EditOutlined, LeftCircleOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Alert, Breadcrumb, Button, Card, Col, Divider, Row, Space, Spin, Tag, Tooltip, Typography, List } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import * as d from '../AppConsts.json';
+import { getTestplanById } from '../services/testplansService';
+import TestplanForm from './testplanForm';
 
 const { Title, Text } = Typography;
+const { Meta } = Card;
 
-class Testplan extends React.Component {
-	constructor(props) {
-		super(props)
-		this.handleSubmit = this.handleSubmit.bind(this)
-		this.statusTag = this.statusTag.bind(this)
-		this.showTestCases = this.showTestCases.bind(this)
-		this.reloadSearch = this.reloadSearch.bind(this)
-	}
-	state = {
-		testplan: {
-			id: undefined,
-			key: undefined,
-			testplanId: undefined,
-			testplanName: undefined,
-			description: undefined,
-			tags: [],
-			createdOn: undefined,
-			status: undefined,
-			projectId: undefined,
-			projectName: undefined,
-			groupId: undefined,
-			groupName: undefined,
-			cases: []
-		},
-		field: {
-			name: undefined,
-			description: undefined,
-			status: undefined,
-			tags: []
-		},
-		dirty: false,
-		showMessageModal: false,
-		message: {
-			title: undefined,
-			description: undefined,
-			type: undefined
-		},
-		visibleDelete: false,
-		deleteTestcaseId: undefined,
-		loading: true
-	}
 
-	componentDidMount() {
-		if (Object.keys(this.props).includes("match")) {
-			let testplanId = this.props.match.params.testplanId
-			getTestplanById(testplanId).then((result) => {
-				if (result.success) {
-					const { testplan } = result
-					let editables = {
-						name: testplan.testplanName,
-						description: testplan.description,
-						status: testplan.status,
-						tags: testplan.tags
-					}
-					this.setState({ testplan: testplan, field: editables, loading: false })
-				}
-			})
-		}
-	}
+export default function Testplan() {
+    const history = useHistory();
+    const { id } = useParams();
+    const [testplan, setTestplan] = useState({});
+    const [editProps, setEditProps] = useState({});
+    const [loading, setLoading] = useState(false);
 
-	handleSubmit() {
-		const { testplan, field } = this.state
-		if (!field.name) {
-			this.setState({
-				showMessageModal: true,
-				message: {
-					title: 'Nombre vacío',
-					description: 'Debe ingresar un nombre para el plan de pruebas.',
-					type: 'validate'
-				},
-				field: { ...this.state.field, name: testplan.testplanName }
-			})
-		}
-		else {
-			let values = {
-				id: testplan.testplanId,
-				name: field.name,
-				description: field.description,
-				tags: field.tags
-			}
-			updateTestplan(values).then((result) => {
-				if (result.success) {
-					this.setState({
-						success: true,
-						showMessageModal: true,
-						message: {
-							title: 'Plan de pruebas modificado',
-							description: 'Se modificó el plan de pruebas con éxito.',
-							type: 'success'
-						}
-					})
-				}
-				else {
-					if (result.validate) {
-						this.setState({
-							success: true,
-							showMessageModal: true,
-							message: {
-								title: 'El nombre ya existe',
-								description: 'Debe ingresar otro nombre para el plan de pruebas.',
-								type: 'validate'
-							}
-						})
-					}
-					else {
-						this.setState({
-							success: true,
-							showMessageModal: true,
-							message: {
-								title: 'Hubo un error',
-								description: 'No se pudo modificar el plan de pruebas',
-								type: 'validate'
-							}
-						})
-					}
-				}
-			})
-			this.setState({
-				success: true,
-				showMessageModal: true,
-				message: {
-					title: 'Plan de pruebas modificado',
-					description: 'El plan de pruebas fue modificado con éxito',
-					type: 'success'
-				}
-			})
-		}
-	}
+    useEffect(() => {
+        loadSearch();
+    }, []);
 
-	statusTag(status) {
-		switch (status) {
-			case 'Not executed':
-				return (
-					<Tooltip title="No tiene ejecuciones" color="#108ee9">
-						<Tag color="#999997">No ejecutado</Tag>
-					</Tooltip>
-				)
-			case 'In progress':
-				return (
-					<Tooltip title="Tiene ejecuciones en progreso" color="#108ee9">
-						<Tag color="#ebcf52">En progreso</Tag>
-					</Tooltip>
-				)
-			case 'Passed':
-				return (
-					<Tooltip title="La última ejecución pasó" color="#108ee9">
-						<Tag color="#09de8c">Pasó</Tag>
-					</Tooltip>
-				)
-			case 'Failed':
-				return (
-					<Tooltip title="Hay ejecuciones que fallaron" color="#108ee9">
-						<Tag color="#f50">Falló</Tag>
-					</Tooltip>
-				)
-		}
-	}
+    function loadSearch() {
+        setLoading(true);
+        getTestplanById(id).then((result) => {
+            if (result.success) {
+                setTestplan(result.testplan);
+                setLoading(false);
+            }
+        })
+    }
 
-	showTestCases() {
-		const { testplan, loading } = this.state
-		const { user } = this.props
+    function showTestplanInformationCard() {
+        if (testplan.testplanId)
+            return <>
+                <Card
+                    className="search-results__card"
+                    actions={[
+                        <Tooltip key={`edit-${id}`} title="Modificar" color="#108ee9">
+                            <EditOutlined
+                                style={{ fontSize: '150%', color: "#228cdbff" }}
+                                onClick={() => setEditProps({
+                                    visible: true,
+                                    mode: 'update',
+                                    testplan: testplan,
+                                    reloadSearch: loadSearch
+                                })}
 
-		if (loading) return (<></>)
-		return (
-			<List
-				size="small"
-				pagination={{
-					pageSize: 5
-				}}
-				dataSource={testplan.cases}
-				bordered={false}
-				renderItem={item => (
-					<List.Item
-						key={item.key}
-						span={4}
-						actions={[
-							this.statusTag(item.status, item.key),
-							<Link key={`link-${item.key}`} to={{ pathname: "/workspace/id=" + item.id + "&p=" + testplan.testplanId + "&n=" + testplan.testplanName }} style={{ color: "#000" }}>
-								<Tooltip title="Modificar caso de prueba" color="#108ee9">
-									<EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} />
-								</Tooltip>
-							</Link>,
-							<ViewExecutions
-								key={`exc-${item.key}`}
-								id={item.id}
-								user={user}
-								reloadTestplan={this.reloadSearch}
-							/>,
-							<Tooltip key={`delete-${item.key}`} title="Eliminar caso de prueba" color="#108ee9">
-								<DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
-							</Tooltip>,
-						]}
-						className={'list-item testcase'}
-						style={{ background: "#fff" }}
-					>
-						<List.Item.Meta
-							description=<div className={'list-item description'}>
-							{'Últ. modificación: ' + item.modifiedOn}
-						</div>
-								/>
-						{item.caseName}
-					</List.Item>
-				)}
-			/>
-		)
-	}
+                            />
+                        </Tooltip>
+                    ]}
+                >
+                    <Meta
+                        title={testplan.groupName}
+                        description={
+                            <Space direction={"vertical"}>
+                                <Title level={5}>{testplan.projectName}</Title>
+                                <Title level={4}>{testplan.testplanName}</Title>
+                                <Tooltip key={`status-${testplan.key}`} title={d.tooltip.testplan[testplan.status]} color="#108ee9">
+                                    <Tag className={`status-tag ${d.statuses[testplan.status].class}`}>{d.statuses[testplan.status].label}</Tag>
+                                </Tooltip>
+                                <p>{testplan.description}</p>
+                                <div>
+                                    {testplan.tags.map(tag => <Tag className={'tags'} key={testplan.key + tag}>{tag}</Tag>)}
+                                </div>
+                            </Space>
+                        }
+                    />
+                </Card>
+            </>
 
-	reloadSearch() {
-		const { testplan } = this.state
-		this.setState({ loading: true })
-		getTestplanById(testplan.testplanId).then((result) => {
-			if (result.success) {
-				const { testplan } = result
-				let editables = {
-					name: testplan.testplanName,
-					description: testplan.description,
-					status: testplan.status,
-					tags: testplan.tags
-				}
-				this.setState({ testplan: testplan, field: editables, loading: false })
-			}
-		})
-	}
+    }
 
-	render() {
-		const { testplan, field, dirty, message, showMessageModal, visibleDelete, deleteTestcaseId, loading } = this.state
-		return (
-			<>
-				<Breadcrumb>
-					<Breadcrumb.Item>{testplan.groupName}</Breadcrumb.Item>
-					<Breadcrumb.Item>{testplan.projectName}</Breadcrumb.Item>
-					<Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
-				</Breadcrumb>
-				<div className="navigation">
-					<Row>
-						<Col flex="1 0 25%">
-							<Tooltip title="Atrás">
-								<LeftCircleOutlined style={{ fontSize: "200%" }} onClick={() => { this.props.history.push('/testplans/manage') }} />
-							</Tooltip>
-						</Col>
-					</Row>
-				</div>
-				<div className="container">
-					<Title className="testplan-title" level={3}>Plan de pruebas</Title>
-					<Divider />
-					<Spin spinning={loading} size="large">
-						<Row>
-							<Col span={5}>
-								<Space direction="vertical">
-									<Text className="modal-title-label">Nombre</Text>
-									<Title
-										className="modal-editable-title"
-										level={4}
-										editable={{
-											tooltip: <Tooltip>Modificar nombre</Tooltip>,
-											autoSize: { minRows: 1, maxRows: 2 },
-											onChange: ((e) => {
-												this.setState({ dirty: true, field: { ...this.state.field, name: e } })
-											})
-										}}
-									>
-										{field.name}
-									</Title>
-									<Text className="modal-title-label">Estado</Text>
-									{this.statusTag(testplan.status)}
-									<Text className="modal-title-label">Descripción</Text>
-									<Text
-										className="modal-editable-text"
-										editable={{
-											tooltip: <Tooltip>Modificar descripción</Tooltip>,
-											autoSize: { minRows: 1, maxRows: 2 },
-											onChange: ((e) => {
-												this.setState({ field: { ...this.state.field, description: e }, dirty: true })
-											})
-										}}
-									>
-										{field.description}
-									</Text>
-									<Text className="modal-title-label">Etiquetas</Text>
-									{ (loading) ? <></> :
-									<Select
-										mode="tags"
-										defaultValue={testplan.tags}
-										onChange={(e) => this.setState({ field: { ...this.state.field, tags: e }, dirty: true })}
-										dropdownMatchSelectWidth={false}
-									/>}
-									<Button type="primary" disabled={!dirty} onClick={this.handleSubmit} style={{ marginTop: "25px" }}>Guardar cambios</Button>
-								</Space>
-							</Col>
+    function showTestcasesList() {
+        if ((testplan.cases || []).length > 0)
+            return <List
+                size="small"
+                pagination={{
+                    pageSize: 5
+                }}
+                dataSource={testplan.cases}
+                bordered={false}
+                renderItem={item => (
+                    <List.Item
+                        key={item.key}
+                        span={4}
+                        actions={[
+                            <Tooltip key={`edit-${item.key}`} title="Modificar caso de prueba" color="#108ee9">
+                                <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/id=${item.id}&p=${testplan.testplanId}&n=${testplan.testplanName}`)} />
+                            </Tooltip>,
+                            <Tooltip key={`delete-${item.key}`} title="Eliminar caso de prueba" color="#108ee9">
+                                <DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
+                            </Tooltip>,
+                        ]}
+                        className={'list-item testcase'}
+                        style={{ background: "#fff" }}
+                    >
+                        <List.Item.Meta
+                            description=<div className={'list-item description'}>
+                            {'Últ. modificación: ' + item.modifiedOn}
+                        </div>
+                            />
+                        {item.caseName}
+                    </List.Item>
+                )}
+            />
+        if (testplan.testplanId && (testplan.cases || []).length === 0)
+            return <Alert
+                message="No hay casos de pruebas"
+                description="Este plan de pruebas no contiene casos de pruebas. Cree un caso de prueba nuevo."
+                type="info"
+                showIcon
+                closable={false}
+            />
 
-							<Col span={1}>
-								<Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
-							</Col>
 
-							<Col span={18}>
-								<Row style={{ display: "flex", alignItems: "center", paddingBottom: "1%" }}>
-									<Col span={12}>
-										<Title level={4}>Casos de prueba</Title>
-									</Col>
-									<Col span={12} style={{ textAlign: "end" }}>
-										<Link to={{ pathname: "/workspace/create?p=" + testplan.testplanId + "&n=" + testplan.testplanName }}>
-											<Button type="primary"
-												icon={<PlusCircleOutlined />}
-											>
-												Crear caso de prueba
-											</Button>
-										</Link>
-									</Col>
-								</Row>
-								{this.showTestCases()}
-							</Col>
-						</Row>
-					</Spin>
-				</div>
-				{(visibleDelete) ? (
-					<TestcaseDelete
-						testcaseId={deleteTestcaseId}
-						visibleDelete={visibleDelete}
-						closeDelete={(() => { this.setState({ visibleDelete: false }) }).bind(this)}
-						reloadSearch={this.reloadSearch}
-					/>
-				) : (
-					<></>
-				)}
-				<MessageModal
-					type={message.type}
-					title={message.title}
-					description={message.description}
-					visible={showMessageModal}
-					onClose={() => this.setState({ showMessageModal: false })}
-				/>
-			</>
-		);
-	}
+    }
+
+    return (<>
+        <Breadcrumb>
+            <Breadcrumb.Item>{testplan.groupName}</Breadcrumb.Item>
+            <Breadcrumb.Item>{testplan.projectName}</Breadcrumb.Item>
+            <Breadcrumb.Item>{testplan.testplanName}</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="navigation">
+            <Row>
+                <Col flex="1 0 25%">
+                    <Tooltip title="Atrás">
+                        <LeftCircleOutlined style={{ fontSize: "200%" }} onClick={() => history.goBack()}
+                        />
+                    </Tooltip>
+                </Col>
+            </Row>
+        </div>
+        <div className="container">
+            <Title className="testplan-title" level={3}>Plan de pruebas</Title>
+            <Divider />
+            <Spin spinning={loading} size="large">
+                <Row>
+                    <Col span={7}>
+                        {showTestplanInformationCard()}
+                    </Col>
+
+                    <Col span={1}>
+                        <Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
+                    </Col>
+
+                    <Col span={16}>
+                        <Col style={{ textAlign: "end", marginBlockEnd: "1%" }}>
+                            <Button
+                                type="primary"
+                                icon={<PlusCircleOutlined style={{ fontSize: "110%" }} />}
+                                onClick={() => history.push(`/workspace/create?p=${testplan.testplanId}&n=${testplan.testplanName}`)}
+                            >
+                                Crear caso de prueba
+                            </Button>
+                        </Col>
+                        <Divider key={testplan.testplanName + '-divider'} orientation="left" style={{ alignItems: 'center' }}>
+                            <Text type="secondary">Casos de pruebas</Text>
+                        </Divider>
+                        {showTestcasesList()}
+                    </Col>
+                </Row>
+            </Spin>
+            <TestplanForm
+                mode={editProps.mode}
+                open={editProps.visible}
+                close={() => setEditProps({ visible: false })}
+                reloadSearch={editProps.reloadSearch}
+                id={id}
+                testplan={editProps.testplan}
+            />
+        </div>
+
+    </>)
 }
-
-export default React.memo(withRouter(Testplan));
