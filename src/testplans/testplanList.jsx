@@ -15,7 +15,7 @@ const { Text } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-class TestplanSearchPane extends React.Component {
+class TestplanList extends React.Component {
 	constructor(props) {
 		super(props)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -104,6 +104,7 @@ class TestplanSearchPane extends React.Component {
 				</Divider>
 
 				<List
+					key={project.name + '-list'}
 					size="small"
 					pagination={{
 						size: "small",
@@ -136,7 +137,7 @@ class TestplanSearchPane extends React.Component {
 							]}
 							style={{ background: "#fff" }}
 						>
-							<Space direction="vertical" size={24} style={{ width: "100%" }}>
+							<Space key={item.key + '-content'} direction="vertical" size={24} style={{ width: "100%" }}>
 								<Row gutter={16} className="row-result">
 									<div className={`row-result__status-mark ${d.statuses[item.status].class}`}>&nbsp;</div>
 									<Col>
@@ -279,4 +280,4 @@ class TestplanSearchPane extends React.Component {
 	}
 }
 
-export default withRouter(TestplanSearchPane);
+export default withRouter(TestplanList);

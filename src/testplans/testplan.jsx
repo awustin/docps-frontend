@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as d from '../AppConsts.json';
 import { getTestplanById } from '../services/testplansService';
+import TestcaseFormH from '../testcases/testcaseFormH';
 import TestplanForm from './testplanForm';
 
 const { Title, Text } = Typography;
@@ -15,6 +16,7 @@ export default function Testplan() {
     const { id } = useParams();
     const [testplan, setTestplan] = useState({});
     const [editProps, setEditProps] = useState({});
+    const [testcaseCreateProps, setTestcaseCreateProps] = useState({});
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -43,8 +45,7 @@ export default function Testplan() {
                                 onClick={() => setEditProps({
                                     visible: true,
                                     mode: 'update',
-                                    testplan: testplan,
-                                    reloadSearch: loadSearch
+                                    testplan: testplan
                                 })}
 
                             />
@@ -151,7 +152,10 @@ export default function Testplan() {
                             <Button
                                 type="primary"
                                 icon={<PlusCircleOutlined style={{ fontSize: "110%" }} />}
-                                onClick={() => history.push(`/workspace/create?p=${testplan.testplanId}&n=${testplan.testplanName}`)}
+                                onClick={() => setTestcaseCreateProps({
+                                    visible: true,
+                                    mode: 'add'
+                                })}
                             >
                                 Crear caso de prueba
                             </Button>
@@ -167,9 +171,16 @@ export default function Testplan() {
                 mode={editProps.mode}
                 open={editProps.visible}
                 close={() => setEditProps({ visible: false })}
-                reloadSearch={editProps.reloadSearch}
+                reloadSearch={loadSearch}
                 id={id}
                 testplan={editProps.testplan}
+            />
+            <TestcaseFormH
+                mode={testcaseCreateProps.mode}
+                open={testcaseCreateProps.visible}
+                close={() => setTestcaseCreateProps({ visible: false })}
+                reloadSearch={loadSearch}
+                testplanId={id}
             />
         </div>
 
