@@ -192,6 +192,8 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 .status-tag {
 	color: white;
 	cursor:default;
+	font-size: 11px;
+	font-weight: bold;
 }
 
 .row-result__date {
@@ -199,28 +201,30 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 }
 
 .not-executed {
-	background-color: #979899;
-	border-color: #a1a19e;
+	background-color: #b2b4b6;
+	border-color: #c9c9c9;
+    text-shadow: 0px 0px 1px black;
 }
 
 .in-progress {
-	background-color: #e9ba38;
-	border-color: #c2a93a;
+	background-color: #fdc713;
+	border-color: #f0dc9a;
+    text-shadow: 0px 0px 1px #000000;
 }
 
 .passed {
 	background-color: #04cf7a;
-	border-color: #04c273;
+	border-color: #84dfb9;
 }
 
 .failed {
 	background-color: #f50;
-	border-color: rgb(218, 74, 2);
+	border-color: #e0a486;
 }
 
 .tags {
 	cursor: default;
-	color: #607383;
+	color: #707070;
     font-weight: bold;
 }
 
