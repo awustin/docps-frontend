@@ -8,19 +8,19 @@
 	},
 	"priorities": {
 		"low": {
-			"label": "Baja",
+			"label": "Prioridad baja",
 			"id": 1,
-			"color": "#6cdef5"
+			"color": "blue"
 		},
 		"medium": {
-			"label": "Media",
+			"label": "Prioridad media",
 			"id": 2,
-			"color": "#f5b642"
+			"color": "gold"
 		},
 		"high": {
-			"label": "Alta",
+			"label": "Prioridad alta",
 			"id": 3,
-			"color": "#f56942"
+			"color": "red"
 		}
 	},
 	"statuses": {

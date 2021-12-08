@@ -168,6 +168,10 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
     grid-gap: .4em .6em;
 }
 
+.search-results__card {
+	margin-bottom: 1em;
+}
+
 .search-results__card .cover {
     display: flex;
     justify-content: center;

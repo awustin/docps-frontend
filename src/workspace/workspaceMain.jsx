@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from "react-router";
 import { Route, Switch } from 'react-router-dom';
 import { createTestcase, getTestcaseById, saveSteps, updateTestcase } from '../services/workspaceService';
-import Testcase from './testCases/testcase';
+import TestcaseView from '../testcases/testcaseView';
 import './WorkspaceStyles.css';
 
 class WorkspaceMain extends React.Component {
@@ -246,39 +246,41 @@ class WorkspaceMain extends React.Component {
 		return (
 			<Switch>
 				<Route path="/workspace/create?p=:testplanId&n=:testplanName" render={() => (
-					<Testcase action="create"
-						testcase={testcase}
-						setTestplan={this.setTestplan}
-						upsertTestcase={this.upsertTestcase}
-						addStep={this.addStep}
-						editStep={this.editStep}
-						deleteStep={this.deleteStep}
-						saveSteps={this.saveSteps}
-						variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
-						messages={messages}
-						modifiedSteps={modifiedSteps}
-						loading={loading}
-					/>
+					// <Testcase action="create"
+					// 	testcase={testcase}
+					// 	setTestplan={this.setTestplan}
+					// 	upsertTestcase={this.upsertTestcase}
+					// 	addStep={this.addStep}
+					// 	editStep={this.editStep}
+					// 	deleteStep={this.deleteStep}
+					// 	saveSteps={this.saveSteps}
+					// 	variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
+					// 	messages={messages}
+					// 	modifiedSteps={modifiedSteps}
+					// 	loading={loading}
+					// />
+					<></>
 				)}
 				/>
 				<Route exact path="/workspace/id=:id&p=:testplanId&n=:testplanName" render={() => (
-					<Testcase action="edit"
-						testcase={testcase}
-						fetchTestcase={this.fetchTestcase}
-						upsertTestcase={this.upsertTestcase}
-						addStep={this.addStep}
-						editStep={this.editStep}
-						deleteStep={this.deleteStep}
-						saveSteps={this.saveSteps}
-						variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
-						messages={messages}
-						modifiedSteps={modifiedSteps}
-						loading={loading}
-					/>
+					// <Testcase action="edit"
+					// 	testcase={testcase}
+					// 	fetchTestcase={this.fetchTestcase}
+					// 	upsertTestcase={this.upsertTestcase}
+					// 	addStep={this.addStep}
+					// 	editStep={this.editStep}
+					// 	deleteStep={this.deleteStep}
+					// 	saveSteps={this.saveSteps}
+					// 	variablesOperations={{ editVariable: this.editVariable, deleteVariable: this.deleteVariable }}
+					// 	messages={messages}
+					// 	modifiedSteps={modifiedSteps}
+					// 	loading={loading}
+					// />
+					<></>
 				)}
 				/>
-				<Route path="/workspace/p=:projectId&id=:testplanId" render={() => (
-					<Testcase />)}
+				<Route path="/workspace/testcase/id=:id" render={() => (
+					<TestcaseView />)}
 				/>
 				<Route path="/workspace" render={() => (
 					<div> Not found :( </div>)}

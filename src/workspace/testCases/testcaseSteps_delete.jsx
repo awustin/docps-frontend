@@ -2,8 +2,6 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Form, Input, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
-import Step from '../steps/step';
-import StepSearch from '../steps/stepSearch';
 
 class TestcaseSteps extends React.Component {
     constructor(props) {
@@ -13,18 +11,18 @@ class TestcaseSteps extends React.Component {
     }
 
     displaySteps() {
-        const { steps, editStep, deleteStep, variablesOperations } = this.props
+        const { steps } = this.props
         let stepList = []
         for (let index = 0; index < steps.length; index++) {
             let step = steps[index]
             stepList.push(
-                <Step
-                    key={index}
-                    step={step}
-                    editStep={editStep}
-                    deleteStep={deleteStep}
-                    variablesOperations={variablesOperations}
-                />
+                // <Step
+                //     key={index}
+                //     step={step}
+                //     editStep={editStep}
+                //     deleteStep={deleteStep}
+                //     variablesOperations={variablesOperations}
+                // />
             )
         }
         return stepList
@@ -47,10 +45,10 @@ class TestcaseSteps extends React.Component {
                 <div>
                     <Row style={{ flexDirection: "column" }}>
                         <Title level={4} className="modal-title-label">Agregar un paso existente</Title>
-                        <StepSearch
+                        {/* <StepSearch
                             testcase={testcase}
                             addStep={addStep}
-                        />
+                        /> */}
                     </Row>
                     <Row style={{ marginBlock: "1% 1%" }}>
                         <Col>

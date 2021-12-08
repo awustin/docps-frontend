@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as d from '../AppConsts.json';
 import { getTestplanById } from '../services/testplansService';
-import TestcaseFormH from '../testcases/testcaseFormH';
+import TestcaseForm from '../testcases/testcaseForm';
 import TestplanForm from './testplanForm';
 
 const { Title, Text } = Typography;
@@ -88,7 +88,7 @@ export default function Testplan() {
                         span={4}
                         actions={[
                             <Tooltip key={`edit-${item.key}`} title="Modificar caso de prueba" color="#108ee9">
-                                <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/id=${item.id}&p=${testplan.testplanId}&n=${testplan.testplanName}`)} />
+                                <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/testcase/id=${item.id}`)} />
                             </Tooltip>,
                             <Tooltip key={`delete-${item.key}`} title="Eliminar caso de prueba" color="#108ee9">
                                 <DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
@@ -175,7 +175,7 @@ export default function Testplan() {
                 id={id}
                 testplan={editProps.testplan}
             />
-            <TestcaseFormH
+            <TestcaseForm
                 mode={testcaseCreateProps.mode}
                 open={testcaseCreateProps.visible}
                 close={() => setTestcaseCreateProps({ visible: false })}

@@ -8,8 +8,6 @@ import {
 import React from 'react';
 import { withRouter } from "react-router";
 import * as d from '../../AppConsts.json';
-import TestcaseForm from '../modals/testcaseForm';
-import TestcaseSteps from './testcaseSteps';
 
 class Testcase extends React.Component {
     constructor(props) {
@@ -77,8 +75,7 @@ class Testcase extends React.Component {
     }
 
     render() {
-        const { testcase, upsertTestcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations, loading } = this.props
-        const { showEditModal } = this.state
+        const { testcase, addStep, editStep, deleteStep, action, modifiedSteps, variablesOperations, loading } = this.props
         const { Title, Text } = Typography
         return (
             <>
@@ -124,18 +121,6 @@ class Testcase extends React.Component {
                                     </Tag>
                                     <Button type="primary" onClick={this.handleEditClick} style={{ marginTop: "25px" }}>Modificar</Button>
                                 </Space>
-                                <TestcaseForm
-                                    visible={showEditModal}
-                                    isEditModalVisible={this.isEditModalVisible}
-                                    upsertTestcase={upsertTestcase}
-                                    values={{
-                                        id: testcase.id,
-                                        name: testcase.testcaseName,
-                                        description: testcase.description,
-                                        preconditions: testcase.preconditions,
-                                        priority: testcase.priority
-                                    }}
-                                />
                             </Col>
                             <Col span={1}>
                                 <Divider type="vertical" style={{ height: "100%" }} dashed></Divider>
@@ -150,15 +135,16 @@ class Testcase extends React.Component {
                                     </Col>
                                 </Row>
                                 <Divider style={{ marginBlock: "10px" }} />
-                                {(action === 'create' || loading) ? <></> :
-                                    <TestcaseSteps
-                                        testcase={testcase}
-                                        steps={testcase.steps}
-                                        addStep={addStep}
-                                        editStep={editStep}
-                                        deleteStep={deleteStep}
-                                        variablesOperations={variablesOperations}
-                                    />}
+                                {(action === 'create' || loading) ? <></> : <></>
+                                    // <TestcaseSteps
+                                    //     testcase={testcase}
+                                    //     steps={testcase.steps}
+                                    //     addStep={addStep}
+                                    //     editStep={editStep}
+                                    //     deleteStep={deleteStep}
+                                    //     variablesOperations={variablesOperations}
+                                    // />
+                                    }
                             </Col>
                         </Row>
                     </Spin>

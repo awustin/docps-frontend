@@ -6,7 +6,7 @@ import { createTestcase, updateTestcase } from '../services/workspaceService';
 
 const { Option } = Select;
 
-export default function TestcaseFormH(props) {
+export default function TestcaseForm(props) {
     const [success, setSuccess] = useState(false);
     const [message, setMessage] = useState({});
     const [showMessage, setShowMessage] = useState(false);
@@ -22,7 +22,7 @@ export default function TestcaseFormH(props) {
             values.id = testplanId;
             createTestcase(values).then(result => handleResponse(result))
         } else if (mode === 'update') {
-            // udpate testcase
+            values.id = testcase.id;
             updateTestcase(values).then(result => handleResponse(result))
         }
     }

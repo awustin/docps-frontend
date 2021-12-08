@@ -1,0 +1,14 @@
+.steps-form {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.steps-form .card {
+    width: 35%;
+}
+
+.steps-flowchart {
+    margin-top: 1em;
+}
