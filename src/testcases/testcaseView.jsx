@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as d from '../AppConsts.json';
 import { getTestcaseById } from '../services/workspaceService';
-import StepSection from '../steps/stepSection';
+import StepsSection from '../steps/stepsSection';
 import TestcaseForm from './testcaseForm';
 
 const { Title, Text } = Typography;
@@ -99,15 +99,6 @@ export default function TestcaseView() {
         </>
     }
 
-    function showStepsSection() {
-        //Component
-        return <>
-            <StepSection
-                id={id}
-            />
-        </>
-    }
-
     return (<>
         <Breadcrumb>
             <Breadcrumb.Item>{testcase.groupName}</Breadcrumb.Item>
@@ -140,7 +131,9 @@ export default function TestcaseView() {
                     </Col>
 
                     <Col span={16}>
-                        {showStepsSection()}
+                        <StepsSection
+                            id={id}
+                        />
                     </Col>
                 </Row>
             </Spin>

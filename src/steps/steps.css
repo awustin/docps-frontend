@@ -1,14 +1,92 @@
-.steps-form {
-    position: absolute;
-    z-index: 2;
+.step-list {
+    margin-right: 1em;
+}
+
+.step-list__card {
+    background: white;
+}
+
+.step-list__row {
+    margin-block: 1em;
+    margin-inline: 2px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
-.steps-form .card {
-    width: 35%;
+.step-list__row .delete {
+    flex: auto;
+    align-self: center;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
 }
 
-.steps-flowchart {
-    margin-top: 1em;
+.step-list__row .delete:hover {
+    cursor: pointer;
+    color: black
+}
+
+.step-list__item {
+    flex: 1 0 90%;
+    box-shadow: 0 0 1px 0;
+    padding: 0.5em;
+    border: white 1px solid;
+    transition: all 0.2s ease-in-out;
+}
+
+.step-list__item:hover {
+    cursor: pointer;
+    border: #006cc9 1px solid;
+}
+
+.step-list__item:active {
+    cursor: pointer;
+    border: white 1px solid;
+}
+
+.step-list__item .description {
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+}
+
+.step-list__item .indicator {
+    flex: auto;
+}
+
+.step-list__item .description .section .header {
+    font-size: 10px !important;
+    color: #8d8d8d;
+}
+
+.step-list__item .section .text {
+    color: #000000;
+    padding-right: 10px;
+}
+
+.step-list__item .section.action {
+    flex: 1 0 40%;
+}
+
+.step-list__item .section.data {
+    flex: 1 0 20%;
+}
+
+.step-list__item .section.result {
+    flex: 1 0 25%;
+}
+
+.step-list__item .variables {
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+}
+
+.success-message {
+    animation: fadeinout 1.5s
+}
+
+@keyframes fadeinout {
+    0% { opacity: 0; }
+    30%,50%,80%   { opacity: 1; }
+    100% { opacity: 0; }
 }
