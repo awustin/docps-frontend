@@ -1,4 +1,5 @@
-import { Button, Card, Form, Input, Select, Typography, Alert } from 'antd';
+import { Button, Card, Form, Input, Select, Typography, Alert, Tooltip } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import './steps.css';
 
@@ -66,7 +67,7 @@ export default function StepEditForm(props) {
                         >
                             <Form.Item
                                 name="actionVariableName"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)' }}
                                 rules={[
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
@@ -84,7 +85,7 @@ export default function StepEditForm(props) {
                             </Form.Item>
                             <Form.Item
                                 name="actionVariableValues"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)', margin: '0 8px' }}
                             >
                                 <Select
                                     mode="tags"
@@ -100,6 +101,13 @@ export default function StepEditForm(props) {
                                 >
                                 </Select>
                             </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(10% - 16px)', margin: '0 8px', fontSize: "120%" }}
+                            >
+                                <Tooltip title="Eliminar variable" color="#108ee9">
+                                    <CloseCircleOutlined onClick={() => editForm.resetFields(['actionVariableName','actionVariableValues'])} />
+                                </Tooltip>
+                            </Form.Item>
                         </Form.Item>
                         <Form.Item
                             name="data"
@@ -113,7 +121,7 @@ export default function StepEditForm(props) {
                         >
                             <Form.Item
                                 name="dataVariableName"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)' }}
                                 rules={[
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
@@ -131,7 +139,7 @@ export default function StepEditForm(props) {
                             </Form.Item>
                             <Form.Item
                                 name="dataVariableValues"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)', margin: '0 8px' }}
                             >
                                 <Select
                                     mode="tags"
@@ -147,6 +155,13 @@ export default function StepEditForm(props) {
                                 >
                                 </Select>
                             </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(10% - 16px)', margin: '0 8px', fontSize: "120%" }}
+                            >
+                                <Tooltip title="Eliminar variable" color="#108ee9">
+                                    <CloseCircleOutlined onClick={() => editForm.resetFields(['dataVariableName','dataVariableValues'])} />
+                                </Tooltip>
+                            </Form.Item>
                         </Form.Item>
                         <Form.Item
                             name="result"
@@ -160,7 +175,7 @@ export default function StepEditForm(props) {
                         >
                             <Form.Item
                                 name="resultVariableName"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)' }}
                                 rules={[
                                     ({ getFieldValue }) => ({
                                         validator(_, value) {
@@ -178,7 +193,7 @@ export default function StepEditForm(props) {
                             </Form.Item>
                             <Form.Item
                                 name="resultVariableValues"
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                style={{ display: 'inline-block', width: 'calc(45% - 16px)', margin: '0 8px' }}
                             >
                                 <Select
                                     mode="tags"
@@ -193,6 +208,13 @@ export default function StepEditForm(props) {
                                     disabled={!resultField}
                                 >
                                 </Select>
+                            </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(10% - 16px)', margin: '0 8px', fontSize: "120%" }}
+                            >
+                                <Tooltip title="Eliminar variable" color="#108ee9">
+                                    <CloseCircleOutlined onClick={() => editForm.resetFields(['resultVariableName','resultVariableValues'])} />
+                                </Tooltip>
                             </Form.Item>
                         </Form.Item>
                         <Form.Item {...tailLayout}>

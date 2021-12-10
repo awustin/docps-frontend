@@ -87,7 +87,6 @@ export default function StepList(props) {
                     name: (values.result) ? values.resultVariableName : undefined,
                     values: (values.result) ? values.resultVariableValues : undefined
                 }
-                console.log(elmUpdate)
                 return elmUpdate
             }
             return elm
@@ -119,7 +118,7 @@ export default function StepList(props) {
                     setMessage({
                         type: 'success',
                         title: 'Pasos guardados',
-                        description: 'Se guardaron los pasos y varaibles con éxito.'
+                        description: 'Se guardaron los pasos y variables con éxito.'
                     });
                     setShowMessage(true);
                 }
@@ -147,10 +146,10 @@ export default function StepList(props) {
     return (<>
         <Spin spinning={loading}>
             <Row>
-                <Col span={13}>
+                <Col span={14}>
                     {showStepsList()}
                 </Col>
-                <Col span={11}>
+                <Col span={10}>
                     {(!showEditStep) ?
                         <Card className="steps-form-card">
                             <Meta
