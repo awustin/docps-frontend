@@ -48,7 +48,7 @@
 	"tooltip": {
 		"testplan": {
 			"Not executed":"Ninguno de sus casos de pruebas tiene ejecuciones asociadas",
-			"In progress":"Tiene al menos un caso de prueba en progreso",
+			"In progress":"Tiene casos de prueba en progreso o sin ejecutar",
 			"Passed":"Todos sus casos de prueba pasaron",
 			"Failed":"Hay casos de prueba que fallaron"
 		},

@@ -1,0 +1,38 @@
+.executions-timeline {
+	margin: 2em 0 0 10%;
+}
+
+.executions-timeline .date {
+	font-weight: 600;
+}
+
+.executions-timeline__row {
+	display: flex;
+	justify-content: space-between;
+	align-content: center;
+}
+
+.executions-timeline__row .delete {
+	flex: 1 0 10%;
+	text-align: center;
+	align-self: center;
+}
+
+.executions-timeline__row .executions-timeline__content {
+	flex: 1 0 90%;
+}
+
+.executions-timeline__header {
+	display: flex;
+}
+
+.executions-timeline__content {
+	border: white 1px solid;
+	padding: 2px 1em;
+    transition: all 0.2s ease-in-out;
+}
+
+.executions-timeline__content:hover {
+    cursor: pointer;
+    border: #006cc9 1px solid;
+}
