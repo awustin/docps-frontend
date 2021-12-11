@@ -1,23 +1,27 @@
-import { EditOutlined, LeftCircleOutlined, PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Alert, Breadcrumb, Button, Card, Col, Divider, Row, Space, Spin, Tag, Tooltip, Typography, List } from 'antd';
+import { DeleteOutlined, EditOutlined, FormOutlined, LeftCircleOutlined, PlusCircleOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { Alert, Breadcrumb, Button, Card, Col, Divider, List, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as d from '../AppConsts.json';
+import ExecutionsPreview from '../executions/executionsPreview';
 import { getTestplanById } from '../services/testplansService';
 import TestcaseForm from '../testcases/testcaseForm';
 import TestplanForm from './testplanForm';
+import './testplans.css';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
 
 
-export default function Testplan() {
+export default function Testplan(props) {
     const history = useHistory();
     const { id } = useParams();
     const [testplan, setTestplan] = useState({});
     const [editProps, setEditProps] = useState({});
+    const [executionsProps, setExecutionsProps] = useState({});
     const [testcaseCreateProps, setTestcaseCreateProps] = useState({});
     const [loading, setLoading] = useState(false);
+    const { user } = props;
 
     useEffect(() => {
         loadSearch();
@@ -78,33 +82,54 @@ export default function Testplan() {
             return <List
                 size="small"
                 pagination={{
-                    pageSize: 5
+                    pageSize: 20
                 }}
                 dataSource={testplan.cases}
                 bordered={false}
-                renderItem={item => (
+                renderItem={item => (<>
                     <List.Item
+                        className='testplan__row_result__item'
                         key={item.key}
                         span={4}
                         actions={[
+                            <div key={`date-${item.key}`} className="row-result__date">{`Última modificación: ${item.modifiedOn}`}</div>,
+                            <Tooltip key={`status-${item.key}`} title={d.tooltip.testcase[item.status]} color="#108ee9">
+                                <Tag className={`status-tag ${d.statuses[item.status].class}`}>{d.statuses[item.status].label}</Tag>
+                            </Tooltip>,
                             <Tooltip key={`edit-${item.key}`} title="Modificar caso de prueba" color="#108ee9">
-                                <EditOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/testcase/id=${item.id}`)} />
+                                <FormOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/testcase/id=${item.id}`)} />
                             </Tooltip>,
                             <Tooltip key={`delete-${item.key}`} title="Eliminar caso de prueba" color="#108ee9">
-                                <DeleteOutlined style={{ fontSize: '150%', color: "#ff785aff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
+                                <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
+                            </Tooltip>,
+                            <Tooltip key={`see-executions-${item.key}`} title="Ver ejecuciones" color="#108ee9">
+                                <ThunderboltOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => setExecutionsProps({ visible: true, testcaseId: item.id })} />
                             </Tooltip>,
                         ]}
-                        className={'list-item testcase'}
                         style={{ background: "#fff" }}
                     >
-                        <List.Item.Meta
-                            description=<div className={'list-item description'}>
-                            {'Últ. modificación: ' + item.modifiedOn}
-                        </div>
-                            />
-                        {item.caseName}
+                        <Space key={item.key + '-content'} direction="vertical" size={24} style={{ width: "100%" }}>
+                            <Row gutter={16} className="row-result">
+                                <div className={`row-result__status-mark ${d.statuses[item.status].class}`}>&nbsp;</div>
+                                <Col>
+                                    {item.caseName}
+                                </Col>
+                            </Row>
+                        </Space>
                     </List.Item>
-                )}
+                    {(executionsProps.visible && executionsProps.testcaseId === item.id) ?
+                        <Row key={`executions-${item.key}`} className='testplan__row-result__executions'>
+                            <Col span={24}>
+                                <ExecutionsPreview
+                                    id={item.id}
+                                    user={user}
+                                    reloadTestcase={loadSearch}
+                                />
+                            </Col>
+                        </Row>
+                        : <></>
+                    }
+                </>)}
             />
         if (testplan.testplanId && (testplan.cases || []).length === 0)
             return <Alert
@@ -114,8 +139,6 @@ export default function Testplan() {
                 showIcon
                 closable={false}
             />
-
-
     }
 
     return (<>

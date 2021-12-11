@@ -53,7 +53,7 @@
 			"Failed":"Hay casos de prueba que fallaron"
 		},
 		"testcase": {
-			"Not executed":"No tiene ejecuciones asociadas",
+			"Not executed":"No tiene ejecuciones o la última ejecución tiene estado No ejecutado",
 			"In progress":"La última ejecución está en progreso",
 			"Passed":"La última ejecución pasó",
 			"Failed":"La última ejecución falló"

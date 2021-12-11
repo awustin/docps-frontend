@@ -1,0 +1,19 @@
+.testplan__row-result__executions {
+    background-color: #fcfcfc;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    position: relative;
+    transform: translateY(-51%) scaleY(0);
+    animation: slide-down 0.2s forwards;
+}
+
+.testplan__row-result__executions .search-results__card {
+    box-shadow: 0 0 2px 0 #cccccc;
+}
+
+@keyframes slide-down {
+    100% {
+        transform: scaleY(1) ;
+        transform: translateY(0);
+    }
+}

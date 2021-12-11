@@ -20,7 +20,7 @@ const ExecutionsEditForm = (props) => {
 
     const onFinish = (values) => {
         values.id = execution.id;
-        updateExecutionById(values).then(result => {
+        updateExecutionById(values).then(() => {
             setMessage({
                 type: 'success',
                 title: 'Ejecución modificada',

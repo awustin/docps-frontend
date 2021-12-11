@@ -1,10 +1,9 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Popconfirm, Tooltip, Typography } from 'antd';
+import { Alert, Button, Card, Popconfirm, Tooltip } from 'antd';
 import React from 'react';
 import './steps.css';
 
 const { Meta } = Card;
-const { Text } = Typography;
 
 const StepsList = (props) => {
     const { steps, showEdit, deleteStep, saveSteps } = props;
