@@ -132,7 +132,6 @@ class GroupList extends React.Component {
         const { results, error, currentPage } = this.state;
         if ((results || []).length > 0) {
             let paginatedResults = results.slice((currentPage - 1) * this.pageSize, currentPage * this.pageSize);
-            console.log(paginatedResults)
             return (<>
                 <div className="search-results">
                     {

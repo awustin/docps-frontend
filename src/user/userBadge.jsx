@@ -1,69 +1,54 @@
-import {
-    AntDesignOutlined
-} from '@ant-design/icons';
-import {
-    Avatar, Col, Row, Space, Tag, Typography
-} from 'antd';
-import React from 'react';
-import { withRouter } from "react-router";
-import {
-    getCurrentUserInfoById
-} from '../services/usersService';
+import { AntDesignOutlined } from '@ant-design/icons';
+import { Avatar, Col, Row, Space, Tag, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { getCurrentUserInfoById } from '../services/usersService';
 
-class UserBadge extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+const { Text } = Typography;
 
-    state = {
-        userInfo: {
-            id: undefined,
-            completeName: undefined,
-            email: undefined,
-            username: undefined,
-            job: undefined,
-            avatar: undefined,
-            isAdmin: undefined
+const UserBadge = (props) => {
+    const [userInfo, setUserInfo] = useState({});
+    const { user, setLoading } = props;
+
+    useEffect(() => {
+        setLoading(true)
+        getCurrentUserInfoById({ id: user.id }).then(({ success, user }) => {
+            if (success)
+                setUserInfo(user);
+            setLoading(false)
+        })
+    }, []);
+
+    const showTagbyRole = () => {
+        switch (user.role) {
+            case 'admin':
+                return <Tag color="volcano">Administrador del sistema</Tag>;
+            case 'groupAdmin':
+                return <Tag color="geekblue">Administrador de grupo</Tag>;
+            case 'user':
+                return <Tag color="blue">Usuario</Tag>;
         }
     }
 
-    componentDidMount() {
-        const { user, setLoading } = this.props
-        setLoading(true)
-        getCurrentUserInfoById({ id: user.id }).then((result) => {
-            const { success, user } = result
-            if (success)
-                this.setState({ userInfo: user })
-            setLoading(false)
-        })
-    }
-
-    render() {
-        const { userInfo } = this.state
-        const { Text } = Typography
-        return (
-            <>
-                <div className="user-badge" >
-                    <Row gutter={16} style={{ height: "100%" , marginBlock: "1em"}}>
-                        <Col flex="1 0 15%" style={{ textAlign: "center", alignSelf: "center" }}>
-                            <Avatar className="default-avatar-1"
-                                size={{ xs: 85, sm: 85, md: 85, lg: 100, xl: 120, xxl: 120 }}
-                                icon={<AntDesignOutlined />}
-                            />
-                        </Col>
-                        <Col flex="1 0 75%">
-                            <Space direction="vertical">
-                                <Text className="badge-name">{userInfo.completeName}</Text>
-                                <Text >{userInfo.job}</Text>
-                                <Text>{userInfo.email}</Text>
-                                {(userInfo.isAdmin) ? (<Tag color="volcano">Administrador del sistema</Tag>) : (<></>)}
-                            </Space>
-                        </Col>
-                    </Row>
-                </div>
-            </>
-        );
-    }
+    return (<>
+        <div className="user-badge" >
+            <Row gutter={16} style={{ height: "100%", marginBlock: "1em" }}>
+                <Col flex="1 0 15%" style={{ textAlign: "center", alignSelf: "center" }}>
+                    <Avatar className="default-avatar-1"
+                        size={{ xs: 85, sm: 85, md: 85, lg: 100, xl: 120, xxl: 120 }}
+                        icon={<AntDesignOutlined />}
+                    />
+                </Col>
+                <Col flex="1 0 75%">
+                    <Space direction="vertical">
+                        <Text className="badge-name">{userInfo.completeName}</Text>
+                        <Text >{userInfo.job}</Text>
+                        <Text>{userInfo.email}</Text>
+                        {showTagbyRole()}
+                    </Space>
+                </Col>
+            </Row>
+        </div>
+    </>)
 }
 
-export default withRouter(UserBadge);
+export default UserBadge;
