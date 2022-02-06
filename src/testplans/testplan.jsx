@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import * as d from '../AppConsts.json';
 import ExecutionsPreview from '../executions/executionsPreview';
+import TestcaseDelete from './modals/testcaseDelete';
 import { getTestplanById } from '../services/testplansService';
 import TestcaseForm from '../testcases/testcaseForm';
 import TestplanForm from './testplanForm';
@@ -20,6 +21,7 @@ export default function Testplan(props) {
     const [editProps, setEditProps] = useState({});
     const [executionsProps, setExecutionsProps] = useState({});
     const [testcaseCreateProps, setTestcaseCreateProps] = useState({});
+    const [testcaseDeleteProps, setTestcaseDeleteProps] = useState({});
     const [loading, setLoading] = useState(false);
     const { user } = props;
 
@@ -100,7 +102,7 @@ export default function Testplan(props) {
                                 <FormOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => history.push(`/workspace/testcase/id=${item.id}`)} />
                             </Tooltip>,
                             <Tooltip key={`delete-${item.key}`} title="Eliminar caso de prueba" color="#108ee9">
-                                <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { this.setState({ visibleDelete: true, deleteTestcaseId: item.id }) }} />
+                                <DeleteOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => { setTestcaseDeleteProps({ visible: true, deleteTestcaseId: item.id }) }} />
                             </Tooltip>,
                             <Tooltip key={`see-executions-${item.key}`} title="Ver ejecuciones" color="#108ee9">
                                 <ThunderboltOutlined style={{ fontSize: '150%', color: "#228cdbff" }} onClick={() => setExecutionsProps({ visible: true, testcaseId: item.id })} />
@@ -129,6 +131,12 @@ export default function Testplan(props) {
                         </Row>
                         : <></>
                     }
+                    <TestcaseDelete
+                        testcaseId={testcaseDeleteProps.deleteTestcaseId}
+                        visibleDelete={testcaseDeleteProps.visible}
+                        closeDelete={() => setTestcaseDeleteProps({ visible: false })}
+                        reloadSearch={loadSearch}
+                    />
                 </>)}
             />
         if (testplan.testplanId && (testplan.cases || []).length === 0)

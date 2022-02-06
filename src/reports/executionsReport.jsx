@@ -56,10 +56,33 @@ class ExecutionsReport extends React.Component {
 				xAxes: {
 					type: 'time',
 					time: {
-						unit: 'week',
+						unit: 'day',
 						displayFormats: {
-							week: 'eee dd, MMMM yyy',
-							weekStartsOn: 1
+							day: 'dd MMM yyyy'
+						}
+					},
+					grid: {
+						lineWidth: (v) => {
+							if (v.tick)
+								if (new Date(v.tick.value).getDate() === 1)
+									return 2
+							return 1
+						},
+						color: (v) => {
+							if (v.tick)
+								if (new Date(v.tick.value).getDate() === 1)
+									return '#9a9a9a'
+							return '#cacaca'
+						}
+					},
+					ticks: {
+						callback: (value) => {
+							return new Date(value).toLocaleDateString('es-AR', { dateStyle: "medium" });
+						},
+						maxRotation: 20,
+						source: 'auto',
+						major: {
+							enabled: true
 						}
 					}
 				}

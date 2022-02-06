@@ -81,6 +81,10 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 	background: rgb(255,160,181) !important;
 	background: linear-gradient(47deg, rgb(248, 151, 106) 0%, rgb(248, 61, 108) 100%) !important;
 }
+.deftest {
+	background: rgb(255,160,181) !important;
+	background: linear-gradient(47deg, rgb(241, 128, 185) 0%, rgb(56, 59, 255) 100%) !important;
+}
 
 /* REPORTS */
 .report-stats-column {
@@ -96,7 +100,8 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 /*LOGIN*/
 .login-container {
 	display: flex;
-	background: #4b7ead;
+	/* background: #4b7ead; */
+	background: white;
 	height: 100vh;
     justify-content: center;
 }
@@ -150,16 +155,16 @@ background: linear-gradient(47deg, rgba(182,152,244,1) 0%, rgba(110,120,255,1) 1
 	font-size: 1.2em !important;
 	font-weight: 700 !important;
 	background: white !important;
-	color: #066ecf !important;
-	border: 2px solid #066ecf !important;
+	color: #0a5296 !important;
+	border: 2px solid #0a5296 !important;
 	border-radius: 15px !important;
 	height: 100% !important;
-	width: 100%;
+	/* width: 50%; */
 }
 
 .login-button:hover {
 	color: white !important;
-	background: #066ecf !important;
+	background: #0a5296 !important;
 }
 
 .search-results {

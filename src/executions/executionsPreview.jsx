@@ -92,7 +92,7 @@ const ExecutionsPreview = (props) => {
                             :
                             <Alert
                                 message="No hay ejecuciones aún"
-                                description={<p>Agregue ejecuciones desde el botón <i>Modificar</i> inferior.</p>}
+                                description={<p>Agregue ejecuciones desde el botón <i>Insertar ejecución</i> inferior.</p>}
                                 type="info"
                                 showIcon
                                 closable={false}

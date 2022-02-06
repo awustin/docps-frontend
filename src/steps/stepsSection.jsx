@@ -32,10 +32,7 @@ export default function StepList(props) {
     const { id } = props;
 
     useEffect(() => {
-        getTestplansDropdown(id).then((result) => {
-            if (result.success)
-                setTreeData(result.testplans)
-        })
+        reloadTreeData();
     }, []);
 
     useEffect(() => {
@@ -44,6 +41,13 @@ export default function StepList(props) {
                 setSteps(result.testcase.steps || []);
         });
     }, []);
+
+    const reloadTreeData = () => {
+        getTestplansDropdown(id).then((result) => {
+            if (result.success)
+                setTreeData(result.testplans)
+        })
+    };
 
     const addStep = values => {
         setSteps(steps.concat({
@@ -66,6 +70,7 @@ export default function StepList(props) {
         })
         );
         form.resetFields();
+        reloadTreeData();
     }
 
     const editStep = values => {
@@ -170,10 +175,8 @@ export default function StepList(props) {
                                             <TreeSelect
                                                 treeDataSimpleMode
                                                 placeholder="Seleccione para comenzar la búsqueda"
-                                                value={treeValue}
                                                 onChange={value => {
-                                                    let step = treeData.find(element => element.id === value)
-                                                    setTreeValue(value);
+                                                    const step = treeData.find(element => element.id === value)
                                                     form.setFieldsValue({
                                                         action: step.action,
                                                         data: step.data,
