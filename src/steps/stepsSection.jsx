@@ -21,7 +21,6 @@ const tailLayout = {
 export default function StepList(props) {
     const [steps, setSteps] = useState([]);
     const [treeData, setTreeData] = useState([]);
-    const [treeValue, setTreeValue] = useState();
     const [showEditStep, setShowEditStep] = useState(false);
     const [current, setCurrent] = useState({});
     const [editSuccess, setEditSuccess] = useState(false);
