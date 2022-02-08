@@ -131,12 +131,15 @@ export default function Testplan(props) {
                         </Row>
                         : <></>
                     }
-                    <TestcaseDelete
-                        testcaseId={testcaseDeleteProps.deleteTestcaseId}
-                        visibleDelete={testcaseDeleteProps.visible}
-                        closeDelete={() => setTestcaseDeleteProps({ visible: false })}
-                        reloadSearch={loadSearch}
-                    />
+                    {(testcaseDeleteProps.visible) ?
+                        <TestcaseDelete
+                            testcaseId={testcaseDeleteProps.deleteTestcaseId}
+                            visibleDelete={testcaseDeleteProps.visible}
+                            closeDelete={() => setTestcaseDeleteProps({ visible: false })}
+                            reloadSearch={loadSearch}
+                        />
+                        : <></>
+                    }
                 </>)}
             />
         if (testplan.testplanId && (testplan.cases || []).length === 0)

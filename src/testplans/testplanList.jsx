@@ -114,7 +114,7 @@ class TestplanList extends React.Component {
 					bordered={false}
 					renderItem={item => (
 						<List.Item
-							key={item.key}
+							key={project.name + item.key}
 							span={4}
 							actions={[
 								<div key={`date-${item.key}`} className="row-result__date">{`Fecha de creación: ${item.createdOn}`}</div>,

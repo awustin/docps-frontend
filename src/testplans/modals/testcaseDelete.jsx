@@ -16,6 +16,7 @@ class TestcaseDelete extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 	}
 	state = {
+		success: false,
 		message: {
 			def: '¿Desea eliminar este caso de prueba?',
 			validate: {
@@ -24,29 +25,43 @@ class TestcaseDelete extends React.Component {
 				type: 'validate'
 			}
 		},
-		validDeletion: true
+		showMessage: false
 	}
 
 	handleSubmit() {
-		const { testcaseId, closeDelete, reloadSearch } = this.props
+		const { testcaseId } = this.props
 		deleteTestcase(testcaseId).then((result) => {
-			if (result.success) {
-				closeDelete()
-				reloadSearch()
-			}
-			else {
-				this.setState({ validDeletion: false })
-			}
+			if (result.success)
+				this.setState({
+					message: {
+						...this.state.message,
+						title: 'Caso de prueba eliminado',
+						description: 'Se eliminó el caso de prueba con éxito.',
+						type: 'success'
+					},
+					success: true
+				})
+			else
+				this.setState({
+					message: {
+						...this.state.message,
+						title: 'No se eliminó el caso de prueba',
+						description: 'Este caso tiene ejecuciones asociadas, por lo que no se puede eliminar.',
+						type: 'validate'
+					},
+					success: false
+				})
+			this.setState({ showMessage: true });
 		})
 	}
 
 	render() {
-		const { closeDelete, visibleDelete } = this.props
-		const { message, validDeletion } = this.state
+		const { closeDelete, reloadSearch, visibleDelete } = this.props
+		const { message, showMessage, success } = this.state
 
 		return (
 			<>
-				{(validDeletion) ? (
+				{(!showMessage) ? (
 					<Modal
 						visible={visibleDelete}
 						closable={false}
@@ -70,11 +85,15 @@ class TestcaseDelete extends React.Component {
 					:
 					(
 						<MessageModal
-							type={message.validate.type}
-							title={message.validate.title}
-							description={message.validate.description}
-							visible={!validDeletion}
-							onClose={closeDelete}
+							type={message.type}
+							title={message.title}
+							description={message.description}
+							visible={showMessage}
+							onClose={() => {
+								if (success)
+									reloadSearch()
+								closeDelete()
+							}}
 						/>
 					)
 				}

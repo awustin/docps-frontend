@@ -10,6 +10,17 @@ export function UserLogIn(params) {
     });
 }
 
+export function UserLogOut(value) {
+  return request.get(`${baseUrl()}/userLogOut`, {
+    params: { sessionId: value }
+  })
+    .then((response) => response.data)
+    .catch((error) => {
+      if (error.response !== undefined) return error.response.data;
+      return error;
+    });
+}
+
 export function getGroupById(value) {
   return request.post(`${baseUrl()}/getGroupById`, { id: value })
     .then((response) => response.data)
@@ -56,7 +67,7 @@ export function updateUser(values) {
 }
 
 export function deleteUserById(id) {
-  return request.post(`${baseUrl()}/deleteUserById`, {id: id})
+  return request.post(`${baseUrl()}/deleteUserById`, { id: id })
     .then((response) => response.data)
     .catch((error) => {
       if (error.response !== undefined) return error.response.data;

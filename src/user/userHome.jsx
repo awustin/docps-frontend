@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import { GroupsIso, PasswordIso, ProjectsIso, ReportsIso, TestplansIso, UsersIso } from '../CustomIcons2.js';
 import './user.css';
 import UserBadge from './userBadge';
+import { connect } from 'react-redux';
 
 const { Text } = Typography;
 const { Meta } = Card;
@@ -148,4 +149,6 @@ class UserHome extends React.Component {
     }
 }
 
-export default withRouter(UserHome);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(withRouter(UserHome));

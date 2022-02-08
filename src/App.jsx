@@ -1,7 +1,8 @@
 import 'antd/dist/antd.css';
 import React, { Component } from 'react';
-import { hot } from 'react-hot-loader';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { createStore } from 'redux';
 import ChangePassword from './account/changePassword';
 import './App.css';
 import './App.less';
@@ -12,13 +13,23 @@ import GroupsMain from './groups/groupsMain';
 import Login from './login/login';
 import Logout from './logout/logout';
 import ProjectsMain from './projects/projectsMain';
+import sessionReducer from './reducers/session';
 import ReportsMain from './reports/reportsMain';
 import { getGroupById } from './services/groupsService';
-import { UserLogIn } from './services/usersService';
+import { UserLogIn, UserLogOut } from './services/usersService';
 import TestplansMain from './testplans/testplansMain';
 import UserMain from './user/userMain';
 import UserVerification from './verification/userVerification';
 import WorkspaceMain from './workspace/workspaceMain';
+
+let store = createStore(sessionReducer);
+
+const checkOpenSession = () => {
+  let sessionId = ((document.cookie.split('; ') || [])
+    .find(elm => elm.includes('sessionId')) || '')
+    .split('=')[1];
+  return sessionId !== undefined;
+};
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +37,7 @@ class App extends Component {
     this.userLogIn = this.userLogIn.bind(this)
     this.changeGroup = this.changeGroup.bind(this)
     this.userLogOut = this.userLogOut.bind(this)
+    this.setLoggedUserFromLocalStorage = this.setLoggedUserFromLocalStorage.bind(this)
   }
 
   state = {
@@ -47,13 +59,24 @@ class App extends Component {
     showLogout: false
   };
 
+  setLoggedUserFromLocalStorage() {
+    let local = JSON.parse(localStorage.getItem('loggedUser'));
+    if (local)
+      this.setState({ loggedUser: local });
+  }
+
+  componentDidMount() {
+    this.setLoggedUserFromLocalStorage();
+  }
+
   userLogIn(params) {
     this.setState({ loading: true, error: undefined });
     UserLogIn(params).then(({ data }) => {
       try {
         if (data.success && data.user) {
-          const { loggedUser } = this.state
-          const { user } = data
+          const { loggedUser } = this.state;
+          const { user } = data;
+          localStorage.setItem('loggedUser', JSON.stringify(user))
           if (loggedUser.id !== user.id && user.id) {
             this.setState({ loading: false, loggedIn: true, loggedUser: user, error: undefined })
           }
@@ -68,7 +91,13 @@ class App extends Component {
   }
 
   userLogOut() {
+    let sessionId = ((document.cookie.split('; ') || [])
+      .find(elm => elm.includes('sessionId')) || '')
+      .split('=')[1];
+
     this.setState({ loggedUser: { id: undefined }, error: undefined, loggedIn: false, showLogout: false });
+    localStorage.removeItem('loggedUser');
+    UserLogOut(sessionId || '');
   }
 
   changeGroup(value) {
@@ -81,12 +110,12 @@ class App extends Component {
   }
 
   render() {
-    const { loggedIn, loggedUser, error, loading, showLogout } = this.state;
+    const { loggedUser, error, loading, showLogout } = this.state;
     return (
-      <>
+      <Provider store={store}>
         <Router>
           {
-            (loggedIn) ? (
+            (checkOpenSession() && loggedUser.id) ? (
               <div>
                 <AppLayout user={loggedUser} logout={() => this.setState({ showLogout: true })}>
                   <Switch>
@@ -154,9 +183,9 @@ class App extends Component {
           onConfirmation={this.userLogOut}
           onCancel={() => this.setState({ showLogout: false })}
         />
-      </>
+      </Provider>
     );
   }
 }
 
-export default hot(module)(App);
+export default App;

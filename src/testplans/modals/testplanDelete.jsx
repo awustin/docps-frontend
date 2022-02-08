@@ -1,10 +1,5 @@
-import {
-	ExclamationCircleOutlined
-} from '@ant-design/icons';
-import {
-	Col, Modal,
-	Row
-} from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Col, Modal, Row } from 'antd';
 import React from 'react';
 import { withRouter } from "react-router";
 import MessageModal from '../../common/messageModal';
