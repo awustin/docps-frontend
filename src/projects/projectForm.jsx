@@ -105,7 +105,9 @@ export default function ProjectForm(props) {
                         <Form.Item
                             label="Grupo"
                             name="projectGroup"
-                            rules={[{ required: true, message: 'Seleccione un grupo.' }]}
+                            rules={[
+                                { required: true, message: 'Seleccione un grupo.' }
+                            ]}
                         >
                             <Select>
                                 {groupList.map((e) => <Option key={e.key}>{e.name}</Option>)}
@@ -117,7 +119,18 @@ export default function ProjectForm(props) {
                     <Form.Item
                         label="Nombre"
                         name="projectName"
-                        rules={[{ required: true, message: 'El nombre del proyecto está vacío.' }]}
+                        rules={[
+                            { required: true, message: 'El nombre del proyecto está vacío.' },
+                            () => ({
+                                validator(_, value) {
+                                    let onlyAlphanumericWhitespaceAndHyphen = /^[\w\s-]*$/;
+                                    if (onlyAlphanumericWhitespaceAndHyphen.test(value) || !value)
+                                        return Promise.resolve();
+                                    else
+                                        return Promise.reject(new Error('El nombre sólo puede contener letras, números, espacios y guiones (-)'));
+                                },
+                            })
+                        ]}
                     >
                         <Input />
                     </Form.Item>

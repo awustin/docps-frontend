@@ -165,6 +165,17 @@ export default function UserForm(props) {
                     <Form.Item
                         label="D.N.I."
                         name="dni"
+                        rules={[
+                            () => ({
+                                validator(_, value) {
+                                    let dniPattern = /^\d{8}$/;
+                                    if(dniPattern.test(value) || !value)
+                                        return Promise.resolve();
+                                    else
+                                        return Promise.reject(new Error('El DNI debe tener 8 números'));
+                                },
+                            })
+                        ]}
                     >
                         <Input placeholder="Ingrese el DNI sin puntos" />
                     </Form.Item>

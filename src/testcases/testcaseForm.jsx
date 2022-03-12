@@ -88,7 +88,18 @@ export default function TestcaseForm(props) {
                 <Form.Item
                     label="Nombre"
                     name="name"
-                    rules={[{ required: true, message: 'El nombre del caso de prueba está vacío.' }]}
+                    rules={[
+                        { required: true, message: 'El nombre del caso de prueba está vacío.' },
+                        () => ({
+                            validator(_, value) {
+                                let onlyAlphanumericWhitespaceAndHyphen = /^[\w\s-]*$/;
+                                if (onlyAlphanumericWhitespaceAndHyphen.test(value) || !value)
+                                    return Promise.resolve();
+                                else
+                                    return Promise.reject(new Error('El nombre sólo puede contener letras, números, espacios y guiones (-)'));
+                            },
+                        })
+                    ]}
                 >
                     <Input />
                 </Form.Item>

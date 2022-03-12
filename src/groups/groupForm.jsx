@@ -157,7 +157,18 @@ export default function GroupForm(props) {
                     <Form.Item
                         label="Nombre"
                         name="name"
-                        rules={[{ required: true, message: 'El nombre es requerido.' }]}
+                        rules={[
+                            { required: true, message: 'El nombre es requerido.' },
+                            () => ({
+                                validator(_, value) {
+                                    let onlyAlphanumericAndWhitespace = /^[\w\s]*$/;
+                                    if (onlyAlphanumericAndWhitespace.test(value) || !value)
+                                        return Promise.resolve();
+                                    else
+                                        return Promise.reject(new Error('El nombre sólo puede contener letras, números y espacios'));
+                                },
+                            })
+                        ]}
                     >
                         <Input disabled={role !== 'admin'} />
                     </Form.Item>

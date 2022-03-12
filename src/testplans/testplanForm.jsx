@@ -149,7 +149,18 @@ export default function TestplanForm(props) {
                     <Form.Item
                         label="Nombre"
                         name="name"
-                        rules={[{ required: true, message: 'El nombre del plan está vacío.' }]}
+                        rules={[
+                            { required: true, message: 'El nombre del plan está vacío.' },
+                            () => ({
+                                validator(_, value) {
+                                    let onlyAlphanumericWhitespaceAndHyphen = /^[\w\s-]*$/;
+                                    if (onlyAlphanumericWhitespaceAndHyphen.test(value) || !value)
+                                        return Promise.resolve();
+                                    else
+                                        return Promise.reject(new Error('El nombre sólo puede contener letras, números, espacios y guiones (-)'));
+                                },
+                            })
+                        ]}
                     >
                         <Input />
                     </Form.Item>
