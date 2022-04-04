@@ -25,10 +25,7 @@ import WorkspaceMain from './workspace/workspaceMain';
 let store = createStore(sessionReducer);
 
 const checkOpenSession = () => {
-  let sessionId = ((document.cookie.split('; ') || [])
-    .find(elm => elm.includes('sessionId')) || '')
-    .split('=')[1];
-  return sessionId !== undefined;
+  return !!localStorage.getItem('sessionId');
 };
 
 class App extends Component {
@@ -60,7 +57,7 @@ class App extends Component {
   };
 
   setLoggedUserFromLocalStorage() {
-    let local = JSON.parse(localStorage.getItem('loggedUser'));
+    let local = JSON.parse(localStorage.getItem('loggedUserLocal'));
     if (local)
       this.setState({ loggedUser: local });
   }
@@ -75,8 +72,9 @@ class App extends Component {
       try {
         if (data.success && data.user) {
           const { loggedUser } = this.state;
-          const { user } = data;
-          localStorage.setItem('loggedUser', JSON.stringify(user))
+          const { user, sessionId } = data;
+          localStorage.setItem('loggedUserLocal', JSON.stringify(user));
+          localStorage.setItem('sessionId', JSON.stringify(sessionId));
           if (loggedUser.id !== user.id && user.id) {
             this.setState({ loading: false, loggedIn: true, loggedUser: user, error: undefined })
           }
@@ -91,13 +89,12 @@ class App extends Component {
   }
 
   userLogOut() {
-    let sessionId = ((document.cookie.split('; ') || [])
-      .find(elm => elm.includes('sessionId')) || '')
-      .split('=')[1];
-
-    this.setState({ loggedUser: { id: undefined }, error: undefined, loggedIn: false, showLogout: false });
-    localStorage.removeItem('loggedUser');
-    UserLogOut(sessionId || '');
+    let sessionId = localStorage.getItem('sessionId');
+    UserLogOut(sessionId).then( result => {
+      this.setState({ loggedUser: { id: undefined }, error: undefined, loggedIn: false, showLogout: false });
+      localStorage.removeItem('loggedUserLocal');
+      localStorage.removeItem('sessionId');
+    });
   }
 
   changeGroup(value) {

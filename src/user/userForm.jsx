@@ -2,6 +2,7 @@ import { Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import MessageModal from '../common/messageModal';
 import { createUser, updateUser } from '../services/usersService';
+import * as validations from './validations.json';
 
 export default function UserForm(props) {
     const [success, setSuccess] = useState(false);
@@ -126,28 +127,28 @@ export default function UserForm(props) {
                     <Form.Item
                         label="Nombre"
                         name="name"
-                        rules={[{ required: true, message: 'El nombre es requerido.' }]}
+                        rules={validations.name}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Apellido"
                         name="lastname"
-                        rules={[{ required: true, message: 'El apellido es requerido.' }]}
+                        rules={validations.lastname}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Correo electrónico"
                         name="email"
-                        rules={[{ required: true, type: "email", message: 'Debe ingresar un correo electrónico válido.' }]}
+                        rules={validations.email}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Nombre de usuario"
                         name="username"
-                        rules={[{ required: true, message: 'Debe ingresar un nombre de usuario válido.' }]}
+                        rules={validations.username}
                     >
                         <Input placeholder="Escriba un nombre de usuario" />
                     </Form.Item>
@@ -155,7 +156,7 @@ export default function UserForm(props) {
                         <Form.Item
                             label="Contraseña"
                             name="password"
-                            rules={[{ required: true, message: 'Debe ingresar una contraseña válida.' }]}
+                            rules={validations.password}
                         >
                             <Input.Password
                                 placeholder="Escriba una contraseña"
@@ -165,29 +166,21 @@ export default function UserForm(props) {
                     <Form.Item
                         label="D.N.I."
                         name="dni"
-                        rules={[
-                            () => ({
-                                validator(_, value) {
-                                    let dniPattern = /^\d{8}$/;
-                                    if(dniPattern.test(value) || !value)
-                                        return Promise.resolve();
-                                    else
-                                        return Promise.reject(new Error('El DNI debe tener 8 números'));
-                                },
-                            })
-                        ]}
+                        rules={validations.dni}
                     >
                         <Input placeholder="Ingrese el DNI sin puntos" />
                     </Form.Item>
                     <Form.Item
                         label="Calle"
                         name="street"
+                        rules={validations.street}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Número"
                         name="streetNumber"
+                        rules={validations.streetNumber}
                     >
                         <Input />
                     </Form.Item>
@@ -200,6 +193,7 @@ export default function UserForm(props) {
                     <Form.Item
                         label="Puesto"
                         name="job"
+                        rules={validations.job}
                     >
                         <Input />
                     </Form.Item>

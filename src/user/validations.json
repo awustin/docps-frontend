@@ -1,0 +1,76 @@
+{
+    "name": [
+        {
+            "required": true,
+            "message": "El nombre es requerido."
+        },
+        {
+            "pattern": "^[a-zA-Z\\s]*$",
+            "message": "Sólo letras y espacios"
+        }
+    ],
+    "lastname": [
+        {
+            "required": true,
+            "message": "El apellido es requerido."
+        },
+        {
+            "pattern": "^[a-zA-Z\\s]*$",
+            "message": "Sólo letras y espacios"
+        }
+    ],
+    "email": [
+        {
+            "required": true,
+            "message": "El correo electrónico es requerido."
+        },
+        {
+            "pattern": "^[^\\s]*$",
+            "message": "Sólo letras, números y caracteres especiales. No admite espacios ni acentos"
+        }
+    ],
+    "username": [
+        {
+            "required": true,
+            "message": "El nombre de usuario es requerido."
+        },
+        {
+            "pattern": "^[\\w\\.\\-]*$",
+            "message": "Sólo letras, números y los caracteres \".\" y \"-\" ."
+        }
+    ],
+    "password": [
+        {
+            "required": true,
+            "message": "La contraseña es requerida."
+        },
+        {
+            "pattern": "^[^\\s]*$",
+            "message": "Sólo letras, números y caracteres especiales. No admite espacios ni acentos"
+        }
+    ],
+    "dni": [
+        {
+            "pattern": "^\\d{8}$",
+            "message": "Sólo 8 caracteres numéricos"
+        }
+    ],
+    "street": [
+        {
+            "pattern": "^[\\w\\.\\s]*$",
+            "message": "Sólo letras, números, espacios y el caracter \".\" ."
+        }
+    ],
+    "streetNumber": [
+        {
+            "pattern": "^[\\d]*$",
+            "message": "Sólo números."
+        }
+    ],
+    "job": [
+        {
+            "pattern": "^[\\w\\.\\s]*$",
+            "message": "Sólo letras, números, espacios y el caracter \".\" ."
+        }
+    ]
+}
