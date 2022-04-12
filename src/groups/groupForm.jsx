@@ -116,13 +116,18 @@ export default function GroupForm(props) {
     }
 
     function buildAdminMembersOptions() {
-        setAdminMembersOptions((form.getFieldValue("members") || []).map(key =>
-            <Option key={key} value={key}>
-                <Space className="user-option">
-                    <Avatar className={`user-option__avatar ${userList.filter(u => u.key === key)[0].defAvatar}`} />
-                    {userList.filter(u => u.key === key)[0].completeName}
-                </Space>
-            </Option>
+        setAdminMembersOptions((form.getFieldValue("members") || []).map(key => {
+            let activeMember = userList.filter(u => u.key === key)[0];
+            console.log(activeMember)
+            if (activeMember) {
+                return <Option key={key} value={key}>
+                    <Space className="user-option">
+                        <Avatar className={`user-option__avatar ${activeMember.defAvatar}`} />
+                        {activeMember.completeName}
+                    </Space>
+                </Option>
+            }
+        }
         ));
     }
 
